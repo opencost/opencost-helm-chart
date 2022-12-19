@@ -1,0 +1,65 @@
+# Create a deployment for a single cost model pod
+#
+# See environment variables if you would like to add a Prometheus for
+# cost model to read from for full functionality.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.opencost.fullname }}
+  labels:
+    app: opencost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencost
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: opencost
+    spec:
+      serviceAccountName: opencost
+      tolerations:
+        - key: availability
+          operator: Equal
+          value: spot
+          effect: NoExecute
+        - key: workload
+          operator: Equal
+          value: infra
+          effect: NoExecute
+      containers:
+        - image: "{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag }}"
+          name: {{ .Values.opencost.exporter.name }}
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "55M"
+            limits:
+              cpu: "999m"
+              memory: "1G"
+          env:
+            - name: PROMETHEUS_SERVER_ENDPOINT
+              value: "http://{{ .Values.opencost.prometheus.serviceName }}.{{ .Values.opencost.prometheus.namespaceName }}.svc" # The endpoint should have the form http://<service-name>.<namespace-name>.svc
+            - name: CLOUD_PROVIDER_API_KEY
+              value: "AIzaSyD29bGxmHAVEOBYtgd8sYM2gM2ekfxQX4U" # The GCP Pricing API requires a key. This is supplied just for evaluation.
+            - name: CLUSTER_ID
+              value: "default-cluster" # Default cluster ID to use if cluster_id is not set in Prometheus metrics.
+          imagePullPolicy: Always
+        {{- if .Values.opencost.ui.enabled -}}
+        - image: "{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag }}"
+          name: opencost-ui
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "55M"
+            limits:
+              cpu: "999m"
+              memory: "1G"
+          imagePullPolicy: Always
+        {{- end -}}
