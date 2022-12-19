@@ -1,0 +1,21 @@
+opencost:
+  fullname: opencost
+  exporter:
+    name: opencost
+    image:
+      repository:  quay.io/kubecost1/kubecost-cost-model
+      tag: latest
+
+  namespace:
+    create: true
+    name: opencost
+
+  prometheus:
+    serviceName: my-prometheus
+    namespaceName: opencost
+
+  ui:
+    enabled: true
+    image:
+      repository: quay.io/kubecost1/opencost-ui
+      tag: latest
