@@ -1,0 +1,72 @@
+{{- if .Values.opencostProductConfigs }}
+{{- if or .Values.opencostProductConfigs.grafanaURL .Values.opencostProductConfigs.labelMappingConfigs }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ default "app-configs" .Values.appConfigmapName }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+data:
+{{- if .Values.opencostProductConfigs.labelMappingConfigs }}
+{{- if .Values.opencostProductConfigs.labelMappingConfigs.enabled }}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.owner_label }}
+    owner_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.owner_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.team_label }}
+    team_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.team_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.department_label }}
+    department_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.department_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.product_label }}
+    product_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.product_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.environment_label }}
+    environment_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.environment_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.namespace_external_label }}
+    namespace_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.namespace_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.cluster_external_label }}
+    cluster_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.cluster_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.controller_external_label }}
+    controller_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.controller_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.product_external_label }}
+    product_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.product_external_label }}"
+  {{- end -}}
+    {{- if .Values.opencostProductConfigs.labelMappingConfigs.service_external_label }}
+    service_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.service_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.deployment_external_label }}
+    deployment_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.deployment_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.team_external_label }}
+    team_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.team_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.environment_external_label }}
+    environment_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.environment_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.department_external_label }}
+    department_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.department_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.statefulset_external_label }}
+    statefulset_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.statefulset_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.daemonset_external_label }}
+    daemonset_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.daemonset_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.pod_external_label }}
+    pod_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.pod_external_label }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.labelMappingConfigs.owner_external_label }}
+    owner_external_label: "{{  .Values.opencostProductConfigs.labelMappingConfigs.owner_external_label }}"
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+  {{- if .Values.opencostProductConfigs.grafanaURL }}
+    grafanaURL: "{{  .Values.opencostProductConfigs.grafanaURL }}"
+  {{- end -}}
+{{- end -}}
+{{- end -}}

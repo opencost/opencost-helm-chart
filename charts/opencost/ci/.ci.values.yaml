@@ -1,0 +1,11 @@
+persistentVolume:
+  enabled: false
+
+opencostFrontend:
+  image: "gcr.io/kubecost1/frontend"
+  imageVersion: prod-1.99.0
+
+prometheus:
+  server:
+    persistentVolume:
+      enabled: false

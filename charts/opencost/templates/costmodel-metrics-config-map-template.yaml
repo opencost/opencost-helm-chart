@@ -1,0 +1,12 @@
+{{- if .Values.opencostProductConfigs -}}
+{{- if .Values.opencostProductConfigs.metricsConfigs -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ default "metrics-config" .Values.metricsConfigmapName }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+data:
+  metrics.json: '{{ toJson .Values.opencostProductConfigs.metricsConfigs }}'
+{{- end -}}
+{{- end -}}

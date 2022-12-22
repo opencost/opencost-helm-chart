@@ -1,0 +1,68 @@
+{{- if not .Values.agent }}
+{{- $nginxPort := .Values.service.targetPort | default 9090 -}}
+{{- $servicePort := .Values.service.port | default 9090 -}}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "costmodel.serviceName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
+spec:
+  selector:
+    {{ include "costmodel.selectorLabels" . | nindent 4 }}
+{{- if .Values.service -}}
+{{- if .Values.service.type }}
+  type: "{{ .Values.service.type }}"
+{{- else }}
+  type: ClusterIP
+{{- end }}
+{{- else }}
+  type: ClusterIP
+{{- end }}
+  ports:
+    - name: tcp-model
+      port: 9003
+      targetPort: 9003
+    - name: tcp-frontend
+      {{- if .Values.opencostFrontend.tls }}
+      {{- if .Values.opencostFrontend.tls.enabled }}
+      port: 443
+      targetPort: 443
+      {{- if (eq .Values.service.type "NodePort") }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      {{- end }}
+      {{- else }}
+      port: {{ $servicePort }}
+      targetPort: {{ $nginxPort }}
+      {{- if (eq .Values.service.type "NodePort") }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      {{- end }}
+      {{- end}}
+      {{- else }}
+      port: {{ $servicePort }}
+      targetPort: {{ $nginxPort }}
+      {{- if (eq .Values.service.type "NodePort") }}
+      {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+    {{- if .Values.saml }}
+    {{- if .Values.saml.enabled }}
+    - name: apiserver
+      port: 9004
+      targetPort: 9004
+    {{- end }}
+    {{- end }}
+{{- end }}

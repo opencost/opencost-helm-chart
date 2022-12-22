@@ -1,0 +1,50 @@
+{{- if .Values.networkPolicy -}}
+{{- if .Values.networkPolicy.enabled -}}
+apiVersion: {{ include "costmodel.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
+{{- if .Values.networkPolicy.denyEgress }}
+metadata:
+  name: deny-egress
+  labels:
+    {{- include "costmodel.commonLabels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "costmodel.selectorLabels" . | nindent 6 }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector: {}
+{{- else }}
+{{- if .Values.networkPolicy.sameNamespace}}
+metadata:
+  name: shared-namespace
+  namespace: {{ default "opencost" .Values.networkPolicy.namespace}}
+spec:
+  podSelector:
+    matchLabels:
+      app: prometheus
+      component: server
+{{- else }}
+metadata:
+  name: closed-traffic
+  namespace: {{ default "opencost" .Values.networkPolicy.namespace}}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: costmodel
+{{- end  }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: costmodel
+    - namespaceSelector:
+        matchLabels:
+          name: k8s-opencost
+{{- end  }}
+{{- end -}}
+{{- end -}}

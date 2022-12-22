@@ -1,0 +1,137 @@
+{{- if .Values.opencostProductConfigs }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ default "pricing-configs" .Values.pricingConfigmapName }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+data:
+  {{- if .Values.opencostProductConfigs.defaultModelPricing }}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.enabled }}
+  {{- if .Values.opencostProductConfigs.customPricesEnabled }}
+    customPricesEnabled: "{{ .Values.opencostProductConfigs.customPricesEnabled }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.CPU }}
+    CPU: "{{ .Values.opencostProductConfigs.defaultModelPricing.CPU | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.spotCPU }}
+    spotCPU: "{{ .Values.opencostProductConfigs.defaultModelPricing.spotCPU | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.RAM }}
+    RAM: "{{ .Values.opencostProductConfigs.defaultModelPricing.RAM | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.spotRAM }}
+    spotRAM: "{{ .Values.opencostProductConfigs.defaultModelPricing.spotRAM | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.GPU }}
+    GPU: "{{ .Values.opencostProductConfigs.defaultModelPricing.GPU | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.spotGPU }}
+    spotGPU: "{{ .Values.opencostProductConfigs.defaultModelPricing.spotGPU | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.storage }}
+    storage: "{{ .Values.opencostProductConfigs.defaultModelPricing.storage | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.zoneNetworkEgress }}
+    zoneNetworkEgress: "{{ .Values.opencostProductConfigs.defaultModelPricing.zoneNetworkEgress | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.regionNetworkEgress }}
+    regionNetworkEgress: "{{ .Values.opencostProductConfigs.defaultModelPricing.regionNetworkEgress | toString }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultModelPricing.internetNetworkEgress }}
+    internetNetworkEgress: "{{ .Values.opencostProductConfigs.defaultModelPricing.internetNetworkEgress | toString }}"
+  {{- end -}}
+  {{- end -}}
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.clusterName }}
+    clusterName: "{{ .Values.opencostProductConfigs.clusterName }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.currencyCode }}
+    currencyCode: "{{ .Values.opencostProductConfigs.currencyCode }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.azureBillingRegion }}
+    azureBillingRegion: "{{ .Values.opencostProductConfigs.azureBillingRegion }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.azureSubscriptionID }}
+    azureSubscriptionID: "{{ .Values.opencostProductConfigs.azureSubscriptionID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.azureClientID }}
+    azureClientID: "{{ .Values.opencostProductConfigs.azureClientID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.azureTenantID }}
+    azureTenantID: "{{ .Values.opencostProductConfigs.azureTenantID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.azureOfferDurableID }}
+    azureOfferDurableID: "{{ .Values.opencostProductConfigs.azureOfferDurableID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.discount }}
+    discount: "{{ .Values.opencostProductConfigs.discount }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.negotiatedDiscount }}
+    negotiatedDiscount: "{{ .Values.opencostProductConfigs.negotiatedDiscount }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.defaultIdle }}
+    defaultIdle: "{{ .Values.opencostProductConfigs.defaultIdle }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.sharedNamespaces }}
+    sharedNamespaces: "{{ .Values.opencostProductConfigs.sharedNamespaces }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.sharedOverhead }}
+    sharedOverhead: "{{ .Values.opencostProductConfigs.sharedOverhead }}"
+  {{- end -}}
+  {{- if gt (len (toString .Values.opencostProductConfigs.shareTenancyCosts)) 0 }}
+  {{- if eq (toString .Values.opencostProductConfigs.shareTenancyCosts) "false" }}
+    shareTenancyCosts: "false"
+  {{- else if eq (toString .Values.opencostProductConfigs.shareTenancyCosts) "true" }}
+    shareTenancyCosts: "true"
+  {{- end -}}
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.spotLabel }}
+    spotLabel: "{{ .Values.opencostProductConfigs.spotLabel }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.spotLabelValue }}
+    spotLabelValue: "{{ .Values.opencostProductConfigs.spotLabelValue }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.awsSpotDataRegion }}
+    spotDataRegion: "{{ .Values.opencostProductConfigs.awsSpotDataRegion }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.awsSpotDataBucket }}
+    spotDataBucket: "{{ .Values.opencostProductConfigs.awsSpotDataBucket }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.awsSpotDataPrefix }}
+    spotDataPrefix: "{{ .Values.opencostProductConfigs.awsSpotDataPrefix }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.projectID }}
+    projectID: "{{ .Values.opencostProductConfigs.projectID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.bigQueryBillingDataDataset }}
+    billingDataDataset: "{{ .Values.opencostProductConfigs.bigQueryBillingDataDataset }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaProjectID }}
+    athenaProjectID: "{{ .Values.opencostProductConfigs.athenaProjectID }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaBucketName }}
+    athenaBucketName: "{{ .Values.opencostProductConfigs.athenaBucketName }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaRegion }}
+    athenaRegion: "{{ .Values.opencostProductConfigs.athenaRegion }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaDatabase }}
+    athenaDatabase: "{{ .Values.opencostProductConfigs.athenaDatabase }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaTable }}
+    athenaTable: "{{ .Values.opencostProductConfigs.athenaTable }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.athenaWorkgroup }}
+    athenaWorkgroup: "{{ .Values.opencostProductConfigs.athenaWorkgroup }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.masterPayerARN}}
+    masterPayerARN: "{{ .Values.opencostProductConfigs.masterPayerARN }}"
+  {{- end }}
+  {{- if .Values.opencostProductConfigs.gpuLabel }}
+    gpuLabel: "{{ .Values.opencostProductConfigs.gpuLabel }}"
+  {{- end -}}
+  {{- if .Values.opencostProductConfigs.gpuLabelValue }}
+    gpuLabelValue: "{{ .Values.opencostProductConfigs.gpuLabelValue }}"
+  {{- end -}}
+{{- end -}}

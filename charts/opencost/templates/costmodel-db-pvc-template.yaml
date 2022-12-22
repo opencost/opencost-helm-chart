@@ -1,0 +1,29 @@
+{{- if (.Values.opencostModel.etlToDisk | default true) -}}
+{{- if .Values.persistentVolume -}}
+{{- if not .Values.persistentVolume.dbExistingClaim -}}
+{{- if .Values.persistentVolume.enabled -}}
+{{- if .Values.persistentVolume.dbPVEnabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "costmodel.fullname" . }}-db
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if .Values.persistentVolume.dbStorageClass }}
+  storageClassName: {{ .Values.persistentVolume.dbStorageClass }}
+  {{ end }}
+  resources:
+    requests:
+    {{- if .Values.persistentVolume }}
+      storage: {{ .Values.persistentVolume.dbSize }}
+    {{- else }}
+      storage: 32.0Gi
+    {{ end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

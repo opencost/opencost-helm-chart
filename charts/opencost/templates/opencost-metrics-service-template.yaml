@@ -1,0 +1,32 @@
+{{- if .Values.opencostMetrics }}
+{{- if .Values.opencostMetrics.exporter }}
+{{- if .Values.opencostMetrics.exporter.enabled }}
+{{- $prometheusScrape := ternary .Values.opencostMetrics.exporter.prometheusScrape true (kindIs "bool" .Values.opencostMetrics.exporter.prometheusScrape) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "opencost.kubeMetricsName" . }}
+  labels:
+{{ include "costmodel.commonLabels" . | nindent 4 }}
+{{- if (or .Values.opencostMetrics.exporter.service.annotations $prometheusScrape) }}
+  annotations:
+{{- if .Values.opencostMetrics.exporter.service.annotations }}
+{{ toYaml .Values.opencostMetrics.exporter.service.annotations | indent 4 }}
+{{- end }}
+{{- if $prometheusScrape }}
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ (quote .Values.opencostMetrics.exporter.port) | default (quote 9005) }}
+{{- end }}
+{{- end }}
+spec:
+  ports:
+  - name: tcp-metrics
+    port: {{ .Values.opencostMetrics.exporter.port | default 9005 }}
+    protocol: TCP
+    targetPort: {{ .Values.opencostMetrics.exporter.port | default 9005 }}
+  selector:
+    app: {{ template "opencost.kubeMetricsName" . }}
+  type: ClusterIP
+{{- end }}
+{{- end }}
+{{- end }}

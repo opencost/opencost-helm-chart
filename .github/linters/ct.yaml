@@ -1,0 +1,15 @@
+# See https://github.com/helm/chart-testing#configuration
+remote: origin
+target-branch: main
+chart-dirs:
+  - charts
+chart-repos:
+  - prometheus-community=https://prometheus-community.github.io/helm-charts
+  - grafana=https://grafana.github.io/helm-charts
+  - thanos=https://charts.bitnami.com/bitnami
+helm-extra-args: |
+  --timeout 60s
+debug: true
+excluded-charts:
+additional-commands:
+  - helm unittest --helm3 --strict --file unittests/*.yaml --file 'unittests/**/*.yaml' {{ .Path }

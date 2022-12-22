@@ -1,0 +1,13 @@
+{{- if .Values.opencostProductConfigs }}
+{{- if .Values.opencostProductConfigs.clusters }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opencost-clusters
+  labels:
+    {{- include "costmodel.commonLabels" . | nindent 4 }}
+data:
+  default-clusters.yaml: |
+{{- toYaml .Values.opencostProductConfigs.clusters | nindent 4 }}
+{{- end }}
+{{- end }}
