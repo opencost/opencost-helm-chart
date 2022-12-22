@@ -1,0 +1,16 @@
+{{- if .Values.opencostProductConfigs }}
+{{- if .Values.opencostProductConfigs.productKey }}
+{{- if .Values.opencostProductConfigs.productKey.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ default "product-configs" .Values.productConfigmapName }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+data:
+  {{- if .Values.opencostProductConfigs.productKey.key }}
+    key: {{  .Values.opencostProductConfigs.productKey.key | quote }}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}

@@ -1,0 +1,25 @@
+apiVersion: v2
+description: Opencost helm chart
+name: opencost
+version: 0.1.0
+keywords:
+  - opencost
+sources:
+  - https://github.com/opencost/opencost-helm-chart
+annotations:
+  "artifacthub.io/links": |
+    - name: Homepage
+      url: https://opencost.io
+dependencies:
+  - condition: global.grafana.enabled
+    name: grafana
+    repository: https://grafana.github.io/helm-charts
+    version: "^6.48.0"
+  - condition: global.prometheus.enabled
+    name: prometheus
+    repository: https://prometheus-community.github.io/helm-charts
+    version: "^19.0.2"
+  - condition: global.thanos.enabled
+    name: thanos
+    repository: https://charts.bitnami.com/bitnami
+    version: "^11.6.5"

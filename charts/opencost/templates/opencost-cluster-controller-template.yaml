@@ -1,0 +1,312 @@
+{{- if .Values.clusterController }}
+{{- if .Values.clusterController.enabled }}
+{{- $serviceName := include "costmodel.serviceName" . -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "opencost.clusterControllerName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+---
+#
+# NOTE: 
+# The following ClusterRole permissions are only created and assigned for the 
+# cluster controller feature. They will not be added to any clusters by default. 
+#
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opencost.clusterControllerName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - opencost.io
+    resources:
+      - turndownschedules
+      - turndownschedules/status
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - ""
+      - events.k8s.io
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - deployments
+      - nodes
+      - pods
+      - resourcequotas
+      - replicationcontrollers
+      - limitranges
+      - pods/eviction
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+      - namespaces
+      - persistentvolumeclaims
+      - persistentvolumes
+      - endpoints
+      - events
+      - services
+    verbs:
+      - get 
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - daemonsets
+      - deployments
+      - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets
+      - deployments
+      - daemonsets
+      - replicasets
+    verbs:
+      - get 
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+      - jobs
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - policy
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: 
+      - storage.k8s.io
+    resources: 
+      - storageclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - events.k8s.io
+    resources:
+      - events
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "opencost.clusterControllerName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "opencost.clusterControllerName" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "opencost.clusterControllerName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "opencost.clusterControllerName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ template "opencost.clusterControllerName" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "opencost.clusterControllerName" . }}
+    spec:
+      containers:
+      - name: {{ template "opencost.clusterControllerName" . }}
+        image: {{ .Values.clusterController.image }}
+        imagePullPolicy: {{ .Values.clusterController.imagePullPolicy }}
+        volumeMounts:
+        - name: cluster-controller-keys
+          mountPath: /var/keys
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CLUSTER_ID
+          value: {{ .Values.prometheus.server.global.external_labels.cluster_id }}
+        - name: TURNDOWN_NAMESPACE
+          value: {{ .Release.Namespace }}
+        - name: TURNDOWN_DEPLOYMENT
+          value: {{ template "opencost.clusterControllerName" . }}
+        {{- if .Values.opencostProductConfigs }}
+        {{- if .Values.opencostProductConfigs.gcpSecretName }}
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/keys/service-key.json
+        {{- end }}
+        {{- end }}
+        - name: CC_LOG_LEVEL
+          value: {{ .Values.clusterController.logLevel | default "info" }}
+        - name: CC_KUBESCALER_COST_MODEL_PATH
+          value: http://{{ $serviceName }}.{{ .Release.Namespace }}:{{ .Values.service.targetPort | default 9090 }}/model
+        {{- if .Values.clusterController.kubescaler }}
+        - name: CC_KUBESCALER_DEFAULT_RESIZE_ALL
+          value: {{ .Values.clusterController.kubescaler.defaultResizeAll | default "false" | quote }}
+        {{- end }}
+        ports:
+        - name: http-server
+          containerPort: 9731
+          hostPort: 9731
+      serviceAccount: {{ template "opencost.clusterControllerName" . }}
+      serviceAccountName: {{ template "opencost.clusterControllerName" . }}
+      volumes:
+      - name: cluster-controller-keys
+        secret:
+          secretName: {{ .Values.clusterController.secretName | default "cluster-controller-service-key" }}
+          # The secret is optional because not all of cluster controller's
+          # functionality requires this secret. Cluster controller will
+          # partially or fully initialize based on the presence of these keys
+          # and their validity.
+          optional: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "opencost.clusterControllerName" . }}-service
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9731
+    targetPort: 9731
+  selector:
+    app: {{ template "opencost.clusterControllerName" . }}
+---
+# TurndownSchedule Custom Resource Definition for persistence
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: turndownschedules.opencost.io
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+spec:
+  group: opencost.io
+  names:
+    kind: TurndownSchedule
+    singular: turndownschedule
+    plural: turndownschedules
+    shortNames:
+    - td
+    - tds
+  scope: Cluster
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                start:
+                  type: string
+                  format: date-time
+                end:
+                  type: string
+                  format: date-time
+                repeat:
+                  type: string
+                  enum: [none, daily, weekly]
+      additionalPrinterColumns:
+      - name: State
+        type: string
+        description: The state of the turndownschedule
+        jsonPath: .status.state
+      - name: Next Turndown
+        type: string
+        description: The next turndown date-time
+        jsonPath: .status.nextScaleDownTime
+      - name: Next Turn Up
+        type: string
+        description: The next turn up date-time
+        jsonPath: .status.nextScaleUpTime
+{{- end }}
+{{- end }}
