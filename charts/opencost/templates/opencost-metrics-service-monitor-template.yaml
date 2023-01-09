@@ -1,0 +1,34 @@
+{{- if .Values.opencostMetrics }}
+{{- if .Values.opencostMetrics.exporter }}
+{{- if .Values.opencostMetrics.exporter.enabled }}
+{{- if .Values.opencostMetrics.exporter.serviceMonitor }}
+{{- if .Values.opencostMetrics.exporter.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "opencost.kubeMetricsName" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+    {{- if .Values.opencostMetrics.exporter.serviceMonitor.additionalLabels }}
+    {{ toYaml .Values.opencostMetrics.exporter.serviceMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: tcp-metrics
+      honorLabels: true
+      interval: 1m
+      scrapeTimeout: 10s
+      path: /metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app: {{ include "opencost.kubeMetricsName" . }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+

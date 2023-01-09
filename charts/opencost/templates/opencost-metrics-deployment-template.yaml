@@ -1,0 +1,267 @@
+{{- if .Values.opencostMetrics }}
+{{- if .Values.opencostMetrics.exporter }}
+{{- if or .Values.opencostMetrics.exporter.enabled .Values.agent }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "opencost.kubeMetricsName" . }}
+  labels:
+    {{ unset (include "costmodel.commonLabels" . | fromYaml) "app" | toYaml | nindent 4 }}
+    app: {{ template "opencost.kubeMetricsName" . }}
+{{- with .Values.opencostMetrics.exporter.labels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.opencostMetrics.exporter.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ include "opencost.kubeMetricsName" . }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ template "opencost.kubeMetricsName" . }}
+        {{- if .Values.global.additionalLabels }}
+        {{ toYaml .Values.global.additionalLabels | nindent 8 }}
+        {{- end }}
+{{- with .Values.opencostMetrics.exporter.labels }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- if .Values.global.podAnnotations }}
+      annotations:
+{{- with .Values.global.podAnnotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- end }}
+    spec:
+      restartPolicy: Always
+      serviceAccountName: {{ template "costmodel.serviceAccountName" . }}
+      volumes:
+        {{- if .Values.agent }}
+        - name: config-store
+          secret:
+            secretName: {{ .Values.agentKeySecretName }}
+        {{- end }}
+        {{- if .Values.opencostProductConfigs }}
+        {{- if .Values.opencostProductConfigs.gcpSecretName }}
+        - name: gcp-key-secret
+          secret:
+            secretName: {{ .Values.opencostProductConfigs.gcpSecretName }}
+            items:
+            - key: compute-viewer-opencost-key.json
+              path: service-key.json
+        {{- end }}
+        {{- if .Values.opencostProductConfigs.serviceKeySecretName }}
+        - name: service-key-secret
+          secret:
+            secretName: {{ .Values.opencostProductConfigs.serviceKeySecretName }}
+        {{- else if .Values.opencostProductConfigs.createServiceKeySecret }}
+        - name: service-key-secret
+          secret:
+            secretName: cloud-service-key
+        {{- end }}
+        {{- if .Values.opencostProductConfigs.azureStorageSecretName }}
+        - name: azure-storage-config
+          secret:
+            secretName: {{ .Values.opencostProductConfigs.azureStorageSecretName }}
+            items:
+              - key: azure-storage-config.json
+                path: azure-storage-config.json
+        {{- else if .Values.opencostProductConfigs.azureStorageCreateSecret }}
+        - name: azure-storage-config
+          secret:
+            secretName: azure-storage-config
+        {{- end }}
+        {{- if .Values.opencostProductConfigs.cloudIntegrationSecret }}
+        - name: cloud-integration
+          secret:
+            secretName: {{ .Values.opencostProductConfigs.cloudIntegrationSecret }}
+            items:
+              - key: cloud-integration.json
+                path: cloud-integration.json
+        {{- end }}
+        {{- end }}
+        - name: persistent-configs
+{{- if .Values.persistentVolume }}
+{{- if .Values.persistentVolume.enabled }}
+          persistentVolumeClaim:
+{{- if .Values.persistentVolume.existingClaim }}
+            claimName: {{ .Values.persistentVolume.existingClaim }}
+{{- else }}
+            claimName: {{ template "costmodel.fullname" . }}
+{{- end -}}
+{{- else }}
+          emptyDir: {}
+{{- end -}}
+{{- else }}
+          persistentVolumeClaim:
+            claimName: {{ template "costmodel.fullname" . }}
+{{- end }}
+      initContainers:
+{{- if .Values.supportNFS }}
+        - name: config-db-perms-fix
+        {{- if .Values.initChownDataImage }}
+          image: {{ .Values.initChownDataImage }}
+        {{- else }}
+          image: busybox
+        {{- end }}
+          resources:
+{{ toYaml .Values.initChownData.resources | indent 12 }}
+          command: ["sh", "-c", "/bin/chmod -R 777 /var/configs"]
+          volumeMounts:
+            - name: persistent-configs
+              mountPath: /var/configs
+          securityContext:
+            runAsUser: 0
+{{- end }}
+      containers:
+        - image: {{ .Values.opencostModel.image }}:{{ .Values.opencostModel.imageVersion }}
+        {{- if .Values.opencostModel.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.opencostModel.imagePullPolicy }}
+        {{- else }}
+          imagePullPolicy: Always
+        {{- end }}
+          name: {{ template "opencost.kubeMetricsName" . }}
+          ports:
+            - name: tcp-metrics
+              protocol: TCP
+              containerPort: {{ .Values.opencostMetrics.exporter.port | default 9005 }}
+          resources:
+{{ toYaml .Values.opencostMetrics.exporter.resources | indent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.opencostMetrics.exporter.port | default 9005 }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 200
+          volumeMounts:
+            - name: persistent-configs
+              mountPath: /var/configs
+            {{- if .Values.agent }}
+            - name: config-store
+              mountPath: /var/secrets
+            {{- end }}
+            {{- if .Values.opencostProductConfigs }}
+            {{- if .Values.opencostProductConfigs.gcpSecretName }}
+            - name: gcp-key-secret
+              mountPath: /var/secrets
+            {{- end }}
+            {{- if or .Values.opencostProductConfigs.azureStorageSecretName .Values.opencostProductConfigs.azureStorageCreateSecret}}
+            - name: azure-storage-config
+              mountPath: /var/azure-storage-config
+            {{- end }}
+            {{- if .Values.opencostProductConfigs.cloudIntegrationSecret}}
+            - name: cloud-integration
+              mountPath: /var/cloud-integration
+            {{- end }}
+            {{- if or .Values.opencostProductConfigs.serviceKeySecretName .Values.opencostProductConfigs.createServiceKeySecret }}
+            - name: service-key-secret
+              mountPath: /var/secrets
+            {{- end }}
+            {{- end }}
+          args:
+            - agent
+            {{- if .Values.opencostMetrics.exporter.extraArgs }}
+            {{ toYaml .Values.opencostMetrics.exporter.extraArgs | nindent 12 }}
+            {{- end }}
+          env:
+            - name: PROMETHEUS_SERVER_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ template "costmodel.fullname" . }}
+                  key: prometheus-server-endpoint
+            - name: CLOUD_PROVIDER_API_KEY
+              value: "AIzaSyDXQPG_MHUEy9neR7stolq6l0ujXmjJlvk" # The GCP Pricing API requires a key.
+            {{- if .Values.opencostProductConfigs }}
+            {{- if .Values.opencostProductConfigs.gcpSecretName }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/configs/key.json
+            {{- end }}
+            {{- end }}
+            - name: CONFIG_PATH
+              value: /var/configs/
+            - name: KUBECOST_METRICS_PORT
+              value: {{ (quote .Values.opencostMetrics.exporter.port) | default (quote 9005) }}
+            {{- if .Values.agent }}
+            - name: KUBECOST_CONFIG_BUCKET
+              value: /var/secrets/object-store.yaml
+            - name: EXPORT_CLUSTER_INFO_ENABLED
+              value: {{ (quote .Values.opencostMetrics.exporter.exportClusterInfo) | default (quote true) }}
+            - name: EXPORT_CLUSTER_CACHE_ENABLED
+              value: {{ (quote .Values.opencostMetrics.exporter.exportClusterCache) | default (quote true) }}
+            {{- end }}
+            - name: EMIT_POD_ANNOTATIONS_METRIC
+              value: {{ (quote .Values.opencostMetrics.emitPodAnnotations) | default (quote false) }}
+            - name: EMIT_NAMESPACE_ANNOTATIONS_METRIC
+              value: {{ (quote .Values.opencostMetrics.emitNamespaceAnnotations) | default (quote false) }}
+            - name: EMIT_KSM_V1_METRICS
+              value: {{ (quote .Values.opencostMetrics.emitKsmV1Metrics) | default (quote true) }}
+            - name: EMIT_KSM_V1_METRICS_ONLY # ONLY emit KSM v1 metrics that do not exist in KSM 2 by default
+              value: {{ (quote .Values.opencostMetrics.emitKsmV1MetricsOnly) | default (quote false) }}
+            - name: MAX_QUERY_CONCURRENCY
+              value: {{ (quote .Values.opencostModel.maxQueryConcurrency) | default (quote 5) }}
+            {{- if .Values.global.prometheus.queryServiceBasicAuthSecretName}}
+            - name: DB_BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.prometheus.queryServiceBasicAuthSecretName }}
+                  key: USERNAME
+            - name: DB_BASIC_AUTH_PW
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.prometheus.queryServiceBasicAuthSecretName }}
+                  key: PASSWORD
+            {{- end }}
+            {{- if .Values.global.prometheus.queryServiceBearerTokenSecretName }}
+            - name: DB_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.prometheus.queryServiceBearerTokenSecretName }}
+                  key: TOKEN
+            {{- end }}
+            {{- if .Values.global.prometheus.insecureSkipVerify }}
+            - name: INSECURE_SKIP_VERIFY
+              value: {{ (quote .Values.global.prometheus.insecureSkipVerify) }}
+            {{- end }}
+            {{- if and (.Values.prometheus.server.global.external_labels.cluster_id) (not .Values.prometheus.server.clusterIDConfigmap) }}
+            - name: CLUSTER_ID
+              value: {{ .Values.prometheus.server.global.external_labels.cluster_id }}
+            {{- end }}
+            {{- if .Values.prometheus.server.clusterIDConfigmap }}
+            - name: CLUSTER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.prometheus.server.clusterIDConfigmap }}
+                  key: CLUSTER_ID
+            {{- end }}
+            {{- if .Values.opencostModel.promClusterIDLabel }}
+            - name: PROM_CLUSTER_ID_LABEL
+              value: {{ .Values.opencostModel.promClusterIDLabel }}
+            {{- end }}
+            - name: RELEASE_NAME
+              value: {{ .Release.Name }}
+            - name: KUBECOST_NAMESPACE
+              value: {{ .Release.Namespace }}
+      {{- if .Values.opencostMetrics.exporter.priorityClassName }}
+      priorityClassName: {{ .Values.opencostMetrics.exporter.priorityClassName }}
+      {{- end }}
+      {{- with .Values.opencostMetrics.exporter.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.opencostMetrics.exporter.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.opencostMetrics.exporter.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

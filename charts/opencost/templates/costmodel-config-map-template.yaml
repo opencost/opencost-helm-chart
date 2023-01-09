@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "costmodel.fullname" . }}
+  labels:
+    {{ include "costmodel.commonLabels" . | nindent 4 }}
+data:
+  {{- if .Values.global.prometheus.enabled }}
+  {{- if .Values.global.zone }}
+    prometheus-alertmanager-endpoint: http://{{ template "costmodel.prometheus.alertmanager.name" . }}.{{ .Release.Namespace  }}.svc.{{ .Values.global.zone }}
+  {{ else }}
+    prometheus-alertmanager-endpoint: http://{{ template "costmodel.prometheus.alertmanager.name" . }}.{{ .Release.Namespace  }}
+  {{- end -}}
+  {{ else }}
+    prometheus-alertmanager-endpoint: {{ .Values.global.notifications.alertmanager.fqdn }}
+  {{- end -}}
+  {{if .Values.global.amp.enabled }}
+    prometheus-server-endpoint: {{ .Values.global.amp.prometheusServerEndpoint }}
+  {{- else if .Values.global.prometheus.enabled }}
+  {{- if .Values.global.zone }}
+    prometheus-server-endpoint: http://{{ template "costmodel.prometheus.server.name" . }}.{{ .Release.Namespace  }}.svc.{{ .Values.global.zone }}
+  {{ else }}
+    prometheus-server-endpoint: http://{{ template "costmodel.prometheus.server.name" . }}.{{ .Release.Namespace  }}
+  {{- end -}}
+  {{ else }}
+    prometheus-server-endpoint: {{ .Values.global.prometheus.fqdn }}
+  {{- end -}}

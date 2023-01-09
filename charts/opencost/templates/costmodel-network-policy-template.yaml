@@ -1,0 +1,47 @@
+{{- if .Values.networkPolicy -}}
+{{- if .Values.networkPolicy.costModel.enabled -}}
+kind: NetworkPolicy
+apiVersion: {{ include "costmodel.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "costmodel.fullname" . }}
+{{- if .Values.networkPolicy.costModel.annotations }}
+  annotations:
+{{ toYaml .Values.networkPolicy.costModel.annotations | indent 4}}
+{{- end }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "costmodel.commonLabels" . | nindent 4 }}
+{{- if .Values.networkPolicy.costModel.additionalLabels }}
+{{ toYaml .Values.networkPolicy.costModel.additionalLabels | indent 4 }}
+{{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "costmodel.selectorLabels" . | nindent 6 }}
+  policyTypes:
+{{- if .Values.networkPolicy.costModel.ingressRules }}
+    - Ingress
+{{- end }}
+{{- if .Values.networkPolicy.costModel.egressRules }}
+    - Egress
+{{- end }}
+{{- if .Values.networkPolicy.costModel.egressRules }}
+  egress:
+{{-  range $rule := .Values.networkPolicy.costModel.egressRules }}
+    - to:
+{{ toYaml $rule.selectors | indent 7 }}
+      ports:
+{{ toYaml $rule.ports | indent 9 }}  
+{{- end }}
+{{- end }}
+{{- if .Values.networkPolicy.costModel.ingressRules }}
+  ingress:
+{{-  range $rule := .Values.networkPolicy.costModel.ingressRules }}
+    - from:
+{{ toYaml $rule.selectors | indent 7 }}
+      ports:
+{{ toYaml $rule.ports | indent 9 }}  
+{{- end }}
+{{- end }}
+{{- end -}}
+{{- end -}}
