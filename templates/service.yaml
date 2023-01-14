@@ -15,7 +15,7 @@ spec:
     - name: {{ .Values.opencost.exporter.name }}
       port: 9003
       targetPort: 9003
-    {{- if .Values.opencost.ui.enabled -}}
+    {{- if .Values.opencost.ui.enabled }}
     - name: opencost-ui
       port: 9090
       targetPort: 9090
