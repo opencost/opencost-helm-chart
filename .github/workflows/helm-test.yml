@@ -1,4 +1,4 @@
-# CI Workflow for helm chart
+# CI Workflow for OpenCost Helm chart
 name: CI
 
 # Controls when the workflow will run
