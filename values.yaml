@@ -12,7 +12,7 @@ opencost:
         cpu: "10m"
         memory: "55M"
       limits:
-        cpu: "999m"
+        # cpu: "999m"
         memory: "1G"
 
   namespace:
@@ -33,7 +33,7 @@ opencost:
         cpu: "10m"
         memory: "55M"
       limits:
-        cpu: "999m"
+#       cpu: "999m"
         memory: "1G"
 
   tolerations: []
