@@ -1,0 +1,8 @@
+{{- if .Values.opencost.namespace.create -}}
+# The namespace opencost will run in
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.opencost.namespace.name }}
+{{- end -}}
+

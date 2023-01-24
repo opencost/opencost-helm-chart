@@ -1,0 +1,22 @@
+# Expose the cost model with a service
+#
+# Without a Prometheus endpoint configured in the deployment,
+# only opencost/metrics will have useful data as it is intended
+# to be used as just an exporter.
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.opencost.fullname }}
+spec:
+  selector:
+    app: opencost
+  type: ClusterIP
+  ports:
+    - name: {{ .Values.opencost.exporter.name }}
+      port: 9003
+      targetPort: 9003
+    {{- if .Values.opencost.ui.enabled }}
+    - name: opencost-ui
+      port: 9090
+      targetPort: 9090
+    {{- end -}}
