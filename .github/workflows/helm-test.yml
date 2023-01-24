@@ -52,20 +52,20 @@ jobs:
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --target-branch ${{ github.event.repository.default_branch }}
+        run: ct lint --chart-dirs . --target-branch ${{ github.event.repository.default_branch }}
 
-      - name: Run chart-testing (lint --all)
-        run: ct lint --all --target-branch ${{ github.event.repository.default_branch }}
+      - name: Run chart-testing (lint opencost)
+        run: ct lint --chart-dirs . --charts opencost
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
         if: steps.list-changed.outputs.changed == 'true' || steps.files-changed.outputs.any_modified == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --target-branch ${{ github.event.repository.default_branch }} --upgrade 
+        run: ct install --chart-dirs . --target-branch ${{ github.event.repository.default_branch }} --upgrade 
 
       # ct list-changed may not report changed files. If 
-      - name: Run chart-testing (install --all)
-        run: ct install --all --target-branch ${{ github.event.repository.default_branch }}
+      - name: Run chart-testing (install opencost)
+        run: ct install --chart-dirs . --charts opencost
 
 
