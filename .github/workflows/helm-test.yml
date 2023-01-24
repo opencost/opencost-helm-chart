@@ -34,6 +34,15 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.3.1
 
+      - name: Get changed files in the docs folder
+        id: files-changed
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            templates/**
+            Chart.yaml
+            values.yaml
+
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
@@ -45,9 +54,17 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --target-branch ${{ github.event.repository.default_branch }}
 
+      - name: Run chart-testing (lint --all)
+        run: ct lint --all
+
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' || steps.files-changed.outputs.any_modified == 'true'
 
       - name: Run chart-testing (install)
         run: ct install --target-branch ${{ github.event.repository.default_branch }} --upgrade 
+
+      # ct list-changed may not report changed files. If 
+      - name: Run chart-testing (install --all)
+        run: ct install --all
+
