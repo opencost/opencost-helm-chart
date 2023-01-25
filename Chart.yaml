@@ -2,4 +2,7 @@ apiVersion: v2
 appVersion: 1.9.8
 name: opencost
 description: Opencost and Opencost UI
-version:  0.0.1
+version: 0.0.1
+maintainers:
+  - name: mattray
+    url: https://mattray.dev

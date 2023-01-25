@@ -1,0 +1,72 @@
+# CI Workflow for OpenCost Helm chart
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  helm-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: azure/setup-helm@v3
+        with:
+          version: v3.10.0
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          check-latest: true
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.3.1
+
+      - name: Get changed files in the docs folder
+        id: files-changed
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            templates/**
+            Chart.yaml
+            values.yaml
+            helm-test.yml
+
+      # change detection in ct seems to not detect some changes. Using simple file modification for now. 
+      # - name: Run chart-testing (list-changed)
+      #   id: list-changed
+      #   run: |
+      #     changed=$(ct list-changed --chart-dirs . --target-branch ${{ github.event.repository.default_branch }})
+      #     if [[ -n "$changed" ]]; then
+      #       echo "chart-changed=true" >> $GITHUB_OUTPUT
+      #     fi
+      # - name: Run chart-testing (lint changed)
+      #   run: ct lint --chart-dirs . --target-branch ${{ github.event.repository.default_branch }}
+
+      - name: Run chart-testing (lint)
+        run: ct lint --chart-dirs . --charts .
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1.4.0
+        # if: steps.list-changed.outputs.chart-changed == 'true' || steps.files-changed.outputs.any_modified == 'true'
+        if: steps.files-changed.outputs.any_modified == 'true'
+
+      # - name: Run chart-testing (install changed)
+      #  run: ct install --chart-dirs . --target-branch ${{ github.event.repository.default_branch }} --upgrade 
+
+      - name: Run chart-testing (install)
+        run: ct install --chart-dirs . --charts .
+
+
