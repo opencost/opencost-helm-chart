@@ -23,7 +23,7 @@ opencost:
 
   prometheus:
     serviceName: my-prometheus
-    namespaceName: opencost
+    namespaceName: prometheus
 
   ui:
     enabled: true
