@@ -22,7 +22,7 @@ opencost:
     name: opencost
 
   prometheus:
-    serviceName: my-prometheus
+    serviceName: my-prometheus-server
     namespaceName: prometheus
 
   ui:
