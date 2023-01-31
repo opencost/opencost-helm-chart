@@ -30,7 +30,7 @@ opencost:
         memory: '1G'
     extraEnv:
       {}
-      #FOO: BAR
+      # FOO: BAR
 
   metrics:
     serviceMonitor:
@@ -51,8 +51,8 @@ opencost:
       metricRelabelings: []
 
   prometheus:
-    #username:
-    #password:
+    # username:
+    # password:
     external:
       enabled: false
       url: 'https://mimir-dev-push.infra.alto.com/prometheus'
