@@ -3,7 +3,10 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opencost
+  labels:
+    {{- include "opencost.labels" . | nindent 4 }}
+  name: {{ include "opencost.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [""]
     resources:
