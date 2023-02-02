@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: 1.9.8
 name: opencost
-description: Opencost and Opencost UI
+description: OpenCost and OpenCost UI
 version: 1.0.0
 maintainers:
   - name: mattray
