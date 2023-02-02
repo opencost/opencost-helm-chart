@@ -39,12 +39,9 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            templates/**
-            Chart.yaml
-            values.yaml
-            helm-test.yml
+            charts/**
 
-      # change detection in ct seems to not detect some changes. Using simple file modification for now. 
+      # change detection in ct seems to not detect some changes. Using simple file modification for now.
       # - name: Run chart-testing (list-changed)
       #   id: list-changed
       #   run: |
@@ -56,7 +53,7 @@ jobs:
       #   run: ct lint --chart-dirs . --target-branch ${{ github.event.repository.default_branch }}
 
       - name: Run chart-testing (lint)
-        run: ct lint --chart-dirs . --charts .
+        run: ct lint --all
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
@@ -67,6 +64,5 @@ jobs:
       #  run: ct install --chart-dirs . --target-branch ${{ github.event.repository.default_branch }} --upgrade 
 
       - name: Run chart-testing (install)
-        run: ct install --chart-dirs . --charts .
-
-
+        run: ct install --all
+        if: steps.files-changed.outputs.any_modified == 'true'
