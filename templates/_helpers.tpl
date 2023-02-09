@@ -75,7 +75,7 @@ Create the name of the controller service account to use
     {{- $host := .Values.opencost.prometheus.internal.serviceName }}
     {{- $ns := .Values.opencost.prometheus.internal.namespaceName }}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
-    {{- printf "%s.%s:%d" $host $ns $port -}}
+    {{- printf "http://%s.%s:%d" $host $ns $port -}}
 {{- end -}}
 {{- end -}}
 
