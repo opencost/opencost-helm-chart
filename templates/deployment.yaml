@@ -30,15 +30,15 @@ spec:
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
       tolerations:
         {{- toYaml .Values.opencost.tolerations | nindent 8 }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.opencost.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.opencost.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with.Values.topologySpreadConstraints }}
+      {{- with.Values.opencost.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
       {{- end }}
