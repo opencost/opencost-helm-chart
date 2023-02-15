@@ -1,12 +1,9 @@
-# heavily borrowed from https://github.com/dirien/minecraft-prometheus-exporter/blob/main/.github/workflows/helm-publish.yaml
 ---
 name: chart-publish
 on:
   push:
     branches:
       - main
-    paths:
-      - 'charts/**'
 env:
   HELM_DOCS_VERSION: '1.11.0'
 
@@ -50,7 +47,7 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@be16258da8010256c6e82849661221415f031968 # v1.5.0
         with:
-          charts_dir: ./
+          charts_dir: charts
           config: './.github/configs/cr.yaml'
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
