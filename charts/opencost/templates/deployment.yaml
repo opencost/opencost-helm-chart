@@ -41,7 +41,7 @@ spec:
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
-            {{- if .Values.opencost.exporter.cloudProviderApiKey }}}
+            {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
               value: {{ .Values.opencost.exporter.cloudProviderApiKey | quote }}
             {{- end }}
