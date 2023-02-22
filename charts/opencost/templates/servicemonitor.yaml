@@ -8,6 +8,9 @@ metadata:
 {{- end }}
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
+    {{- if .Values.opencost.metrics.serviceMonitor.additionalLabels }}
+    {{- toYaml .Values.opencost.metrics.serviceMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
 spec:
   endpoints:
     - port: http
