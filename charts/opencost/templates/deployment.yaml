@@ -30,6 +30,18 @@ spec:
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
       tolerations:
         {{- toYaml .Values.opencost.tolerations | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with.Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag }}"
           name: {{ include "opencost.fullname" . }}
