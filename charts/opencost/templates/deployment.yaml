@@ -1,4 +1,4 @@
-{{- include  "isPrometheusConfigValid" . }}
+{{- include  "isPrometheusConfigValid" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,6 +30,18 @@ spec:
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
       tolerations:
         {{- toYaml .Values.opencost.tolerations | nindent 8 }}
+      {{- with .Values.opencost.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.opencost.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with.Values.opencost.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag }}"
           name: {{ include "opencost.fullname" . }}
