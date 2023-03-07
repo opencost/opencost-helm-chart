@@ -80,3 +80,9 @@ opencost:
   nodeSelector: {}
   affinity: {}
   topologySpreadConstraints: []
+## @param extraVolumes A list of volumes to be added to the pod
+##
+extraVolumes: []
+## @param extraVolumeMounts A list of volume mounts to be added to the pod
+##
+extraVolumeMounts: []
