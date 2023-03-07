@@ -28,6 +28,8 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1G'
+    ## @param extraVolumeMounts A list of volume mounts to be added to the pod
+    extraVolumeMounts: []
     extraEnv:
       {}
       # FOO: BAR
@@ -83,6 +85,4 @@ opencost:
 ## @param extraVolumes A list of volumes to be added to the pod
 ##
 extraVolumes: []
-## @param extraVolumeMounts A list of volume mounts to be added to the pod
-##
-extraVolumeMounts: []
+
