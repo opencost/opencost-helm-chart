@@ -51,8 +51,8 @@ spec:
             - containerPort: 9003
               name: http
           volumeMounts:
-          {{- if .Values.extraVolumeMounts }}
-          {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- if .Values.opencost.exporter.extraVolumeMounts }}
+          {{- toYaml .Values.opencost.exporter.extraVolumeMounts | nindent 12 }}
           {{- end }}
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
