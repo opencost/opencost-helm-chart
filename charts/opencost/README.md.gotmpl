@@ -2,13 +2,15 @@
 
 {{ template "chart.description" . }}
 
-{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+{{ template "chart.versionBadge" . }}
+{{ template "chart.typeBadge" . }}
+{{ template "chart.appVersionBadge" . }}
 
 {{ template "chart.maintainersSection" . }}
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `opencost`:
 
 ```console
 $ helm install opencost opencost/{{ template "chart.name" . }}
