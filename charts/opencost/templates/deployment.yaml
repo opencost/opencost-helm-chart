@@ -20,10 +20,10 @@ spec:
       maxUnavailable: 1
     type: RollingUpdate
   template:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+    {{- with .Values.podAnnotations }}
+    annotations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
     metadata:
       labels:
         {{- include "opencost.selectorLabels" . | nindent 8 }}
