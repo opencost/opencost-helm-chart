@@ -85,4 +85,3 @@ opencost:
 ## @param extraVolumes A list of volumes to be added to the pod
 ##
 extraVolumes: []
-
