@@ -50,6 +50,10 @@ spec:
           ports:
             - containerPort: 9003
               name: http
+          volumeMounts:
+          {{- if .Values.opencost.exporter.extraVolumeMounts }}
+          {{- toYaml .Values.opencost.exporter.extraVolumeMounts | nindent 12 }}
+          {{- end }}
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
@@ -89,4 +93,8 @@ spec:
           ports:
             - containerPort: 9090
               name: http-ui
-        {{- end -}}
+        {{- end }}
+      volumes:
+      {{- if .Values.extraVolumes }}
+      {{- toYaml .Values.extraVolumes | nindent 8 }}
+      {{- end }}
