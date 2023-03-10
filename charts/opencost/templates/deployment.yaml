@@ -78,6 +78,9 @@ spec:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BASIC_AUTH_PW
             {{- end }}
+            {{- with .Values.opencost.exporter.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
             - name: {{ $key }}
