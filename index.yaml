@@ -3,6 +3,18 @@ entries:
   opencost:
   - apiVersion: v2
     appVersion: 1.9.8
+    created: "2023-03-10T15:57:38.288424685Z"
+    description: OpenCost and OpenCost UI
+    digest: 619ea9aa8cd21120f5fb7cc13bb67dbb3ef3fc56955e1df3075f2c40e5141a52
+    maintainers:
+    - name: mattray
+      url: https://mattray.dev
+    name: opencost
+    urls:
+    - https://github.com/opencost/opencost-helm-chart/releases/download/1.1.0-helm/opencost-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.9.8
     created: "2023-02-23T06:30:18.142262354Z"
     description: OpenCost and OpenCost UI
     digest: ce949acb70cfc28fc6662b757cdb210d21751852cef7bc4e12297c7900c7404d
@@ -25,4 +37,4 @@ entries:
     urls:
     - https://github.com/opencost/opencost-helm-chart/releases/download/1.0.2-helm/opencost-1.0.2.tgz
     version: 1.0.2
-generated: "2023-02-23T06:30:18.142274154Z"
+generated: "2023-03-10T15:57:38.288439185Z"
