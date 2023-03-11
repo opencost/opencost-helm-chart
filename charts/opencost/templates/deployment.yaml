@@ -20,6 +20,10 @@ spec:
       maxUnavailable: 1
     type: RollingUpdate
   template:
+    {{- with .Values.podAnnotations }}
+    annotations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
     metadata:
       labels:
         {{- include "opencost.selectorLabels" . | nindent 8 }}
@@ -63,7 +67,7 @@ spec:
             {{- end }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
-            # If username and password are defined, pull from secrets
+            # If username, password or bearer_token are defined, pull from secrets
             {{- if .Values.opencost.prometheus.username }}
             - name: DB_BASIC_AUTH_USERNAME
               valueFrom:
@@ -77,6 +81,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BASIC_AUTH_PW
+            {{- else if .Values.opencost.prometheus.bearer_token }}
+            - name: DB_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.fullname" . }}
+                  key: DB_BEARER_TOKEN
             {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
