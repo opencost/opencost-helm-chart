@@ -23,9 +23,9 @@ spec:
     metadata:
       labels:
         {{- include "opencost.selectorLabels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
+      {{- if .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
     {{- if .Values.imagePullSecrets }}
