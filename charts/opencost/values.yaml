@@ -6,6 +6,8 @@ serviceAccount:
 
 annotations: {}
 
+podAnnotations: {}
+
 service:
   annotations: {}
   labels: {}
@@ -55,6 +57,7 @@ opencost:
   prometheus:
     # username:
     # password:
+    # bearer_token:
     external:
       enabled: false
       url: 'https://mimir-dev-push.infra.alto.com/prometheus'
