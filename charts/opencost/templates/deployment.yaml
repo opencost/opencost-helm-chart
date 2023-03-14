@@ -81,18 +81,15 @@ spec:
                 secretKeyRef:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BASIC_AUTH_PW
-            {{- end }}
-<<<<<<< HEAD
-            {{- with .Values.opencost.exporter.env }}
-            {{- toYaml . | nindent 12 }}
-=======
-            {{- if .Values.opencost.prometheus.bearer_token }}
+            {{- else if .Values.opencost.prometheus.bearer_token }}
             - name: DB_BEARER_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BEARER_TOKEN
->>>>>>> fd88fa3 (add pod annotation and make secret object optional)
+            {{- end }}
+            {{- with .Values.opencost.exporter.env }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
