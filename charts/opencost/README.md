@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.100.2](https://img.shields.io/badge/AppVersion-1.100.2-informational?style=flat-square)
+![AppVersion: 1.101.2](https://img.shields.io/badge/AppVersion-1.101.2-informational?style=flat-square)
 
 ## Maintainers
 
@@ -34,6 +34,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.image.registry | string | `"quay.io"` | Exporter container image registry |
 | opencost.exporter.image.repository | string | `"kubecost1/kubecost-cost-model"` | Exporter container image name |
 | opencost.exporter.image.tag | string | `""` (use appVersion in Chart.yaml) | Exporter container image tag |
+| opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
