@@ -13,6 +13,10 @@ annotations: {}
 # --  Annotations to add to the OpenCost Pod
 podAnnotations: {}
 
+# -- Holds pod-level security attributes and common container settings
+podSecurityContext: {}
+  # fsGroup: 2000
+
 service:
   # --  Annotations to add to the service
   annotations: {}
@@ -46,6 +50,15 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- The security options the container should be run with
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 1000
+
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
     # -- Any extra environment variables you would like to pass on to the pod
@@ -111,6 +124,14 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- The security options the container should be run with
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 1000
 
   # -- Toleration labels for pod assignment
   tolerations: []
