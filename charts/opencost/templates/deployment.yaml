@@ -10,7 +10,7 @@ metadata:
   annotations: {{ toYaml .Values.annotations | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.opencost.exporter.replicas }}
   selector:
     matchLabels:
       {{- include "opencost.selectorLabels" . | nindent 6 }}

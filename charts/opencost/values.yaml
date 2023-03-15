@@ -35,6 +35,8 @@ opencost:
       # -- Exporter container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
       tag: ""
+    # -- Number of OpenCost replicas to run
+    replicas: 1
     resources:
       # -- CPU/Memory resource requests
       requests:
