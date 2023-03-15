@@ -47,7 +47,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag }}"
+        - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: {{ include "opencost.fullname" . }}
           resources:
             {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
@@ -98,7 +98,7 @@ spec:
             {{- end }}
           imagePullPolicy: Always
         {{- if .Values.opencost.ui.enabled }}
-        - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag }}"
+        - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: opencost-ui
           resources:
             {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
