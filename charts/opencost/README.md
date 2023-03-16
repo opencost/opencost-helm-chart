@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square)
+![Version: 1.6.0](https://img.shields.io/badge/Version-1.6.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.101.2](https://img.shields.io/badge/AppVersion-1.101.2-informational?style=flat-square)
 
@@ -37,6 +37,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
+| opencost.exporter.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
 | opencost.metrics.serviceMonitor.enabled | bool | `false` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
 | opencost.metrics.serviceMonitor.honorLabels | bool | `false` | HonorLabels chooses the metric's labels on collisions with target labels |
@@ -62,7 +63,9 @@ $ helm install opencost opencost/opencost
 | opencost.ui.image.tag | string | `""` (use appVersion in Chart.yaml) | UI container image tag |
 | opencost.ui.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
+| opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | podAnnotations | object | `{}` | Annotations to add to the OpenCost Pod |
+| podSecurityContext | object | `{}` | Holds pod-level security attributes and common container settings |
 | service.annotations | object | `{}` | Annotations to add to the service |
 | service.labels | object | `{}` | Labels to add to the service account |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
