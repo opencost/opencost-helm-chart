@@ -136,6 +136,15 @@ opencost:
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
 
+    # -- Ingress for OpenCost UI
+    ingress:
+      enabled: false
+      ingressClassName: ""
+      hosts:
+        - host: example.local
+          paths:
+            - /
+ 
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment
