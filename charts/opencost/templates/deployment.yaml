@@ -25,7 +25,7 @@ spec:
         {{- include "opencost.selectorLabels" . | nindent 8 }}
       {{- if .Values.podAnnotations }}
       annotations:
-      {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
     spec:
     {{- if .Values.imagePullSecrets }}
@@ -58,9 +58,9 @@ spec:
               name: http
           securityContext:
             {{- toYaml .Values.opencost.exporter.securityContext | nindent 12 }}
+          {{- with .Values.opencost.exporter.extraVolumeMounts }}
           volumeMounts:
-          {{- if .Values.opencost.exporter.extraVolumeMounts }}
-          {{- toYaml .Values.opencost.exporter.extraVolumeMounts | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
@@ -93,7 +93,7 @@ spec:
                   key: DB_BEARER_TOKEN
             {{- end }}
             {{- with .Values.opencost.exporter.env }}
-            {{- toYaml . | nindent 12 }}
+              {{- toYaml . | nindent 12 }}
             {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
@@ -112,8 +112,12 @@ spec:
               name: http-ui
           securityContext:
             {{- toYaml .Values.opencost.ui.securityContext | nindent 12 }}
+          {{- with .Values.opencost.ui.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
+      {{- with .Values.extraVolumes }}
       volumes:
-      {{- if .Values.extraVolumes }}
-      {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}

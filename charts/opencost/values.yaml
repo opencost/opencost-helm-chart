@@ -133,6 +133,9 @@ opencost:
       # runAsNonRoot: true
       # runAsUser: 1000
 
+    # -- A list of volume mounts to be added to the pod
+    extraVolumeMounts: []
+
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment

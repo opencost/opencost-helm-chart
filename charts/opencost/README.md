@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.6.0](https://img.shields.io/badge/Version-1.6.0-informational?style=flat-square)
+![Version: 1.7.0](https://img.shields.io/badge/Version-1.7.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.101.2](https://img.shields.io/badge/AppVersion-1.101.2-informational?style=flat-square)
 
@@ -58,6 +58,7 @@ $ helm install opencost opencost/opencost
 | opencost.tolerations | list | `[]` | Toleration labels for pod assignment |
 | opencost.topologySpreadConstraints | list | `[]` | Assign custom TopologySpreadConstraints rules |
 | opencost.ui.enabled | bool | `true` | Enable OpenCost UI |
+| opencost.ui.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
 | opencost.ui.image.registry | string | `"quay.io"` | UI container image registry |
 | opencost.ui.image.repository | string | `"kubecost1/opencost-ui"` | UI container image name |
 | opencost.ui.image.tag | string | `""` (use appVersion in Chart.yaml) | UI container image tag |
