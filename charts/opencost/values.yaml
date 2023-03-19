@@ -17,12 +17,41 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
-# networkpolicies for external prometheus need  to be defined as a custom policy
+# networkpolicies for ingress
 networkpolicies:
-  enabled: true
-  exporterPodAccessLabels:
-    app: prometheus
-  exporterNamespaceAccessName: prometheus
+  # -- Specifies whether networkpolicies should be created
+  enabled: false
+  exporter:
+    # -- Specifies whether ingress networkpolicy for exporter metrics should be created
+    enabled: true
+    # -- Pod labels of metrics scraper (e.g. prometheus) to allow access to exporter
+    scraperLabels:
+    #  app: prometheus
+
+    # -- Namespace of prometheus to allow access to exporter
+    prometheusNamespace: opencost
+  prometheus:
+    # -- Specifies whether egress networkpolicies for in-cluster Prometheus should be created
+    enabled: true
+    # --- Pod labels of in-cluster Prometheus to allow access to in-cluster Prometheus
+    labels:
+    #  app: prometheus
+  custom:
+    # -- Specifies whether custom networkpolicies should be created
+    enabled: false
+    # -- Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template.
+    rules: 
+    - metadata:
+        name: foo
+        namespace: bar
+      spec:
+        podSelector: {}
+        policyTypes:
+        - Egress
+        egress:   
+        - to:
+          - podSelector: {}
+            namespaceSelector: {}
 
 service:
   # --  Annotations to add to the service
@@ -109,10 +138,9 @@ opencost:
       # -- Namespace of in-cluster Prometheus
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
-      port: 9090
-      # --- Pod labels of in-cluster Prometheus
-      labels:
-        app: prometheus
+      servicePort: 9090
+      # -- Pod port of in-cluster Prometheus
+      podPort: 9090
 
   ui:
     # -- Enable OpenCost UI

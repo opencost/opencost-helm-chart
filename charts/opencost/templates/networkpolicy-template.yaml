@@ -1,0 +1,9 @@
+{{- $apiVersion := (include "networkingAPIVersion" .) }}
+{{- if .Values.networkpolicies.custom.enabled }}
+{{- range $rule := .Values.networkpolicies.custom.rules }}
+{{ $apiVersion }}
+kind: NetworkPolicy
+{{ toYaml $rule }}
+---
+{{- end }}
+{{- end }}

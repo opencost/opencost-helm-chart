@@ -74,7 +74,7 @@ Create the name of the controller service account to use
 {{- else -}}
     {{- $host := .Values.opencost.prometheus.internal.serviceName }}
     {{- $ns := .Values.opencost.prometheus.internal.namespaceName }}
-    {{- $port := .Values.opencost.prometheus.internal.port | int }}
+    {{- $port := .Values.opencost.prometheus.internal.servicePort | int }}
     {{- printf "http://%s.%s.svc:%d" $host $ns $port -}}
 {{- end -}}
 {{- end -}}
@@ -90,8 +90,10 @@ Check that either prometheus external or internal is defined
 {{- end -}}
 
 {{/*
-Define the name for the opencost namespace
+Get api version of networking.k8s.io
 */}}
-{{- define "opencost.namespaceName" -}}
-{{ .Release.Namespace | default "opencost" }}
+{{- define "networkingAPIVersion" -}}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
+apiVersion: networking.k8s.io/v1
+{{- end }}
 {{- end -}}

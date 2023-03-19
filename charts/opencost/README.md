@@ -26,6 +26,14 @@ $ helm install opencost opencost/opencost
 |-----|------|---------|-------------|
 | annotations | object | `{}` | Annotations to add to the Deployment |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
+| networkpolicies.custom.enabled | bool | `false` | Specifies whether custom networkpolicies should be created |
+| networkpolicies.custom.rules | list | `[{"metadata":{"name":"foo","namespace":"bar"},"spec":{"egress":[{"to":[{"namespaceSelector":{},"podSelector":{}}]}],"podSelector":{},"policyTypes":["Egress"]}}]` | Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template. |
+| networkpolicies.enabled | bool | `false` | Specifies whether networkpolicies should be created |
+| networkpolicies.exporter.enabled | bool | `true` | Specifies whether ingress networkpolicy for exporter metrics should be created |
+| networkpolicies.exporter.prometheusNamespace | string | `"opencost"` | Namespace of prometheus to allow access to exporter |
+| networkpolicies.exporter.scraperLabels | string | `nil` | Pod labels of metrics scraper (e.g. prometheus) to allow access to exporter |
+| networkpolicies.prometheus.enabled | bool | `true` | Specifies whether egress networkpolicies for in-cluster Prometheus should be created |
+| networkpolicies.prometheus.labels | string | `nil` | - Pod labels of in-cluster Prometheus to allow access to in-cluster Prometheus |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
@@ -51,8 +59,9 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.external.url | string | `"https://mimir-dev-push.infra.alto.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
 | opencost.prometheus.internal.namespaceName | string | `"opencost"` | Namespace of in-cluster Prometheus |
-| opencost.prometheus.internal.port | int | `9090` | Service port of in-cluster Prometheus |
+| opencost.prometheus.internal.podPort | int | `9090` | Pod port of in-cluster Prometheus |
 | opencost.prometheus.internal.serviceName | string | `"my-prometheus"` | Service name of in-cluster Prometheus |
+| opencost.prometheus.internal.servicePort | int | `9090` | Service port of in-cluster Prometheus |
 | opencost.prometheus.password | string | `""` | Prometheus Basic auth password |
 | opencost.prometheus.username | string | `""` | Prometheus Basic auth username |
 | opencost.tolerations | list | `[]` | Toleration labels for pod assignment |

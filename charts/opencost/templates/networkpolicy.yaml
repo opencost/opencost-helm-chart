@@ -1,5 +1,6 @@
+{{- $apiVersion := (include "networkingAPIVersion" .) }}
 {{- if .Values.networkpolicies.enabled -}}
-apiVersion: networking.k8s.io/v1
+{{- if .Values.networkpolicies.exporter.enabled -}}
 kind: NetworkPolicy
 metadata:
   name: allow-opencost-exporter-ingress
@@ -14,54 +15,44 @@ spec:
     - from:
       - podSelector:
           matchLabels:
-          {{- range $key, $val := .Values.networkpolicies.exporterPodAccessLabels }}
+          {{- range $key, $val := .Values.networkpolicies.exporter.scraperLabels }}
             {{$key}}: {{$val }}
           {{- end}}
-        {{- if ne .Values.networkpolicies.exporterNamespaceAccessName (include "opencost.namespaceName" . ) }}
+        {{- if ne .Values.networkpolicies.exporter.prometheusNamespace .Release.Namespace }}
         namespaceSelector:
           matchLabels:
-            name: {{ .Values.networkpolicies.exporterNamespaceAccessName }}
-
+            name: {{ .Values.networkpolicies.exporter.prometheusNamespace }}
         {{- end }}
       ports:
       - port: 9003
-
+{{- end }}
 ---
 {{- if .Values.opencost.prometheus.internal.enabled }}
-apiVersion: networking.k8s.io/v1
+{{- if .Values.networkpolicies.prometheus.enabled }}
 kind: NetworkPolicy
 metadata:
-  name: allow-prometheus-opencost-ingress
-  namespace: {{ .Values.opencost.prometheus.internal.namespaceName }}
+  name: allow-opencost-metrics-egress
+  namespace: {{ .Release.Namespace }}
 spec:
   podSelector:
     matchLabels:
-    {{- range $key, $val := .Values.opencost.prometheus.internal.labels }}
-      {{$key}}: {{$val }}
-    {{- end}}
+      app.kubernetes.io/name: opencost
   policyTypes:
-    - Ingress
-  ingress:
-    - from:
+    - Egress
+  egress:
+    - to:
       - podSelector:
           matchLabels:
-            app.kubernetes.io/name: opencost
-        {{- if ne .Values.opencost.prometheus.internal.namespaceName (include "opencost.namespaceName" . ) }}
+          {{- range $key, $val := .Values.networkpolicies.prometheus.labels }}
+            {{ $key }}: {{ $val }}
+          {{- end}}
+        {{- if ne .Values.opencost.prometheus.internal.namespaceName .Release.Namespace }}
         namespaceSelector:
           matchLabels:
-            name: {{ include "opencost.namespaceName" .  }}
+            name: {{ .Values.networkpolicies.exporter.prometheusNamespace }}
         {{- end }}
+      ports:
+      - port: {{ .Values.opencost.prometheus.internal.podPort }}
 {{- end }}
-
-
-
-
-
-
-
-
-
-
-
-
+{{- end }}
 {{- end }}
