@@ -6,6 +6,13 @@ serviceAccount:
 
 annotations: {}
 
+# networkpolicies for external prometheus need  to be defined as a custom policy
+networkpolicies:
+  enabled: true
+  exporterPodAccessLabels:
+    app: prometheus
+  exporterNamespaceAccessName: prometheus
+
 service:
   annotations: {}
   labels: {}
@@ -58,9 +65,11 @@ opencost:
       url: 'https://mimir-dev-push.infra.alto.com/prometheus'
     internal:
       enabled: true
-      serviceName: my-prometheus
-      namespaceName: opencost
-      port: 9090
+      serviceName: my-prometheus-server
+      namespaceName: prometheus
+      port: 80
+      labels:
+        app: prometheus
 
   ui:
     enabled: true

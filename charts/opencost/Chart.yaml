@@ -3,6 +3,7 @@ appVersion: 1.9.8
 name: opencost
 description: OpenCost and OpenCost UI
 version: 1.0.3
+icon: https://www.opencost.io/assets/images/opencost-logo-da1451b88bd3065568f9755168643730.png
 maintainers:
   - name: mattray
     url: https://mattray.dev

@@ -1,0 +1,67 @@
+{{- if .Values.networkpolicies.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-opencost-exporter-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: opencost
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+          {{- range $key, $val := .Values.networkpolicies.exporterPodAccessLabels }}
+            {{$key}}: {{$val }}
+          {{- end}}
+        {{- if ne .Values.networkpolicies.exporterNamespaceAccessName (include "opencost.namespaceName" . ) }}
+        namespaceSelector:
+          matchLabels:
+            name: {{ .Values.networkpolicies.exporterNamespaceAccessName }}
+
+        {{- end }}
+      ports:
+      - port: 9003
+
+---
+{{- if .Values.opencost.prometheus.internal.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-prometheus-opencost-ingress
+  namespace: {{ .Values.opencost.prometheus.internal.namespaceName }}
+spec:
+  podSelector:
+    matchLabels:
+    {{- range $key, $val := .Values.opencost.prometheus.internal.labels }}
+      {{$key}}: {{$val }}
+    {{- end}}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app.kubernetes.io/name: opencost
+        {{- if ne .Values.opencost.prometheus.internal.namespaceName (include "opencost.namespaceName" . ) }}
+        namespaceSelector:
+          matchLabels:
+            name: {{ include "opencost.namespaceName" .  }}
+        {{- end }}
+{{- end }}
+
+
+
+
+
+
+
+
+
+
+
+
+{{- end }}

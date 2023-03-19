@@ -88,3 +88,10 @@ Check that either prometheus external or internal is defined
         {{- fail "Only use one of the prometheus setups, internal or external" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Check that either prometheus external or internal is defined
+*/}}
+{{- define "opencost.namespaceName" -}}
+{{ .Release.Namespace | default "opencost" }}
+{{- end -}}
