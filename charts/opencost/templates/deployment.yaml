@@ -10,7 +10,7 @@ metadata:
   annotations: {{ toYaml .Values.annotations | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.opencost.exporter.replicas }}
   selector:
     matchLabels:
       {{- include "opencost.selectorLabels" . | nindent 6 }}
@@ -23,10 +23,16 @@ spec:
     metadata:
       labels:
         {{- include "opencost.selectorLabels" . | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
     spec:
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
     {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
       tolerations:
         {{- toYaml .Values.opencost.tolerations | nindent 8 }}
@@ -43,13 +49,19 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag }}"
+        - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: {{ include "opencost.fullname" . }}
           resources:
             {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
           ports:
             - containerPort: 9003
               name: http
+          securityContext:
+            {{- toYaml .Values.opencost.exporter.securityContext | nindent 12 }}
+          {{- with .Values.opencost.exporter.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
@@ -59,7 +71,7 @@ spec:
             {{- end }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
-            # If username and password are defined, pull from secrets
+            # If username, password or bearer_token are defined, pull from secrets
             {{- if .Values.opencost.prometheus.username }}
             - name: DB_BASIC_AUTH_USERNAME
               valueFrom:
@@ -73,6 +85,15 @@ spec:
                 secretKeyRef:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BASIC_AUTH_PW
+            {{- else if .Values.opencost.prometheus.bearer_token }}
+            - name: DB_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.fullname" . }}
+                  key: DB_BEARER_TOKEN
+            {{- end }}
+            {{- with .Values.opencost.exporter.env }}
+              {{- toYaml . | nindent 12 }}
             {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
@@ -81,7 +102,7 @@ spec:
             {{- end }}
           imagePullPolicy: Always
         {{- if .Values.opencost.ui.enabled }}
-        - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag }}"
+        - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: opencost-ui
           resources:
             {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
@@ -89,4 +110,14 @@ spec:
           ports:
             - containerPort: 9090
               name: http-ui
-        {{- end -}}
+          securityContext:
+            {{- toYaml .Values.opencost.ui.securityContext | nindent 12 }}
+          {{- with .Values.opencost.ui.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
+      {{- with .Values.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

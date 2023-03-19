@@ -1,10 +1,21 @@
 serviceAccount:
+  # -- Specifies whether a service account should be created
   create: true
+  # --  Annotations to add to the service account
   annotations: {}
   # eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eksctl-opencost
+
+  # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
+# --  Annotations to add to the Deployment
 annotations: {}
+# --  Annotations to add to the OpenCost Pod
+podAnnotations: {}
+
+# -- Holds pod-level security attributes and common container settings
+podSecurityContext: {}
+  # fsGroup: 2000
 
 # networkpolicies for external prometheus need  to be defined as a custom policy
 networkpolicies:
@@ -14,78 +25,135 @@ networkpolicies:
   exporterNamespaceAccessName: prometheus
 
 service:
+  # --  Annotations to add to the service
   annotations: {}
+  # --  Labels to add to the service account
   labels: {}
+  # --  Kubernetes Service type
   type: ClusterIP
 
 opencost:
   exporter:
-    # The GCP Pricing API requires a key. This is supplied just for evaluation.
-    # cloudProviderApiKey: 'asdfasdfasdf'
-    # Default cluster ID to use if cluster_id is not set in Prometheus metrics.
+    # -- The GCP Pricing API requires a key. This is supplied just for evaluation.
+    cloudProviderApiKey: ""
+    # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
     defaultClusterId: 'default-cluster'
     image:
+      # -- Exporter container image registry
       registry: quay.io
+      # -- Exporter container image name
       repository: kubecost1/kubecost-cost-model
-      tag: latest
+      # -- Exporter container image tag
+      # @default -- `""` (use appVersion in Chart.yaml)
+      tag: ""
+    # -- Number of OpenCost replicas to run
+    replicas: 1
     resources:
+      # -- CPU/Memory resource requests
       requests:
         cpu: '10m'
-        memory: '55M'
+        memory: '55Mi'
+      # -- CPU/Memory resource limits
       limits:
         cpu: '999m'
-        memory: '1G'
-    extraEnv:
-      {}
+        memory: '1Gi'
+    # -- The security options the container should be run with
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 1000
+
+    # -- A list of volume mounts to be added to the pod
+    extraVolumeMounts: []
+    # -- Any extra environment variables you would like to pass on to the pod
+    extraEnv: {}
       # FOO: BAR
 
   metrics:
     serviceMonitor:
+      # -- Create ServiceMonitor resource for scraping metrics using PrometheusOperator
       enabled: false
+      # -- Additional labels to add to the ServiceMonitor
       additionalLabels: {}
-      ## The label to use to retrieve the job name from.
-      ## jobLabel: "app.kubernetes.io/name"
-      namespace: ''
-      namespaceSelector: {}
-      ## Default: scrape .Release.Namespace only
-      ## To scrape all, use the following:
-      ## namespaceSelector:
-      ##   any: true
+      # -- Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart)
+      namespace: ""
+      # -- Interval at which metrics should be scraped
       scrapeInterval: 30s
-      # honorLabels: true
-      targetLabels: []
+      # -- HonorLabels chooses the metric's labels on collisions with target labels
+      honorLabels: false
+      # -- RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields
       relabelings: []
+      # -- MetricRelabelConfigs to apply to samples before ingestion
       metricRelabelings: []
 
   prometheus:
-    # username:
-    # password:
+    # -- Prometheus Basic auth username
+    username: ""
+    # -- Prometheus Basic auth password
+    password: ""
+    # -- Prometheus Bearer token
+    bearer_token: ""
     external:
+      # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
+      # -- External Prometheus url
       url: 'https://mimir-dev-push.infra.alto.com/prometheus'
     internal:
+      # -- Use in-cluster Prometheus
       enabled: true
-      serviceName: my-prometheus-server
-      namespaceName: prometheus
-      port: 80
+      # -- Service name of in-cluster Prometheus
+      serviceName: my-prometheus
+      # -- Namespace of in-cluster Prometheus
+      namespaceName: opencost
+      # -- Service port of in-cluster Prometheus
+      port: 9090
+      # --- Pod labels of in-cluster Prometheus
       labels:
         app: prometheus
 
   ui:
+    # -- Enable OpenCost UI
     enabled: true
     image:
+      # -- UI container image registry
       registry: quay.io
+      # -- UI container image name
       repository: kubecost1/opencost-ui
-      tag: latest
+      # -- UI container image tag
+      # @default -- `""` (use appVersion in Chart.yaml)
+      tag: ""
     resources:
+      # -- CPU/Memory resource requests
       requests:
         cpu: '10m'
-        memory: '55M'
+        memory: '55Mi'
+      # -- CPU/Memory resource limits
       limits:
         cpu: '999m'
-        memory: '1G'
+        memory: '1Gi'
+    # -- The security options the container should be run with
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 1000
 
+    # -- A list of volume mounts to be added to the pod
+    extraVolumeMounts: []
+
+  # -- Toleration labels for pod assignment
   tolerations: []
+  # -- Node labels for pod assignment
   nodeSelector: {}
+  # -- Affinity settings for pod assignment
   affinity: {}
+  # -- Assign custom TopologySpreadConstraints rules
   topologySpreadConstraints: []
+
+# -- A list of volumes to be added to the pod
+extraVolumes: []

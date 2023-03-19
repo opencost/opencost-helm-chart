@@ -90,7 +90,7 @@ Check that either prometheus external or internal is defined
 {{- end -}}
 
 {{/*
-Check that either prometheus external or internal is defined
+Define the name for the opencost namespace
 */}}
 {{- define "opencost.namespaceName" -}}
 {{ .Release.Namespace | default "opencost" }}

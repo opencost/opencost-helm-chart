@@ -34,35 +34,24 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.3.1
 
-      - name: Get changed files in the docs folder
-        id: files-changed
-        uses: tj-actions/changed-files@v35
-        with:
-          files: |
-            charts/**
-
-      # change detection in ct seems to not detect some changes. Using simple file modification for now.
-      # - name: Run chart-testing (list-changed)
-      #   id: list-changed
-      #   run: |
-      #     changed=$(ct list-changed --chart-dirs . --target-branch ${{ github.event.repository.default_branch }})
-      #     if [[ -n "$changed" ]]; then
-      #       echo "chart-changed=true" >> $GITHUB_OUTPUT
-      #     fi
-      # - name: Run chart-testing (lint changed)
-      #   run: ct lint --chart-dirs . --target-branch ${{ github.event.repository.default_branch }}
+      - name: List changed charts
+        id: list-changed
+        run: |
+          ## If executed with debug this won't work anymore.
+          changed=$(ct --config ./.github/configs/ct.yaml list-changed)
+          charts=$(echo "$changed" | tr '\n' ' ' | xargs)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed_charts=$charts" >> $GITHUB_OUTPUT
+          fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --all
+        run: ct lint --debug --config ./.github/configs/ct.yaml --lint-conf ./.github/configs/lintconf.yaml
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
-        # if: steps.list-changed.outputs.chart-changed == 'true' || steps.files-changed.outputs.any_modified == 'true'
-        if: steps.files-changed.outputs.any_modified == 'true'
-
-      # - name: Run chart-testing (install changed)
-      #  run: ct install --chart-dirs . --target-branch ${{ github.event.repository.default_branch }} --upgrade 
+        if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --all
-        if: steps.files-changed.outputs.any_modified == 'true'
+        run: ct install --config ./.github/configs/ct.yaml
+        if: steps.list-changed.outputs.changed == 'true'
