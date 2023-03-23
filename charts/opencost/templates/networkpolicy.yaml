@@ -18,10 +18,10 @@ spec:
           {{- range $key, $val := .Values.networkpolicies.exporter.scraperLabels }}
             {{$key}}: {{$val }}
           {{- end}}
-        {{- if ne .Values.networkpolicies.exporter.prometheusNamespace .Release.Namespace }}
+        {{- if ne .Values.networkpolicies.exporter.scraperNamespace .Release.Namespace }}
         namespaceSelector:
           matchLabels:
-            name: {{ .Values.networkpolicies.exporter.prometheusNamespace }}
+            name: {{ .Values.networkpolicies.exporter.scraperNamespace }}
         {{- end }}
       ports:
       - port: 9003
@@ -49,7 +49,7 @@ spec:
         {{- if ne .Values.opencost.prometheus.internal.namespaceName .Release.Namespace }}
         namespaceSelector:
           matchLabels:
-            name: {{ .Values.networkpolicies.exporter.prometheusNamespace }}
+            name: {{ .Values.networkpolicies.exporter.scraperNamespace }}
         {{- end }}
       ports:
       - port: {{ .Values.opencost.prometheus.internal.podPort }}

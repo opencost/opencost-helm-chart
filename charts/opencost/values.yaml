@@ -29,7 +29,7 @@ networkpolicies:
     #  app: prometheus
 
     # -- Namespace of prometheus to allow access to exporter
-    prometheusNamespace: opencost
+    scraperNamespace: opencost
   prometheus:
     # -- Specifies whether egress networkpolicies for in-cluster Prometheus should be created
     enabled: true

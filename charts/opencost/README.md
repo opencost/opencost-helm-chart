@@ -30,8 +30,8 @@ $ helm install opencost opencost/opencost
 | networkpolicies.custom.rules | string | `nil` | Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template. |
 | networkpolicies.enabled | bool | `false` | Specifies whether networkpolicies should be created |
 | networkpolicies.exporter.enabled | bool | `true` | Specifies whether ingress networkpolicy for exporter metrics should be created |
-| networkpolicies.exporter.prometheusNamespace | string | `"opencost"` | Namespace of prometheus to allow access to exporter |
 | networkpolicies.exporter.scraperLabels | string | `nil` | Pod labels of metrics scraper (e.g. prometheus) to allow access to exporter |
+| networkpolicies.exporter.scraperNamespace | string | `"opencost"` | Namespace of prometheus to allow access to exporter |
 | networkpolicies.prometheus.enabled | bool | `true` | Specifies whether egress networkpolicies for in-cluster Prometheus should be created |
 | networkpolicies.prometheus.labels | string | `nil` | - Pod labels of in-cluster Prometheus to allow access to in-cluster Prometheus |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
