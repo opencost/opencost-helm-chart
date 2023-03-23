@@ -9,7 +9,8 @@ OpenCost and OpenCost UI
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| mattray |  | <https://mattray.dev> |
+| mattray | github@mattray.dev | <https://mattray.dev> |
+| toscott |  |
 
 ## Usage
 
