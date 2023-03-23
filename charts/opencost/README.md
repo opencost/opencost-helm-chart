@@ -27,7 +27,7 @@ $ helm install opencost opencost/opencost
 | annotations | object | `{}` | Annotations to add to the Deployment |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | networkpolicies.custom.enabled | bool | `false` | Specifies whether custom networkpolicies should be created |
-| networkpolicies.custom.rules | list | `[{"metadata":{"name":"foo","namespace":"bar"},"spec":{"egress":[{"to":[{"namespaceSelector":{},"podSelector":{}}]}],"podSelector":{},"policyTypes":["Egress"]}}]` | Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template. |
+| networkpolicies.custom.rules | string | `nil` | Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template. |
 | networkpolicies.enabled | bool | `false` | Specifies whether networkpolicies should be created |
 | networkpolicies.exporter.enabled | bool | `true` | Specifies whether ingress networkpolicy for exporter metrics should be created |
 | networkpolicies.exporter.prometheusNamespace | string | `"opencost"` | Namespace of prometheus to allow access to exporter |

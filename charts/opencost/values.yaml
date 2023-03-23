@@ -41,17 +41,17 @@ networkpolicies:
     enabled: false
     # -- Custom networkpolicies for more complex K8s environments. Passes metadata and spec directly to networkpolicy template.
     rules: 
-    - metadata:
-        name: foo
-        namespace: bar
-      spec:
-        podSelector: {}
-        policyTypes:
-        - Egress
-        egress:   
-        - to:
-          - podSelector: {}
-            namespaceSelector: {}
+    #- metadata:
+    #    name: foo
+    #    namespace: bar
+    #  spec:
+    #    podSelector: {}
+    #    policyTypes:
+    #    - Egress
+    #    egress:   
+    #    - to:
+    #      - podSelector: {}
+    #        namespaceSelector: {}
 
 service:
   # --  Annotations to add to the service
