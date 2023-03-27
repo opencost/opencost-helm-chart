@@ -12,6 +12,8 @@ serviceAccount:
 annotations: {}
 # --  Annotations to add to the OpenCost Pod
 podAnnotations: {}
+# --  Annotations to add to the Secret
+secretAnnotations: {}
 
 # -- Holds pod-level security attributes and common container settings
 podSecurityContext: {}
