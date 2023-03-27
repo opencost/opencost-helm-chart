@@ -136,6 +136,25 @@ opencost:
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
 
+    ingress:
+      # -- Ingress for OpenCost UI
+      enabled: false
+      # -- Ingress controller which implements the resource
+      ingressClassName: ""
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # kubernetes.io/tls-acme: "true"
+      # -- A list of host rules used to configure the Ingress
+      # @default -- See [values.yaml](values.yaml)
+      hosts:
+        - host: example.local
+          paths:
+            - /
+      # -- Ingress TLS configuration
+      tls: []
+        #  - secretName: chart-example-tls
+        #    hosts:
+        #      - chart-example.local
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment
