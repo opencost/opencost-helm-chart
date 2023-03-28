@@ -1,9 +1,5 @@
-
-# opencost
-
-OpenCost and OpenCost UI
-
-![Version: 1.3.1](https://img.shields.io/badge/Version-1.3.1-informational?style=flat-square) ![AppVersion: 1.9.8](https://img.shields.io/badge/AppVersion-1.9.8-informational?style=flat-square)
+# OpenCost Helm Chart
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![Chart Publish](https://github.com/opencost/opencost-helm-chart/workflows/chart-publish/badge.svg?branch=main) [![Releases downloads](https://img.shields.io/github/downloads/opencost/opencost-helm-chart/total.svg)](https://github.com/opencost/opencost-helm-charts/releases)
 
 ## Maintainers
 
@@ -22,8 +18,8 @@ Once Helm is set up properly, add the repo as follows:
 helm repo add opencost https://opencost.github.io/opencost-helm-chart
 ```
 
-You can then run `helm search repo opencost` to see the charts.
+See the [Chart Documentation](https://github.com/opencost/opencost-helm-charts/charts/opencost/README.md) for chart install instructions.
 
 ## OpenCost Links
-* https://github.com/opencost/opencost/tree/develop/kubernetes
-* https://www.opencost.io/docs/
+* [OpenCost](https://github.com/opencost/opencost)
+* [Documentation](https://www.opencost.io/docs/)
