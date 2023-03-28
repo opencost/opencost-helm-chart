@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
   {{- with .Values.opencost.ui.ingress.annotations }}
-  annotations: {{ toYaml .Values.opencost.ui.ingress.annotations | nindent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
 {{- if .Values.opencost.ui.ingress.ingressClassName }}
