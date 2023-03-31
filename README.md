@@ -18,7 +18,7 @@ Once Helm is set up properly, add the repo as follows:
 helm repo add opencost https://opencost.github.io/opencost-helm-chart
 ```
 
-See the [Chart Documentation](https://github.com/opencost/opencost-helm-charts/charts/opencost/README.md) for chart install instructions.
+See the [Chart Documentation](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md) for chart install instructions.
 
 ## OpenCost Links
 * [OpenCost](https://github.com/opencost/opencost)
