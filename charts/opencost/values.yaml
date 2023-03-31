@@ -16,6 +16,8 @@ podAnnotations: {}
 secretAnnotations: {}
 # --  Labels to add to the OpenCost Pod
 podLabels: {}
+# --  Pod priority
+priorityClassName: null
 
 # -- Holds pod-level security attributes and common container settings
 podSecurityContext: {}
