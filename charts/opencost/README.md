@@ -25,6 +25,8 @@ $ helm install opencost opencost/opencost
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
+| nameOverride | string | `""` | Overwrite the default name of the chart |
 | annotations | object | `{}` | Annotations to add to the Deployment |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |

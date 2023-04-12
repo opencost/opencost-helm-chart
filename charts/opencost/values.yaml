@@ -1,3 +1,8 @@
+# -- Overwrite the default name of the chart
+nameOverride: ""
+# -- Overwrite all resources name created by the chart
+fullnameOverride: ""
+
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: true
