@@ -1,11 +1,14 @@
-# Bind the role to the service account
+{{- if .Values.rbac.enabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
   name: {{ include "opencost.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  {{- if .Values.annotations }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -14,3 +17,4 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "opencost.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
+{{- end -}}
