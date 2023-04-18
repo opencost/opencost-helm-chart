@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.11.1](https://img.shields.io/badge/Version-1.11.1-informational?style=flat-square)
+![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.102.0](https://img.shields.io/badge/AppVersion-1.102.0-informational?style=flat-square)
 
@@ -25,11 +25,10 @@ $ helm install opencost opencost/opencost
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| annotations | object | `{}` | Annotations to add to the all the resources |
+| extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
 | nameOverride | string | `""` | Overwrite the default name of the chart |
-| annotations | object | `{}` | Annotations to add to the all the resources|
-| rbac.enabled | bool | `true` | Specifies whether RBAC should be used | 
-| extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
@@ -76,7 +75,8 @@ $ helm install opencost opencost/opencost
 | opencost.ui.image.registry | string | `"quay.io"` | UI container image registry |
 | opencost.ui.image.repository | string | `"kubecost1/opencost-ui"` | UI container image name |
 | opencost.ui.image.tag | string | `""` (use appVersion in Chart.yaml) | UI container image tag |
-| opencost.ui.ingress.enabled | bool | `true` | Ingress for OpenCost UI |
+| opencost.ui.ingress.annotations | object | `{}` | Annotations for Ingress resource |
+| opencost.ui.ingress.enabled | bool | `false` | Ingress for OpenCost UI |
 | opencost.ui.ingress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the Ingress |
 | opencost.ui.ingress.ingressClassName | string | `""` | Ingress controller which implements the resource |
 | opencost.ui.ingress.tls | list | `[]` | Ingress TLS configuration |
@@ -97,9 +97,10 @@ $ helm install opencost opencost/opencost
 | podLabels | object | `{}` | Labels to add to the OpenCost Pod |
 | podSecurityContext | object | `{}` | Holds pod-level security attributes and common container settings |
 | priorityClassName | string | `nil` | Pod priority |
+| rbac.enabled | bool | `true` |  |
 | secretAnnotations | object | `{}` | Annotations to add to the Secret |
-| service.enabled | bool | `true` | Enable service |
 | service.annotations | object | `{}` | Annotations to add to the service |
+| service.enabled | bool | `true` |  |
 | service.labels | object | `{}` | Labels to add to the service account |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
