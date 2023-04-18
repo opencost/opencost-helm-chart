@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.10.0](https://img.shields.io/badge/Version-1.10.0-informational?style=flat-square)
+![Version: 1.11.1](https://img.shields.io/badge/Version-1.11.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.101.2](https://img.shields.io/badge/AppVersion-1.101.2-informational?style=flat-square)
+![AppVersion: 1.102.0](https://img.shields.io/badge/AppVersion-1.102.0-informational?style=flat-square)
 
 ## Maintainers
 
@@ -25,7 +25,10 @@ $ helm install opencost opencost/opencost
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| annotations | object | `{}` | Annotations to add to the Deployment |
+| fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
+| nameOverride | string | `""` | Overwrite the default name of the chart |
+| annotations | object | `{}` | Annotations to add to the all the resources|
+| rbac.enabled | bool | `true` | Specifies whether RBAC should be used | 
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
@@ -76,6 +79,7 @@ $ helm install opencost opencost/opencost
 | podSecurityContext | object | `{}` | Holds pod-level security attributes and common container settings |
 | priorityClassName | string | `nil` | Pod priority |
 | secretAnnotations | object | `{}` | Annotations to add to the Secret |
+| service.enabled | bool | `true` | Enable service |
 | service.annotations | object | `{}` | Annotations to add to the service |
 | service.labels | object | `{}` | Labels to add to the service account |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |

@@ -1,3 +1,8 @@
+# -- Overwrite the default name of the chart
+nameOverride: ""
+# -- Overwrite all resources name created by the chart
+fullnameOverride: ""
+
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: true
@@ -8,7 +13,7 @@ serviceAccount:
   # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
-# --  Annotations to add to the Deployment
+# --  Annotations to add to the all the resources
 annotations: {}
 # --  Annotations to add to the OpenCost Pod
 podAnnotations: {}
@@ -24,12 +29,17 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 service:
+  enabled: true
   # --  Annotations to add to the service
   annotations: {}
   # --  Labels to add to the service account
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+
+# Create cluster role policies
+rbac:
+  enabled: true
 
 opencost:
   exporter:
