@@ -79,4 +79,3 @@ rules:
       - get
       - list
       - watch
-

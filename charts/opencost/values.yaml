@@ -47,14 +47,11 @@ opencost:
     cloudProviderApiKey: ""
     # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
     defaultClusterId: 'default-cluster'
+    prometheusServerEndpoint: ""
     image:
-      # -- Exporter container image registry
-      registry: quay.io
-      # -- Exporter container image name
-      repository: kubecost1/kubecost-cost-model
-      # -- Exporter container image tag
-      # @default -- `""` (use appVersion in Chart.yaml)
+      repository: "quay.io/kubecost1/kubecost-cost-model"
       tag: ""
+      pullPolicy: "Always"
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
@@ -144,13 +141,9 @@ opencost:
     # -- Enable OpenCost UI
     enabled: true
     image:
-      # -- UI container image registry
-      registry: quay.io
-      # -- UI container image name
-      repository: kubecost1/opencost-ui
-      # -- UI container image tag
-      # @default -- `""` (use appVersion in Chart.yaml)
+      repository: "quay.io/kubecost1/opencost-ui"
       tag: ""
+      pullPolicy: "Always"
     resources:
       # -- CPU/Memory resource requests
       requests:

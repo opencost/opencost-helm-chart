@@ -55,7 +55,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+        - image: "{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: {{ include "opencost.fullname" . }}
           resources:
             {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
@@ -99,7 +99,7 @@ spec:
           {{- end }}
           env:
             - name: PROMETHEUS_SERVER_ENDPOINT
-              value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
+              value: {{ .Values.opencost.exporter.prometheusServerEndpoint | default (printf "%s" (include "opencost.prometheusServerEndpoint" .)) }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
               value: {{ .Values.opencost.exporter.cloudProviderApiKey | quote }}
@@ -135,9 +135,9 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          imagePullPolicy: Always
+          imagePullPolicy: "{{ .Values.opencost.exporter.image.pullPolicy }}"
         {{- if .Values.opencost.ui.enabled }}
-        - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+        - image:  "{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: opencost-ui
           {{- with .Values.opencost.ui.livenessProbe }}
           {{- if .enabled }}
@@ -163,7 +163,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
-          imagePullPolicy: Always
+          imagePullPolicy: "{{ .Values.opencost.ui.image.pullPolicy }}"
           ports:
             - containerPort: 9090
               name: http-ui

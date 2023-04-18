@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square)
+![Version: 1.12.1](https://img.shields.io/badge/Version-1.12.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.102.0](https://img.shields.io/badge/AppVersion-1.102.0-informational?style=flat-square)
 
@@ -32,10 +32,11 @@ $ helm install opencost opencost/opencost
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
+| opencost.exporter.prometheusServerEndpoint | string | `"http://my-prometheus.opencost.svc:9090"` | Set a Prometheus endpoint without pass namespaceName and port |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
-| opencost.exporter.image.registry | string | `"quay.io"` | Exporter container image registry |
-| opencost.exporter.image.repository | string | `"kubecost1/kubecost-cost-model"` | Exporter container image name |
+| opencost.exporter.image.repository | string | `"quay.io/kubecost1/kubecost-cost-model"` | Exporter container image registry and name |
+| opencost.exporter.image.pullPolicy | string | `"Always"` | Exporter pull image policy |
 | opencost.exporter.image.tag | string | `""` (use appVersion in Chart.yaml) | Exporter container image tag |
 | opencost.exporter.livenessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Liveness probe configuration |
 | opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
@@ -72,8 +73,8 @@ $ helm install opencost opencost/opencost
 | opencost.topologySpreadConstraints | list | `[]` | Assign custom TopologySpreadConstraints rules |
 | opencost.ui.enabled | bool | `true` | Enable OpenCost UI |
 | opencost.ui.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
-| opencost.ui.image.registry | string | `"quay.io"` | UI container image registry |
-| opencost.ui.image.repository | string | `"kubecost1/opencost-ui"` | UI container image name |
+| opencost.ui.image.repository | string | `"quay.io/kubecost1/opencost-ui"` | UI container image registry and name |
+| opencost.ui.image.pullPolicy | string | `"Always"` | UI container pull image policy |
 | opencost.ui.image.tag | string | `""` (use appVersion in Chart.yaml) | UI container image tag |
 | opencost.ui.ingress.annotations | object | `{}` | Annotations for Ingress resource |
 | opencost.ui.ingress.enabled | bool | `false` | Ingress for OpenCost UI |
