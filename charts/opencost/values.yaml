@@ -1,3 +1,8 @@
+# -- Overwrite the default name of the chart
+nameOverride: ""
+# -- Overwrite all resources name created by the chart
+fullnameOverride: ""
+
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: true
@@ -8,7 +13,7 @@ serviceAccount:
   # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
-# --  Annotations to add to the Deployment
+# --  Annotations to add to the all the resources
 annotations: {}
 # --  Annotations to add to the OpenCost Pod
 podAnnotations: {}
@@ -24,12 +29,17 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 service:
+  enabled: true
   # --  Annotations to add to the service
   annotations: {}
   # --  Labels to add to the service account
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+
+# Create cluster role policies
+rbac:
+  enabled: true
 
 opencost:
   exporter:
@@ -56,6 +66,26 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- Liveness probe configuration
+    livenessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
+    # -- Readiness probe configuration
+    readinessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:
@@ -82,7 +112,7 @@ opencost:
       # -- Interval at which metrics should be scraped
       scrapeInterval: 30s
       # -- HonorLabels chooses the metric's labels on collisions with target labels
-      honorLabels: false
+      honorLabels: true
       # -- RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields
       relabelings: []
       # -- MetricRelabelConfigs to apply to samples before ingestion
@@ -130,6 +160,26 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- Liveness probe configuration
+    livenessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
+    # -- Readiness probe configuration
+    readinessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:

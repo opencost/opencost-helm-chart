@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.10.0](https://img.shields.io/badge/Version-1.10.0-informational?style=flat-square)
+![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.101.2](https://img.shields.io/badge/AppVersion-1.101.2-informational?style=flat-square)
+![AppVersion: 1.102.0](https://img.shields.io/badge/AppVersion-1.102.0-informational?style=flat-square)
 
 ## Maintainers
 
@@ -25,8 +25,10 @@ $ helm install opencost opencost/opencost
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| annotations | object | `{}` | Annotations to add to the Deployment |
+| annotations | object | `{}` | Annotations to add to the all the resources |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
+| fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
+| nameOverride | string | `""` | Overwrite the default name of the chart |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
@@ -35,13 +37,23 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.image.registry | string | `"quay.io"` | Exporter container image registry |
 | opencost.exporter.image.repository | string | `"kubecost1/kubecost-cost-model"` | Exporter container image name |
 | opencost.exporter.image.tag | string | `""` (use appVersion in Chart.yaml) | Exporter container image tag |
+| opencost.exporter.livenessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Liveness probe configuration |
+| opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.exporter.livenessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.exporter.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.exporter.readinessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Readiness probe configuration |
+| opencost.exporter.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.exporter.readinessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.exporter.readinessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.exporter.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
 | opencost.metrics.serviceMonitor.enabled | bool | `false` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
-| opencost.metrics.serviceMonitor.honorLabels | bool | `false` | HonorLabels chooses the metric's labels on collisions with target labels |
+| opencost.metrics.serviceMonitor.honorLabels | bool | `true` | HonorLabels chooses the metric's labels on collisions with target labels |
 | opencost.metrics.serviceMonitor.metricRelabelings | list | `[]` | MetricRelabelConfigs to apply to samples before ingestion |
 | opencost.metrics.serviceMonitor.namespace | string | `""` | Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart) |
 | opencost.metrics.serviceMonitor.relabelings | list | `[]` | RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields |
@@ -68,6 +80,16 @@ $ helm install opencost opencost/opencost
 | opencost.ui.ingress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the Ingress |
 | opencost.ui.ingress.ingressClassName | string | `""` | Ingress controller which implements the resource |
 | opencost.ui.ingress.tls | list | `[]` | Ingress TLS configuration |
+| opencost.ui.livenessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Liveness probe configuration |
+| opencost.ui.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.ui.livenessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.ui.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.ui.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.ui.readinessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Readiness probe configuration |
+| opencost.ui.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.ui.readinessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.ui.readinessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.ui.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.ui.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
@@ -75,8 +97,10 @@ $ helm install opencost opencost/opencost
 | podLabels | object | `{}` | Labels to add to the OpenCost Pod |
 | podSecurityContext | object | `{}` | Holds pod-level security attributes and common container settings |
 | priorityClassName | string | `nil` | Pod priority |
+| rbac.enabled | bool | `true` |  |
 | secretAnnotations | object | `{}` | Annotations to add to the Secret |
 | service.annotations | object | `{}` | Annotations to add to the service |
+| service.enabled | bool | `true` |  |
 | service.labels | object | `{}` | Labels to add to the service account |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |

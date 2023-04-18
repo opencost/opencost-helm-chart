@@ -59,6 +59,35 @@ spec:
           name: {{ include "opencost.fullname" . }}
           resources:
             {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9003
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 200
+          {{- with .Values.opencost.exporter.livenessProbe }}
+          {{- if .enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9003
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            failureThreshold: {{ .periodSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.opencost.exporter.redinessProbe }}
+          {{- if .enabled }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9003
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            failureThreshold: {{ .periodSeconds }}
+          {{- end }}
+          {{- end }}
           ports:
             - containerPort: 9003
               name: http
@@ -110,6 +139,28 @@ spec:
         {{- if .Values.opencost.ui.enabled }}
         - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           name: opencost-ui
+          {{- with .Values.opencost.ui.livenessProbe }}
+          {{- if .enabled }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            failureThreshold: {{ .periodSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.opencost.ui.readinessProbe }}
+          {{- if .enabled }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            failureThreshold: {{ .periodSeconds }}
+          {{- end }}
+          {{- end }}
           resources:
             {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
           imagePullPolicy: Always
