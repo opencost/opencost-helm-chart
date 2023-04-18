@@ -66,6 +66,26 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- Liveness probe configuration
+    livenessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
+    # -- Readiness probe configuration
+    readinessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:
@@ -140,6 +160,26 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # -- Liveness probe configuration
+    livenessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
+    # -- Readiness probe configuration
+    readinessProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 30
+      # -- Probe frequency in seconds
+      periodSeconds: 10
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 200
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:

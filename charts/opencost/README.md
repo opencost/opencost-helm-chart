@@ -38,6 +38,16 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.image.registry | string | `"quay.io"` | Exporter container image registry |
 | opencost.exporter.image.repository | string | `"kubecost1/kubecost-cost-model"` | Exporter container image name |
 | opencost.exporter.image.tag | string | `""` (use appVersion in Chart.yaml) | Exporter container image tag |
+| opencost.exporter.livenessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Liveness probe configuration |
+| opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.exporter.livenessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.exporter.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.exporter.readinessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Readiness probe configuration |
+| opencost.exporter.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.exporter.readinessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.exporter.readinessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
@@ -66,11 +76,20 @@ $ helm install opencost opencost/opencost
 | opencost.ui.image.registry | string | `"quay.io"` | UI container image registry |
 | opencost.ui.image.repository | string | `"kubecost1/opencost-ui"` | UI container image name |
 | opencost.ui.image.tag | string | `""` (use appVersion in Chart.yaml) | UI container image tag |
-| opencost.ui.ingress.annotations | object | `{}` | Annotations for Ingress resource |
-| opencost.ui.ingress.enabled | bool | `false` | Ingress for OpenCost UI |
+| opencost.ui.ingress.enabled | bool | `true` | Ingress for OpenCost UI |
 | opencost.ui.ingress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the Ingress |
 | opencost.ui.ingress.ingressClassName | string | `""` | Ingress controller which implements the resource |
 | opencost.ui.ingress.tls | list | `[]` | Ingress TLS configuration |
+| opencost.ui.livenessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Liveness probe configuration |
+| opencost.ui.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.ui.livenessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.ui.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.ui.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.ui.readinessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Readiness probe configuration |
+| opencost.ui.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
+| opencost.ui.readinessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
+| opencost.ui.readinessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.ui.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.ui.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
