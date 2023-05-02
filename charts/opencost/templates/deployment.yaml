@@ -106,6 +106,20 @@ spec:
             {{- end }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
+            {{- if .Values.opencost.exporter.aws.access_key_id }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.fullname" . }}
+                  key: AWS_ACCESS_KEY_ID
+            {{- end }}
+            {{- if .Values.opencost.exporter.aws.secret_access_key }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.fullname" . }}
+                  key: AWS_SECRET_ACCESS_KEY
+            {{- end }}
             # If username, password or bearer_token are defined, pull from secrets
             {{- if .Values.opencost.prometheus.username }}
             - name: DB_BASIC_AUTH_USERNAME
@@ -127,6 +141,10 @@ spec:
                   name: {{ include "opencost.fullname" . }}
                   key: DB_BEARER_TOKEN
             {{- end }}
+            {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
+            - name: EXPORT_CSV_FILE
+              value: {{ .Values.opencost.exporter.csv_path | quote }}
+            {{- end}}
             {{- with .Values.opencost.exporter.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -135,6 +153,12 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+          {{- if .Values.opencost.exporter.persistence.enabled }}
+          volumeMounts:
+            - mountPath: /mnt/export
+              name: opencost-export
+              readOnly: false
+          {{- end }}
           imagePullPolicy: Always
         {{- if .Values.opencost.ui.enabled }}
         - image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
@@ -174,7 +198,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- with .Values.extraVolumes }}
       volumes:
+      {{- if .Values.opencost.exporter.persistence.enabled }}
+        - name: opencost-export
+          persistentVolumeClaim:
+            claimName: opencost-export
+      {{- end }}
+      {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
