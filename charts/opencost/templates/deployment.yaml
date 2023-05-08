@@ -202,7 +202,7 @@ spec:
       {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
           persistentVolumeClaim:
-            claimName: opencost-export
+            claimName: {{ include "opencost.fullname" . }}-pvc
       {{- end }}
       {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 8 }}
