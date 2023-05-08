@@ -95,6 +95,26 @@ opencost:
       # runAsNonRoot: true
       # runAsUser: 1000
 
+    # Path of CSV file
+    csv_path: ""
+
+    # Persistent volume claim for storing the data. eg: csv file
+    persistence:
+      enabled: false
+      # -- Annotations for persistent volume
+      annotations: {}
+      # -- Access mode for persistent volume
+      accessMode: ""
+      # --Storage class for persistent volume
+      storageClass: ""
+      # -- Size for persistent volume
+      size: ""
+
+    aws:
+      # -- AWS secret access key
+      secret_access_key: ""
+      # -- AWS secret key id
+      access_key_id: ""
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
     # -- Any extra environment variables you would like to pass on to the pod

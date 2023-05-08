@@ -1,0 +1,20 @@
+{{- if .Values.opencost.exporter.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "opencost.fullname" . }}-pvc
+  namespace: {{ .Release.Namespace }}
+{{- with .Values.opencost.exporter.persistence.annotations  }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  labels:
+    {{- include "opencost.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.opencost.exporter.persistence.accessMode | quote }}
+  storageClassName: {{ default "" .Values.opencost.exporter.persistence.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.opencost.exporter.persistence.size | quote }}
+{{- end }}
