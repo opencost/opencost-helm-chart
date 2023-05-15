@@ -61,7 +61,7 @@ $ helm install opencost opencost/opencost
 | opencost.nodeSelector | object | `{}` | Node labels for pod assignment |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
-| opencost.prometheus.external.url | string | `"https://mimir-dev-push.infra.alto.com/prometheus"` | External Prometheus url |
+| opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
 | opencost.prometheus.internal.namespaceName | string | `"opencost"` | Namespace of in-cluster Prometheus |
 | opencost.prometheus.internal.port | int | `9090` | Service port of in-cluster Prometheus |
