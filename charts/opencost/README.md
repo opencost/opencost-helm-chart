@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square)
+![Version: 1.14.2](https://img.shields.io/badge/Version-1.14.2-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.102.0](https://img.shields.io/badge/AppVersion-1.102.0-informational?style=flat-square)
+![AppVersion: 1.103.1](https://img.shields.io/badge/AppVersion-1.103.1-informational?style=flat-square)
 
 ## Maintainers
 
@@ -30,7 +30,10 @@ $ helm install opencost opencost/opencost
 | fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
 | nameOverride | string | `""` | Overwrite the default name of the chart |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
+| opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
+| opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
+| opencost.exporter.csv_path | string | `""` |  |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
@@ -42,6 +45,11 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.livenessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
 | opencost.exporter.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
 | opencost.exporter.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.exporter.persistence.accessMode | string | `""` | Access mode for persistent volume |
+| opencost.exporter.persistence.annotations | object | `{}` | Annotations for persistent volume |
+| opencost.exporter.persistence.enabled | bool | `false` |  |
+| opencost.exporter.persistence.size | string | `""` | Size for persistent volume |
+| opencost.exporter.persistence.storageClass | string | `""` | Storage class for persistent volume |
 | opencost.exporter.readinessProbe | object | `{"enabled":true,"failureThreshold":200,"initialDelaySeconds":30,"periodSeconds":10}` | Readiness probe configuration |
 | opencost.exporter.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
 | opencost.exporter.readinessProbe.failureThreshold | int | `200` | Number of failures for probe to be considered failed |
