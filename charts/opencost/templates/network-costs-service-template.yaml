@@ -1,0 +1,35 @@
+{{- if .Values.networkCosts }}
+{{- if .Values.networkCosts.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "opencost.networkCostsName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- if (or .Values.networkCosts.service.annotations .Values.networkCosts.prometheusScrape) }}
+  annotations:
+{{- if .Values.networkCosts.service.annotations }}
+{{ toYaml .Values.networkCosts.service.annotations | indent 4 }}
+{{- end }}
+{{- if .Values.networkCosts.prometheusScrape }}
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ (quote .Values.networkCosts.port) | default (quote 3001) }}
+{{- end }}
+{{- end }}
+  labels:
+    {{ unset (include "opencost.labels" . | fromYaml) "app" | toYaml | nindent 4 }}
+    app: {{ template "opencost.networkCostsName" . }}
+{{- if .Values.networkCosts.service.labels }}
+{{ toYaml .Values.networkCosts.service.labels | indent 4 }}
+{{- end }}
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: {{ .Values.networkCosts.port | default 3001 }}
+    protocol: TCP
+    targetPort: {{ .Values.networkCosts.port | default 3001 }}
+  selector:
+    app: {{ template "opencost.networkCostsName" . }}
+  type: ClusterIP
+{{- end }}
+{{- end }}

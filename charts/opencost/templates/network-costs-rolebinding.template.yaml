@@ -1,0 +1,23 @@
+{{- if .Values.networkCosts }}
+{{- if .Values.networkCosts.enabled }}
+{{- if .Values.networkCosts.podSecurityPolicy }}
+{{- if .Values.networkCosts.podSecurityPolicy.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+    name: {{ template "opencost.fullname" . }}-network-costs
+    namespace: {{ .Release.Namespace }}
+    labels:
+      {{ include "opencost.labels" . | nindent 6 }}
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: {{ template "opencost.fullname" . }}-network-costs
+subjects:
+- kind: ServiceAccount
+  name: {{ template "opencost.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,25 @@
+{{- if .Values.networkCosts }}
+{{- if .Values.networkCosts.enabled }}
+{{- if .Values.networkCosts.podSecurityPolicy }}
+{{- if .Values.networkCosts.podSecurityPolicy.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "opencost.fullname" . }}-network-costs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "opencost.labels" . | nindent 4 }}
+  annotations:
+{{- if .Values.networkCosts.podSecurityPolicy.annotations }}
+{{ toYaml .Values.networkCosts.podSecurityPolicy.annotations | indent 4 }}
+{{- end }}
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames:
+  - {{ template "opencost.fullname" . }}-network-costs
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

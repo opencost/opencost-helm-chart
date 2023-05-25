@@ -1,0 +1,40 @@
+{{- if .Values.networkCosts }}
+{{- if .Values.networkCosts.enabled }}
+{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
+{{- if .Values.networkCosts.podSecurityPolicy }}
+{{- if .Values.networkCosts.podSecurityPolicy.enabled }}
+apiVersion: {{ include "opencost.podSecurityPolicy.apiVersion" . }}
+kind: PodSecurityPolicy
+metadata:
+    name: {{ template "opencost.fullname" . }}-network-costs
+    labels:
+      {{ include "opencost.labels" . | nindent 6 }}
+spec:
+    privileged: true
+    hostNetwork: true
+    allowedHostPaths:
+    {{- if .Values.networkCosts.hostProc }}
+    - pathPrefix: {{ default "/proc" .Values.networkCosts.hostProc.hostPath }}
+      readOnly: false
+    {{- else }}
+    - pathPrefix: /proc
+      readOnly: false
+    {{- end }}    
+    hostPorts:
+    - min: 1
+      max: 65535
+    seLinux:
+        rule: RunAsAny
+    supplementalGroups:
+        rule: RunAsAny
+    runAsUser:
+        rule: RunAsAny
+    fsGroup:
+        rule: RunAsAny
+    volumes:
+        - '*'
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

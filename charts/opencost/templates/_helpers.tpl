@@ -88,3 +88,18 @@ Check that either prometheus external or internal is defined
         {{- fail "Only use one of the prometheus setups, internal or external" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for daemonset.
+*/}}
+{{- define "opencost.daemonset.apiVersion" -}}
+{{- if semverCompare "<1.9-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else if semverCompare "^1.9-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "apps/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "opencost.networkCostsName" -}}
+{{- printf "%s-%s" .Release.Name "network-costs" -}}
+{{- end -}}

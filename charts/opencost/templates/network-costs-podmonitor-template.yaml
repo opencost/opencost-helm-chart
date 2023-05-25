@@ -1,0 +1,32 @@
+{{- if .Values.networkCosts }}
+{{- if .Values.networkCosts.enabled }}
+{{- if .Values.networkCosts.podMonitor }}
+{{- if .Values.networkCosts.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "opencost.networkCostsName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "opencost.labels" . | nindent 4 }}
+    {{- if .Values.networkCosts.podMonitor.additionalLabels }}
+    {{ toYaml .Values.networkCosts.podMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  podMetricsEndpoints:
+    - port: http-server
+      honorLabels: true
+      interval: 1m
+      scrapeTimeout: 10s
+      path: /metrics
+      scheme: http
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app: {{ template "opencost.networkCostsName" . }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -240,5 +240,133 @@ opencost:
   # -- Assign custom TopologySpreadConstraints rules
   topologySpreadConstraints: []
 
+
+networkCosts:
+  enabled: true
+  podSecurityPolicy:
+    enabled: false
+  image: gcr.io/kubecost1/kubecost-network-costs:v0.16.6
+  imagePullPolicy: Always
+  updateStrategy:
+    type: RollingUpdate
+  # For existing Prometheus Installs, annotates the Service which generates Endpoints for each of the network-costs pods.
+  # The Service is annotated with prometheus.io/scrape: "true" to automatically get picked up by the prometheus config.
+  # NOTE: Setting this option to true and leaving the above extraScrapeConfig "job_name: kubecost-networking" configured will cause the
+  # NOTE: pods to be scraped twice.
+  prometheusScrape: false
+  serviceMonitor:
+    enabled: true
+    scrapeTimeout: 10s
+    additionalLabels: {}
+    metricRelabelings: []
+    relabelings: []
+  # Traffic Logging will enable logging the top 5 destinations for each source
+  # every 30 minutes.
+  trafficLogging: true
+
+  # Port will set both the containerPort and hostPort to this value.
+  # These must be identical due to network-costs being run on hostNetwork
+  port: 3001
+  # this daemonset can use significant resources on large clusters: https://guide.kubecost.com/hc/en-us/articles/4407595973527-Network-Traffic-Cost-Allocation
+  resources:
+    limits: # remove the limits by setting limits: {}
+      cpu: 500m # can be less, will depend on cluster size
+      # memory: it is not recommended to set a memory limit
+    requests:
+     cpu: 50m
+     memory: 20Mi
+  extraArgs: []
+  config:
+    # Configuration for traffic destinations, including specific classification
+    # for IPs and CIDR blocks. This configuration will act as an override to the
+    # automatic classification provided by network-costs.
+    destinations:
+      # In Zone contains a list of address/range that will be
+      # classified as in zone.
+      in-zone:
+        # Loopback Addresses in "IANA IPv4 Special-Purpose Address Registry"
+        - "127.0.0.0/8"
+        # IPv4 Link Local Address Space
+        - "169.254.0.0/16"
+        # Private Address Ranges in RFC-1918
+        - "10.0.0.0/8" # Remove this entry if using Multi-AZ Kubernetes
+        - "172.16.0.0/12"
+        - "192.168.0.0/16"
+
+      # In Region contains a list of address/range that will be
+      # classified as in region. This is synonymous with cross
+      # zone traffic, where the regions between source and destinations
+      # are the same, but the zone is different.
+      in-region: []
+
+      # Cross Region contains a list of address/range that will be
+      # classified as non-internet egress from one region to another.
+      cross-region: []
+
+      # Internet contains a list of address/range that will be
+      # classified as internet traffic. This is synonymous with traffic
+      # that cannot be classified within the cluster.
+      # NOTE: Internet classification filters are executed _after_
+      # NOTE: direct-classification, but before in-zone, in-region,
+      # NOTE: and cross-region.
+      internet: []
+
+      # Direct Classification specifically maps an ip address or range
+      # to a region (required) and/or zone (optional). This classification
+      # takes priority over in-zone, in-region, and cross-region configurations.
+      direct-classification: []
+      # - region: "us-east1"
+      #   zone: "us-east1-c"
+      #   ips:
+      #     - "10.0.0.0/24"
+    services:
+      # google-cloud-services: when set to true, enables labeling traffic metrics with google cloud
+      # service endpoints
+      google-cloud-services: false
+      # amazon-web-services: when set to true, enables labeling traffic metrics with amazon web service
+      # endpoints.
+      amazon-web-services: false
+      # azure-cloud-services: when set to true, enables labeling traffic metrics with azure cloud service
+      # endpoints
+      azure-cloud-services: false
+      # user defined services provide a way to define custom service endpoints which will label traffic metrics
+      # falling within the defined address range.
+      #services:
+      #  - service: "test-service-1"
+      #    ips:
+      #      - "19.1.1.2"
+      #  - service: "test-service-2"
+      #    ips:
+      #      - "15.128.15.2"
+      #      - "20.0.0.0/8"
+
+  ## Node tolerations for server scheduling to nodes with taints
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  ##
+  tolerations: []
+  #  - key: "key"
+  #    operator: "Equal|Exists"
+  #    value: "value"
+  #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  affinity: {}
+
+  service:
+    annotations: {}
+    labels: {}
+
+  ## PriorityClassName
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+  ## PodMonitor
+  ## Allows scraping of network metrics from a dedicated prometheus operator setup
+  podMonitor:
+    enabled: false
+    additionalLabels: {}
+  additionalLabels: {}
+  nodeSelector: {}
+  annotations: {}
+
+
 # -- A list of volumes to be added to the pod
 extraVolumes: []

@@ -1,0 +1,32 @@
+{{- if and .Values.networkCosts.enabled .Values.networkCosts.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "opencost.networkCostsName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ include "opencost.labels" . | nindent 4 }}
+    {{- if .Values.networkCosts.serviceMonitor.additionalLabels }}
+    {{ toYaml .Values.networkCosts.serviceMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    - port: metrics
+      honorLabels: true
+      interval: 1m
+      scrapeTimeout: {{ .Values.networkCosts.serviceMonitor.scrapeTimeout }}
+      path: /metrics
+      scheme: http
+      {{- with .Values.networkCosts.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.networkCosts.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml . | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app: {{ include "opencost.networkCostsName" . }}
+{{- end }}
