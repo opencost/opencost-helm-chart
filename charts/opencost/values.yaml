@@ -139,12 +139,19 @@ opencost:
       metricRelabelings: []
 
   prometheus:
+    # -- Secret name that contains credentials for Prometheus
+    secret_name: null
     # -- Prometheus Basic auth username
     username: ""
+    # -- Key in the secret that references the username
+    username_key: DB_BASIC_AUTH_USERNAME
     # -- Prometheus Basic auth password
     password: ""
+    # -- Key in the secret that references the password
+    password_key: DB_BASIC_AUTH_PW
     # -- Prometheus Bearer token
     bearer_token: ""
+    bearer_token_key: DB_BEARER_TOKEN
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false

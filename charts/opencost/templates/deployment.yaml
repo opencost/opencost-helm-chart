@@ -110,36 +110,36 @@ spec:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.fullname" . }}
+                  name: {{ include "opencost.prometheus.secretname" . }}
                   key: AWS_ACCESS_KEY_ID
             {{- end }}
             {{- if .Values.opencost.exporter.aws.secret_access_key }}
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.fullname" . }}
+                  name: {{ include "opencost.prometheus.secretname" . }}
                   key: AWS_SECRET_ACCESS_KEY
             {{- end }}
             # If username, password or bearer_token are defined, pull from secrets
-            {{- if .Values.opencost.prometheus.username }}
+            {{- if or .Values.opencost.prometheus.username (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.username_key) }}
             - name: DB_BASIC_AUTH_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.fullname" . }}
-                  key: DB_BASIC_AUTH_USERNAME
+                  name: {{ include "opencost.prometheus.secretname" . }}
+                  key: {{ .Values.opencost.prometheus.username_key }}
             {{- end }}
-            {{- if .Values.opencost.prometheus.password }}
+            {{- if or .Values.opencost.prometheus.password (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.password_key) }}
             - name: DB_BASIC_AUTH_PW
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.fullname" . }}
-                  key: DB_BASIC_AUTH_PW
-            {{- else if .Values.opencost.prometheus.bearer_token }}
+                  name: {{ include "opencost.prometheus.secretname" . }}
+                  key: {{ .Values.opencost.prometheus.password_key }}
+            {{- else if or .Values.opencost.prometheus.bearer_token (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.bearer_token_key) }}
             - name: DB_BEARER_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.fullname" . }}
-                  key: DB_BEARER_TOKEN
+                  name: {{ include "opencost.prometheus.secretname" . }}
+                  key: {{ .Values.opencost.prometheus.bearer_token_key }}
             {{- end }}
             {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
