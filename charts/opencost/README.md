@@ -2,16 +2,16 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.14.3](https://img.shields.io/badge/Version-1.14.3-informational?style=flat-square)
+![Version: 1.14.5](https://img.shields.io/badge/Version-1.14.5-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.103.1](https://img.shields.io/badge/AppVersion-1.103.1-informational?style=flat-square)
+![AppVersion: 1.104.0](https://img.shields.io/badge/AppVersion-1.104.0-informational?style=flat-square)
 
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
-| mattray |  | <https://mattray.dev> |
-| toscott |  |  |
+| Name | Url |
+| ---- | --- |
+| mattray | <https://mattray.dev> |
+| toscott |  |
 
 ## Installing the Chart
 
