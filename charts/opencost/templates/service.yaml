@@ -12,7 +12,6 @@ metadata:
     {{- toYaml .Values.service.labels | nindent 4 }}
   {{- end }}
   name: {{ include "opencost.fullname" . }}
-  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     {{- include "opencost.selectorLabels" . | nindent 4 }}

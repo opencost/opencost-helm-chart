@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "opencost.fullname" . }}-pvc
-  namespace: {{ .Release.Namespace }}
 {{- with .Values.opencost.exporter.persistence.annotations  }}
   annotations:
 {{ toYaml . | indent 4 }}
