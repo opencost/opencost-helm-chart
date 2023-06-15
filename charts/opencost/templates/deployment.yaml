@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
   name: {{ include "opencost.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   {{- if .Values.annotations }}
   annotations: {{ toYaml .Values.annotations | nindent 4 }}
   {{- end }}
