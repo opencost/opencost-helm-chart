@@ -58,13 +58,6 @@ spec:
           name: {{ include "opencost.fullname" . }}
           resources:
             {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 9003
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 200
           {{- with .Values.opencost.exporter.livenessProbe }}
           {{- if .enabled }}
           livenessProbe:
@@ -73,10 +66,10 @@ spec:
               port: 9003
             initialDelaySeconds: {{ .initialDelaySeconds }}
             periodSeconds: {{ .periodSeconds }}
-            failureThreshold: {{ .periodSeconds }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
           {{- end }}
-          {{- with .Values.opencost.exporter.redinessProbe }}
+          {{- with .Values.opencost.exporter.readinessProbe }}
           {{- if .enabled }}
           readinessProbe:
             httpGet:
@@ -84,7 +77,7 @@ spec:
               port: 9003
             initialDelaySeconds: {{ .initialDelaySeconds }}
             periodSeconds: {{ .periodSeconds }}
-            failureThreshold: {{ .periodSeconds }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
           {{- end }}
           ports:
@@ -170,7 +163,7 @@ spec:
               port: 9090
             initialDelaySeconds: {{ .initialDelaySeconds }}
             periodSeconds: {{ .periodSeconds }}
-            failureThreshold: {{ .periodSeconds }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
           {{- end }}
           {{- with .Values.opencost.ui.readinessProbe }}
@@ -181,7 +174,7 @@ spec:
               port: 9090
             initialDelaySeconds: {{ .initialDelaySeconds }}
             periodSeconds: {{ .periodSeconds }}
-            failureThreshold: {{ .periodSeconds }}
+            failureThreshold: {{ .failureThreshold }}
           {{- end }}
           {{- end }}
           resources:

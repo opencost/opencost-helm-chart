@@ -75,7 +75,7 @@ opencost:
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
-      failureThreshold: 200
+      failureThreshold: 3
     # -- Readiness probe configuration
     readinessProbe:
       # -- Whether probe is enabled
@@ -85,7 +85,7 @@ opencost:
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
-      failureThreshold: 200
+      failureThreshold: 3
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:
@@ -196,7 +196,7 @@ opencost:
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
-      failureThreshold: 200
+      failureThreshold: 3
     # -- Readiness probe configuration
     readinessProbe:
       # -- Whether probe is enabled
@@ -206,7 +206,7 @@ opencost:
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
-      failureThreshold: 200
+      failureThreshold: 3
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:
