@@ -24,5 +24,8 @@ spec:
     - name: http-ui
       port: 9090
       targetPort: 9090
-    {{- end -}}
-{{- end -}}
+    {{- end }}
+    {{- with .Values.service.extraPorts }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

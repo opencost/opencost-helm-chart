@@ -34,7 +34,7 @@ spec:
               service:
                 name: {{ include "opencost.fullname" $ }}
                 port:
-                  name: http-ui
+                  name: {{ $.Values.opencost.ui.ingress.servicePort }}
         {{- end }}
   {{- end }}
 {{- end }}
