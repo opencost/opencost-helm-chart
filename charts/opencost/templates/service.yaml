@@ -1,20 +1,18 @@
-{{- if .Values.service.enabled -}}
+{{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-  {{- range $key, $value := .Values.service.annotations }}
-    {{ $key }}: {{ $value | quote }}
-  {{- end }}
+  name: {{ include "opencost.fullname" . }}
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
-  {{- if .Values.service.labels }}
-    {{- toYaml .Values.service.labels | nindent 4 }}
+    {{- with .Values.service.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.service.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
-  name: {{ include "opencost.fullname" . }}
 spec:
-  selector:
-    {{- include "opencost.selectorLabels" . | nindent 4 }}
+  selector: {{- include "opencost.selectorLabels" . | nindent 4 }}
   type: {{ .Values.service.type }}
   ports:
     - name: http
@@ -24,5 +22,5 @@ spec:
     - name: http-ui
       port: 9090
       targetPort: 9090
-    {{- end -}}
-{{- end -}}
+    {{- end }}
+{{- end }}

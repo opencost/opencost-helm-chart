@@ -22,7 +22,7 @@ secretAnnotations: {}
 # --  Labels to add to the OpenCost Pod
 podLabels: {}
 # --  Pod priority
-priorityClassName: null
+priorityClassName: ~
 
 # -- Holds pod-level security attributes and common container settings
 podSecurityContext: {}
@@ -140,7 +140,7 @@ opencost:
 
   prometheus:
     # -- Secret name that contains credentials for Prometheus
-    secret_name: null
+    secret_name: ~
     # -- Prometheus Basic auth username
     username: ""
     # -- Key in the secret that references the username
