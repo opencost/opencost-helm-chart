@@ -55,6 +55,8 @@ opencost:
       # -- Exporter container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
       tag: ""
+      # -- Exporter container image pull policy
+      pullPolicy: IfNotPresent
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
@@ -66,7 +68,7 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
-    # -- Liveness probe configuration
+    # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
       enabled: true
@@ -76,7 +78,7 @@ opencost:
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
       failureThreshold: 3
-    # -- Readiness probe configuration
+    # Readiness probe configuration
     readinessProbe:
       # -- Whether probe is enabled
       enabled: true
@@ -178,6 +180,8 @@ opencost:
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
       tag: ""
+      # -- UI container image pull policy
+      pullPolicy: IfNotPresent
     resources:
       # -- CPU/Memory resource requests
       requests:
@@ -187,7 +191,7 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
-    # -- Liveness probe configuration
+    # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
       enabled: true
@@ -197,7 +201,7 @@ opencost:
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
       failureThreshold: 3
-    # -- Readiness probe configuration
+    # Readiness probe configuration
     readinessProbe:
       # -- Whether probe is enabled
       enabled: true
