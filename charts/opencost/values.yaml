@@ -9,7 +9,9 @@ serviceAccount:
   # --  Annotations to add to the service account
   annotations: {}
   # eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eksctl-opencost
-
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
   # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
