@@ -52,7 +52,7 @@ spec:
       containers:
         - name: {{ include "opencost.fullname" . }}
           image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           ports:
             - containerPort: 9003
               name: http
@@ -148,7 +148,7 @@ spec:
         {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui
           image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:
             - containerPort: 9090
               name: http-ui
