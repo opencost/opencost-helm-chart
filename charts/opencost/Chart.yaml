@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 1.104.0
+appVersion: 1.104.4
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
