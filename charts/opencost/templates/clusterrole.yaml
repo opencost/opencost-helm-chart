@@ -77,4 +77,3 @@ rules:
       - get
       - list
       - watch
-
