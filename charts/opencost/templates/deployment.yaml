@@ -83,7 +83,10 @@ spec:
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
-              value: {{ .Values.opencost.exporter.cloudProviderApiKey | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.prometheus.secretname" . }}
+                    key: CLOUD_PROVIDER_API_KEY
             {{- end }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}

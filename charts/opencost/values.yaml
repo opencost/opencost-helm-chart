@@ -90,6 +90,8 @@ opencost:
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
       failureThreshold: 3
+    # -- Secret name that contains credentials for exporter
+    secret_name: ~
     # -- The security options the container should be run with
     securityContext: {}
       # capabilities:

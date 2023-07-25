@@ -43,6 +43,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opencost.exporter.secretname" -}}
+  {{- if .Values.opencost.exporter.secret_name -}}
+    {{- .Values.opencost.exporter.secret_name -}}
+  {{- else -}}
+    {{- include "opencost.fullname" . -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "opencost.labels" -}}
