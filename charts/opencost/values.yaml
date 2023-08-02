@@ -172,7 +172,7 @@ opencost:
       port: 9090
     
     thanos:
-      enabled: true
+      enabled: false
       queryOffset: ''
       maxSourceResolution: ''
       internal:
