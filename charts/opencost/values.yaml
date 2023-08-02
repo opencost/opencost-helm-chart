@@ -170,6 +170,19 @@ opencost:
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
       port: 9090
+    
+    thanos:
+      enabled: true
+      queryOffset: ''
+      maxSourceResolution: ''
+      internal:
+        enabled: true
+        serviceName: my-thanos-query
+        namespaceName: opencost
+        port: 10901
+      external:
+        enabled: false
+        url: 'https://thanos-query.example.com/thanos'
 
   ui:
     # -- Enable OpenCost UI
