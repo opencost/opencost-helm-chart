@@ -170,7 +170,6 @@ opencost:
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
       port: 9090
-    
     thanos:
       enabled: false
       queryOffset: ''
