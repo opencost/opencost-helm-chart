@@ -82,10 +82,10 @@ Create the name of the controller service account to use
 */}}
 {{- define "opencost.prometheusServerEndpoint" -}}
   {{- if .Values.opencost.prometheus.external.enabled -}}
-    {{ .Values.opencost.prometheus.external.url }}
+    {{ tpl .Values.opencost.prometheus.external.url . }}
   {{- else -}}
-    {{- $host := .Values.opencost.prometheus.internal.serviceName }}
-    {{- $ns := .Values.opencost.prometheus.internal.namespaceName }}
+    {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
+    {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
     {{- printf "http://%s.%s.svc:%d" $host $ns $port -}}
   {{- end -}}
