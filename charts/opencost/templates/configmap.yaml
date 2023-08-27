@@ -1,0 +1,18 @@
+{{- if .Values.configs -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opencost.fullname" . }}-metrics-config
+  labels:
+    {{ include "opencost.labels" . | nindent 4 }}
+data:
+{{- if .Values.configs.clusterInfo }}
+{{- if and .Values.opencost.exporter.defaultClusterId (not (hasKey .Values.configs.clusterInfo "id")) }}
+{{- $_ := set .Values.configs.clusterInfo "id" .Values.opencost.exporter.defaultClusterId }}
+{{- end }}
+  cluster-info.json: '{{ toJson .Values.configs.clusterInfo }}'
+{{- end }}
+{{- if .Values.configs.metricsConfigs }}
+  metrics.json: '{{ toJson .Values.configs.metricsConfigs }}'
+{{- end }}
+{{- end -}}

@@ -270,5 +270,21 @@ opencost:
   # -- Assign custom TopologySpreadConstraints rules
   topologySpreadConstraints: []
 
+configs: {}
+  # local cluster info
+  # clusterInfo: {}
+  #   id: ""
+  #   name: ""
+  #   profile: ""
+  #   provider: ""
+  #   account: ""
+  #   project: ""
+  #   region: ""
+  #   provisioner: ""
+
+  # configuration for metrics emitted by Opencost
+  # metricsConfigs: {}
+  #   disabledMetrics: [] # list of metrics that Opencost will not emit. Note that disabling metrics can lead to unexpected behavior in the cost-model.
+
 # -- A list of volumes to be added to the pod
 extraVolumes: []
