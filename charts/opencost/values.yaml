@@ -165,7 +165,7 @@ opencost:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
       # -- External Prometheus url
-      url: 'https://prometheus.example.com/prometheus'
+      url: "https://prometheus.example.com/prometheus"
     internal:
       # -- Use in-cluster Prometheus
       enabled: true
@@ -175,6 +175,18 @@ opencost:
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
       port: 9090
+    thanos:
+      enabled: false
+      queryOffset: ''
+      maxSourceResolution: ''
+      internal:
+        enabled: true
+        serviceName: my-thanos-query
+        namespaceName: opencost
+        port: 10901
+      external:
+        enabled: false
+        url: 'https://thanos-query.example.com/thanos'
 
   ui:
     # -- Enable OpenCost UI
