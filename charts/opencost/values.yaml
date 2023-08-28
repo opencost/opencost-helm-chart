@@ -160,7 +160,7 @@ opencost:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
       # -- External Prometheus url
-      url: 'https://prometheus.example.com/prometheus'
+      url: "https://prometheus.example.com/prometheus"
     internal:
       # -- Use in-cluster Prometheus
       enabled: true
