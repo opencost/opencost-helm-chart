@@ -1,0 +1,13 @@
+{{- if and .Values.opencost.onpremisemode.use_values_map .Values.opencost.onpremisemode.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.opencost.onpremisemode.configmap_name }}
+data:
+  default.json: |-
+    {
+{{- range $key, $val := .Values.opencost.onpremisemode.cost_model }}
+{{ $key | quote | indent 6}}: {{ $val | quote }}
+{{- end}}
+    }
+{{- end }}

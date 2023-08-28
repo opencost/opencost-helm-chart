@@ -2,16 +2,16 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.19.2](https://img.shields.io/badge/Version-1.19.1-informational?style=flat-square)
+![Version: 1.19.2](https://img.shields.io/badge/Version-1.19.2-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.105.2](https://img.shields.io/badge/AppVersion-1.105.2-informational?style=flat-square)
 
 ## Maintainers
 
-| Name | Url |
-| ---- | --- |
-| mattray | <https://mattray.dev> |
-| toscott |  |
+| Name | Email | Url |
+| ---- | ------ | --- |
+| mattray |  | <https://mattray.dev> |
+| toscott |  |  |
 
 ## Installing the Chart
 
@@ -28,6 +28,7 @@ $ helm install opencost opencost/opencost
 | annotations | object | `{}` | Annotations to add to the all the resources |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
+| imagePullSecrets | list | `[]` | List of secret names to use for pulling the images |
 | nameOverride | string | `""` | Overwrite the default name of the chart |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
@@ -35,6 +36,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.csv_path | string | `""` |  |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
+| opencost.exporter.env | list | `[]` | List of additional environment variables to set in the container |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
 | opencost.exporter.image.pullPolicy | string | `"IfNotPresent"` | Exporter container image pull policy |
@@ -66,6 +68,11 @@ $ helm install opencost opencost/opencost
 | opencost.metrics.serviceMonitor.relabelings | list | `[]` | RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields |
 | opencost.metrics.serviceMonitor.scrapeInterval | string | `"30s"` | Interval at which metrics should be scraped |
 | opencost.nodeSelector | object | `{}` | Node labels for pod assignment |
+| opencost.onpremisemode.config_path | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
+| opencost.onpremisemode.configmap_name | string | `"custom-pricing-model"` |  |
+| opencost.onpremisemode.cost_model | object | `{"CPU":1.25,"GPU\"":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"provider":"custom","regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage\"":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
+| opencost.onpremisemode.enabled | bool | `false` | Enables custom pricing for on-premise setup. |
+| opencost.onpremisemode.use_values_map | bool | `true` | Configures the pricing model provided in the values file. |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
@@ -77,6 +84,15 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.password | string | `""` | Prometheus Basic auth password |
 | opencost.prometheus.password_key | string | `"DB_BASIC_AUTH_PW"` | Key in the secret that references the password |
 | opencost.prometheus.secret_name | string | `nil` | Secret name that contains credentials for Prometheus |
+| opencost.prometheus.thanos.enabled | bool | `false` |  |
+| opencost.prometheus.thanos.external.enabled | bool | `false` |  |
+| opencost.prometheus.thanos.external.url | string | `"https://thanos-query.example.com/thanos"` |  |
+| opencost.prometheus.thanos.internal.enabled | bool | `true` |  |
+| opencost.prometheus.thanos.internal.namespaceName | string | `"opencost"` |  |
+| opencost.prometheus.thanos.internal.port | int | `10901` |  |
+| opencost.prometheus.thanos.internal.serviceName | string | `"my-thanos-query"` |  |
+| opencost.prometheus.thanos.maxSourceResolution | string | `""` |  |
+| opencost.prometheus.thanos.queryOffset | string | `""` |  |
 | opencost.prometheus.username | string | `""` | Prometheus Basic auth username |
 | opencost.prometheus.username_key | string | `"DB_BASIC_AUTH_USERNAME"` | Key in the secret that references the username |
 | opencost.tolerations | list | `[]` | Toleration labels for pod assignment |

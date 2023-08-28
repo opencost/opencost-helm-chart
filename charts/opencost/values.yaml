@@ -129,6 +129,28 @@ opencost:
     # -- Any extra environment variables you would like to pass on to the pod
     extraEnv: {}
       # FOO: BAR
+  onpremisemode:
+    # -- Enables custom pricing for on-premise setup.
+    enabled: false
+    configmap_name: custom-pricing-model
+    # -- Path for the pricing configuration.
+    config_path: /tmp/custom-config
+    # -- Configures the pricing model provided in the values file.
+    use_values_map: true
+    # -- More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart
+    cost_model:
+      provider: custom
+      description: Modified prices based on your internal pricing
+      CPU: 1.25
+      spotCPU: 0.006655
+      RAM: 0.50
+      spotRAM: 0.000892
+      GPU: 0.95
+      storage: 0.25
+      zoneNetworkEgress: 0.01
+      regionNetworkEgress: 0.01
+      internetNetworkEgress: 0.12
+
 
   metrics:
     serviceMonitor:
