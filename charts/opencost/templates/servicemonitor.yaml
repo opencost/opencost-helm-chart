@@ -5,6 +5,8 @@ metadata:
   name: {{ include "opencost.fullname" . }}
   {{- if .Values.opencost.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.opencost.metrics.serviceMonitor.namespace | quote }}
+  {{- else }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
