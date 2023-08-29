@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.19.2](https://img.shields.io/badge/Version-1.19.2-informational?style=flat-square)
+![Version: 1.19.3](https://img.shields.io/badge/Version-1.19.3-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.105.2](https://img.shields.io/badge/AppVersion-1.105.2-informational?style=flat-square)
 
@@ -70,7 +70,7 @@ $ helm install opencost opencost/opencost
 | opencost.nodeSelector | object | `{}` | Node labels for pod assignment |
 | opencost.onpremisemode.config_path | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
 | opencost.onpremisemode.configmap_name | string | `"custom-pricing-model"` |  |
-| opencost.onpremisemode.cost_model | object | `{"CPU":1.25,"GPU\"":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"provider":"custom","regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage\"":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
+| opencost.onpremisemode.cost_model | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"provider":"custom","regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
 | opencost.onpremisemode.enabled | bool | `false` | Enables custom pricing for on-premise setup. |
 | opencost.onpremisemode.use_values_map | bool | `true` | Configures the pricing model provided in the values file. |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
