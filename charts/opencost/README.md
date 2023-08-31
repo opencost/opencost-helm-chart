@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.19.3](https://img.shields.io/badge/Version-1.19.3-informational?style=flat-square)
+![Version: 1.19.4](https://img.shields.io/badge/Version-1.19.4-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.105.2](https://img.shields.io/badge/AppVersion-1.105.2-informational?style=flat-square)
 
@@ -45,7 +45,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.image.tag | string | `""` (use appVersion in Chart.yaml) | Exporter container image tag |
 | opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
 | opencost.exporter.livenessProbe.failureThreshold | int | `3` | Number of failures for probe to be considered failed |
-| opencost.exporter.livenessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.livenessProbe.initialDelaySeconds | int | `120` | Number of seconds before probe is initiated |
 | opencost.exporter.livenessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.exporter.persistence.accessMode | string | `""` | Access mode for persistent volume |
 | opencost.exporter.persistence.annotations | object | `{}` | Annotations for persistent volume |
@@ -54,7 +54,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.persistence.storageClass | string | `""` | Storage class for persistent volume |
 | opencost.exporter.readinessProbe.enabled | bool | `true` | Whether probe is enabled |
 | opencost.exporter.readinessProbe.failureThreshold | int | `3` | Number of failures for probe to be considered failed |
-| opencost.exporter.readinessProbe.initialDelaySeconds | int | `30` | Number of seconds before probe is initiated |
+| opencost.exporter.readinessProbe.initialDelaySeconds | int | `120` | Number of seconds before probe is initiated |
 | opencost.exporter.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
 | opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
