@@ -78,7 +78,7 @@ opencost:
       # -- Whether probe is enabled
       enabled: true
       # -- Number of seconds before probe is initiated
-      initialDelaySeconds: 30
+      initialDelaySeconds: 120
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
@@ -88,7 +88,7 @@ opencost:
       # -- Whether probe is enabled
       enabled: true
       # -- Number of seconds before probe is initiated
-      initialDelaySeconds: 30
+      initialDelaySeconds: 120
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed

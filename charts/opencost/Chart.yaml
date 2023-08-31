@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 1.105.2
+appVersion: 1.106.1
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
@@ -9,7 +9,7 @@ keywords:
   - kubecost
   - opencost
   - monitoring
-version: 1.19.2
+version: 1.20.0
 maintainers:
   - name: mattray
     url: https://mattray.dev
