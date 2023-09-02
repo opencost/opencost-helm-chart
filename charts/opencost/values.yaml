@@ -175,6 +175,11 @@ opencost:
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
       port: 9090
+    amp:
+      # -- Use Amazon Managed Service for Prometheus (AMP)
+      enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
+      # -- Workspace ID for AMP
+      workspaceId: ""
     thanos:
       enabled: false
       queryOffset: ''
@@ -261,6 +266,35 @@ opencost:
         #  - secretName: chart-example-tls
         #    hosts:
         #      - chart-example.local
+
+  sigV4Proxy:
+    image: public.ecr.aws/aws-observability/aws-sigv4-proxy:latest
+    imagePullPolicy: IfNotPresent
+    name: aps
+    port: 8005
+    region: us-west-2 # The AWS region
+    host: aps-workspaces.us-west-2.amazonaws.com # The hostname for AMP service.
+    # role_arn: arn:aws:iam::<account>:role/role-name # The AWS IAM role to assume.
+    extraEnv: # Pass extra env variables to sigV4Proxy
+    # - name: AWS_ACCESS_KEY_ID
+    #   value: <access_key>
+    # - name: AWS_SECRET_ACCESS_KEY
+    #   value: <secret_key>
+    resources: {}
+      # limits:
+      #   cpu: 200m
+      #   memory: 500Mi
+      # requests:
+      #   cpu: 20m
+      #   memory: 32Mi
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 65534
+
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment

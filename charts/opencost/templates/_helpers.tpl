@@ -83,6 +83,10 @@ Create the name of the controller service account to use
 {{- define "opencost.prometheusServerEndpoint" -}}
   {{- if .Values.opencost.prometheus.external.enabled -}}
     {{ tpl .Values.opencost.prometheus.external.url . }}
+  {{- else if (and .Values.opencost.prometheus.amp.enabled .Values.opencost.sigV4Proxy) -}}
+    {{- $port := .Values.opencost.sigV4Proxy.port | int }}
+    {{- $ws := .Values.opencost.prometheus.amp.workspaceId }}
+    {{- printf "http://localhost:%d/workspaces/%v" $port $ws -}}
   {{- else -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
@@ -107,12 +111,13 @@ Create the name of the controller service account to use
 Check that either prometheus external or internal is defined
 */}}
 {{- define "isPrometheusConfigValid" -}}
-  {{- if and .Values.opencost.prometheus.external.enabled .Values.opencost.prometheus.internal.enabled -}}
-    {{- fail "Only use one of the prometheus setups, internal or external" -}}
+  {{- $prometheusModes := add .Values.opencost.prometheus.external.enabled .Values.opencost.prometheus.internal.enabled .Values.opencost.prometheus.amp.enabled | int }}
+  {{- if gt $prometheusModes 1 -}}
+    {{- fail "Only use one of the prometheus setups: internal, external, or amp" -}}
   {{- end -}}
   {{- if .Values.opencost.prometheus.thanos.enabled -}}
     {{- if and .Values.opencost.prometheus.thanos.external.enabled .Values.opencost.prometheus.thanos.internal.enabled -}}
-      {{- fail "Only use one of the thanos setups, internal or external" -}}
+      {{- fail "Only use one of the thanos setups: internal or external" -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
