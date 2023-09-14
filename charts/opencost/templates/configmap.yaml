@@ -1,13 +1,13 @@
-{{- if and .Values.opencost.onpremisemode.use_values_map .Values.opencost.onpremisemode.enabled }}
+{{- if and .Values.opencost.customPricing.createConfigmap .Values.opencost.customPricing.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.opencost.onpremisemode.configmap_name }}
+  name: {{ .Values.opencost.customPricing.configmapName }}
 data:
   default.json: |-
     {
-{{- range $key, $val := .Values.opencost.onpremisemode.cost_model }}
-{{ $key | quote | indent 6}}: {{ $val | quote }}
+{{- range $key, $val := .Values.opencost.customPricing.costModel }}
+{{ $key | quote | indent 6}}: {{ $val | quote }},
 {{- end}}
     }
 {{- end }}
