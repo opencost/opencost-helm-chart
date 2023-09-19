@@ -17,6 +17,7 @@ spec:
       scheme: http
       path: /metrics
       interval: {{ .Values.opencost.metrics.serviceMonitor.scrapeInterval }}
+      scrapeTimeout: {{ .Values.opencost.metrics.serviceMonitor.scrapeTimeout }}
       {{- if .Values.opencost.metrics.serviceMonitor.honorLabels }}
       honorLabels: true
       {{- end }}
