@@ -33,7 +33,7 @@ $ helm install opencost opencost/opencost
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.customPricing.configPath | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
 | opencost.customPricing.configmapName | string | `"custom-pricing-model"` |  |
-| opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"provider":"custom","regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
+| opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
 | opencost.customPricing.createConfigmap | bool | `true` | Configures the pricing model provided in the values file. |
 | opencost.customPricing.enabled | bool | `false` | Enables custom pricing for on-premise setup. |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
