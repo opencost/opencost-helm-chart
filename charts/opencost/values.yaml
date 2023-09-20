@@ -139,7 +139,6 @@ opencost:
     createConfigmap: true
     # -- More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart
     costModel:
-      provider: custom
       description: Modified prices based on your internal pricing
       CPU: 1.25
       spotCPU: 0.006655

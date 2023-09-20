@@ -9,5 +9,6 @@ data:
 {{- range $key, $val := .Values.opencost.customPricing.costModel }}
 {{ $key | quote | indent 6}}: {{ $val | quote }},
 {{- end}}
+    "provider" : "custom"
     }
 {{- end }}
