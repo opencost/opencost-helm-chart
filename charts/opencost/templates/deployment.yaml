@@ -143,16 +143,26 @@ spec:
             {{- with .Values.opencost.exporter.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- if .Values.opencost.customPricing.enabled }}
+            - name: CONFIG_PATH
+              value: {{ .Values.opencost.customPricing.configPath | quote }}
+            {{- end }}
+            # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- if or .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts }}
+          {{- if or .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled}}
           volumeMounts:
             {{- if .Values.opencost.exporter.persistence.enabled }}
             - mountPath: /mnt/export
               name: opencost-export
               readOnly: false
+            {{- end }}
+            {{- if .Values.opencost.customPricing.enabled }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}
+              name: custom-configs
+              readOnly: true
             {{- end }}
             {{- with .Values.opencost.exporter.extraVolumeMounts }}
               {{- toYaml . | nindent 12 }}
@@ -191,8 +201,13 @@ spec:
           volumeMounts: {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes }}
+      {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled}}
       volumes:
+        {{- if .Values.opencost.customPricing.enabled }}
+        - name: custom-configs
+          configMap:
+            name: {{ .Values.opencost.customPricing.configmapName }}
+        {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
           persistentVolumeClaim:
