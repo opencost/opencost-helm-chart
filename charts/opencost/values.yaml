@@ -161,6 +161,8 @@ opencost:
       namespace: ""
       # -- Interval at which metrics should be scraped
       scrapeInterval: 30s
+      # -- Timeout after which the scrape is ended
+      scrapeTimeout: 10s
       # -- HonorLabels chooses the metric's labels on collisions with target labels
       honorLabels: true
       # -- RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields
