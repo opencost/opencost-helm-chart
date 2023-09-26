@@ -11,11 +11,7 @@ spec:
   replicas: {{ .Values.opencost.exporter.replicas }}
   selector:
     matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels:
