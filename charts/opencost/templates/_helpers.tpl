@@ -92,7 +92,7 @@ Create the name of the controller service account to use
 {{- end -}}
 
 {{/*
-Check that either prometheus external or internal is defined
+Check that either thanos external or internal is defined
 */}}
 {{- define "opencost.thanosServerEndpoint" -}}
   {{- if .Values.opencost.prometheus.thanos.external.enabled -}}
