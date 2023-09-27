@@ -87,11 +87,13 @@ Create the name of the controller service account to use
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
-    {{- printf "http://%s.%s.svc:%d" $host $ns $port -}}
+    {{- printf "http://%s.%s.svc.cluster.local:%d" $host $ns $port -}}
   {{- end -}}
 {{- end -}}
 
-
+{{/*
+Check that either prometheus external or internal is defined
+*/}}
 {{- define "opencost.thanosServerEndpoint" -}}
   {{- if .Values.opencost.prometheus.thanos.external.enabled -}}
     {{ .Values.opencost.prometheus.thanos.external.url }}
@@ -99,12 +101,12 @@ Create the name of the controller service account to use
     {{- $host := .Values.opencost.prometheus.thanos.internal.serviceName }}
     {{- $ns := .Values.opencost.prometheus.thanos.internal.namespaceName }}
     {{- $port := .Values.opencost.prometheus.thanos.internal.port | int }}
-    {{- printf "http://%s.%s.svc:%d" $host $ns $port -}}
+    {{- printf "http://%s.%s.svc.cluster.local:%d" $host $ns $port -}}
   {{- end -}}
 {{- end -}}
 
 {{/*
-Check that either prometheus external or internal is defined
+Check that the config is valid
 */}}
 {{- define "isPrometheusConfigValid" -}}
   {{- if and .Values.opencost.prometheus.external.enabled .Values.opencost.prometheus.internal.enabled -}}
