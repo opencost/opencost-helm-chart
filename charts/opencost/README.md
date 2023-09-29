@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.20.0](https://img.shields.io/badge/Version-1.20.0-informational?style=flat-square)
+![Version: 1.20.1](https://img.shields.io/badge/Version-1.20.1-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.106.1](https://img.shields.io/badge/AppVersion-1.106.1-informational?style=flat-square)
 
@@ -66,12 +66,15 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.exporter.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
-| opencost.metrics.serviceMonitor.enabled | bool | `false` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
+| opencost.metrics.serviceMonitor.enabled | bool | `true` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
 | opencost.metrics.serviceMonitor.honorLabels | bool | `true` | HonorLabels chooses the metric's labels on collisions with target labels |
 | opencost.metrics.serviceMonitor.metricRelabelings | list | `[]` | MetricRelabelConfigs to apply to samples before ingestion |
 | opencost.metrics.serviceMonitor.namespace | string | `""` | Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart) |
 | opencost.metrics.serviceMonitor.relabelings | list | `[]` | RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields |
+| opencost.metrics.serviceMonitor.scheme | string | `"https"` | HTTP scheme used for scraping. Defaults to `http` |
 | opencost.metrics.serviceMonitor.scrapeInterval | string | `"30s"` | Interval at which metrics should be scraped |
+| opencost.metrics.serviceMonitor.scrapeTimeout | string | `"10s"` | Timeout after which the scrape is ended |
+| opencost.metrics.serviceMonitor.tlsConfig | object | `{"caFile":"/etc/prom-certs/root-cert.pem","certFile":"/etc/prom-certs/cert-chain.pem","insecureSkipVerify":true,"keyFile":"/etc/prom-certs/key.pem"}` | TLS configuration for scraping metrics |
 | opencost.nodeSelector | object | `{}` | Node labels for pod assignment |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
