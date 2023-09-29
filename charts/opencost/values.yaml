@@ -154,7 +154,7 @@ opencost:
   metrics:
     serviceMonitor:
       # -- Create ServiceMonitor resource for scraping metrics using PrometheusOperator
-      enabled: true
+      enabled: false
       # -- Additional labels to add to the ServiceMonitor
       additionalLabels: {}
       # -- Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart)
@@ -170,13 +170,13 @@ opencost:
       # -- MetricRelabelConfigs to apply to samples before ingestion
       metricRelabelings: []
       # -- HTTP scheme used for scraping. Defaults to `http`
-      scheme: https
+      scheme: http
       # -- TLS configuration for scraping metrics
-      tlsConfig:
-        caFile: /etc/prom-certs/root-cert.pem
-        certFile: /etc/prom-certs/cert-chain.pem
-        insecureSkipVerify: true
-        keyFile: /etc/prom-certs/key.pem
+      tlsConfig: {}
+        # caFile: /etc/prom-certs/root-cert.pem
+        # certFile: /etc/prom-certs/cert-chain.pem
+        # insecureSkipVerify: true
+        # keyFile: /etc/prom-certs/key.pem
 
   prometheus:
     # -- Secret name that contains credentials for Prometheus
