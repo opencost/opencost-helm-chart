@@ -62,6 +62,8 @@ opencost:
       tag: ""
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
+    # -- List of extra arguments for the command, e.g.: log-format=json
+    extraArgs: []
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:

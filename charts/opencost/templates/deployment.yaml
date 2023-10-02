@@ -53,6 +53,10 @@ spec:
         - name: {{ include "opencost.fullname" . }}
           image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
+          args:
+          {{- range .Values.opencost.exporter.extraArgs }}
+          - --{{ . }}
+          {{- end }}
           ports:
             - containerPort: 9003
               name: http
