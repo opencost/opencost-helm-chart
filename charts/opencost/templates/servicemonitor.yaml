@@ -27,6 +27,9 @@ spec:
       {{- with .Values.opencost.metrics.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.opencost.metrics.serviceMonitor.extraEndpoints }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
   selector:
     matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
   namespaceSelector:

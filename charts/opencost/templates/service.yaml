@@ -23,4 +23,7 @@ spec:
       port: 9090
       targetPort: 9090
     {{- end }}
+    {{- with .Values.service.extraPorts }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
 {{- end }}

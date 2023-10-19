@@ -208,6 +208,9 @@ spec:
           volumeMounts: {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
+        {{- with .Values.opencost.extraContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled}}
       volumes:
         {{- if .Values.opencost.customPricing.enabled }}

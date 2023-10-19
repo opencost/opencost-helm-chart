@@ -41,6 +41,14 @@ service:
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+  # -- extra ports.  Useful for sidecar pods such as oauth-proxy
+  extraPorts: []
+    # - name: oauth-proxy
+    #   port: 8081
+    #   targetPort: 8081
+    # - name: oauth-metrics
+    #   port: 8082
+    #   targetPort: 8082
 
 # Create cluster role policies
 rbac:
@@ -171,6 +179,10 @@ opencost:
       relabelings: []
       # -- MetricRelabelConfigs to apply to samples before ingestion
       metricRelabelings: []
+      # -- extra Endpoints to add to the ServiceMonitor.  Useful for scraping sidecars
+      extraEndpoints: []
+        # - port: oauth-metrics
+        #   path: /metrics
 
   prometheus:
     # -- Secret name that contains credentials for Prometheus
@@ -281,11 +293,15 @@ opencost:
         - host: example.local
           paths:
             - /
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      servicePort: http-ui
+      # servicePort: oauth-proxy
       # -- Ingress TLS configuration
       tls: []
         #  - secretName: chart-example-tls
         #    hosts:
         #      - chart-example.local
+
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment
@@ -294,6 +310,24 @@ opencost:
   affinity: {}
   # -- Assign custom TopologySpreadConstraints rules
   topologySpreadConstraints: []
+
+  # -- extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI
+  extraContainers: []
+    # - name: oauth-proxy
+    #   image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0
+    #   args:
+    #     - --upstream=http://127.0.0.1:9090
+    #     - --http-address=0.0.0.0:8081
+    #     - --metrics-address=0.0.0.0:8082
+    #     - ...
+    #   ports:
+    #     - name: oauth-proxy
+    #       containerPort: 8081
+    #       protocol: TCP
+    #     - name: oauth-metrics
+    #       containerPort: 8082
+    #       protocol: TCP
+    #   resources: {}
 
 # -- A list of volumes to be added to the pod
 extraVolumes: []
