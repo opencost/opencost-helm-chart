@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 1.104.0
+appVersion: 1.106.3
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
@@ -9,8 +9,9 @@ keywords:
   - kubecost
   - opencost
   - monitoring
-version: 1.15.1
+version: 1.21.2
 maintainers:
   - name: mattray
     url: https://mattray.dev
   - name: toscott
+home: https://github.com/opencost/opencost-helm-chart

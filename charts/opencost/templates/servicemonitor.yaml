@@ -3,13 +3,13 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "opencost.fullname" . }}
-{{- if .Values.opencost.metrics.serviceMonitor.namespace }}
+  {{- if .Values.opencost.metrics.serviceMonitor.namespace }}
   namespace: {{ .Values.opencost.metrics.serviceMonitor.namespace | quote }}
-{{- end }}
+  {{- end }}
   labels:
     {{- include "opencost.labels" . | nindent 4 }}
     {{- if .Values.opencost.metrics.serviceMonitor.additionalLabels }}
-    {{- toYaml .Values.opencost.metrics.serviceMonitor.additionalLabels | nindent 4 }}
+      {{- toYaml .Values.opencost.metrics.serviceMonitor.additionalLabels | nindent 4 }}
     {{- end }}
 spec:
   endpoints:
@@ -17,21 +17,21 @@ spec:
       scheme: http
       path: /metrics
       interval: {{ .Values.opencost.metrics.serviceMonitor.scrapeInterval }}
-    {{- if .Values.opencost.metrics.serviceMonitor.honorLabels }}
+      scrapeTimeout: {{ .Values.opencost.metrics.serviceMonitor.scrapeTimeout }}
+      {{- if .Values.opencost.metrics.serviceMonitor.honorLabels }}
       honorLabels: true
-    {{- end }}
-    {{- if .Values.opencost.metrics.serviceMonitor.relabelings }}
-      relabelings: {{ toYaml .Values.opencost.metrics.serviceMonitor.relabelings | nindent 8 }}
-    {{- end }}
-    {{- if .Values.opencost.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{ toYaml .Values.opencost.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
-    {{- end }}
-  {{- with .Values.opencost.metrics.serviceMonitor.extraEndpoints }}
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+      {{- end }}
+      {{- with .Values.opencost.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.opencost.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.opencost.metrics.serviceMonitor.extraEndpoints }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
   selector:
-    matchLabels:
-      {{- include "opencost.selectorLabels" . | nindent 6 }}
+    matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
