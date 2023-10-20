@@ -1,5 +1,7 @@
-# OpenCost Helm Chart
+# OpenCost Helm Charts
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![Chart Publish](https://github.com/opencost/opencost-helm-chart/workflows/chart-publish/badge.svg?branch=main) [![Releases downloads](https://img.shields.io/github/downloads/opencost/opencost-helm-chart/total.svg)](https://github.com/opencost/opencost-helm-charts/releases)
+
+This repository holds both the primary [OpenCost Helm Chart](charts/opencost/) and the [Prometheus OpenCost Exporter Helm Chart](charts/prometheus-opencost-exporter/). The Prometheus OpenCost Exporter is co-located in https://github.com/prometheus-community/helm-charts and this is the originating repository.
 
 ## Maintainers
 
