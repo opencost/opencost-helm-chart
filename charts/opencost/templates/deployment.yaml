@@ -150,12 +150,24 @@ spec:
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}
             {{- end }}
+            - name: DATA_RETENTION_DAILY_RESOLUTION_DAYS
+              value: {{ .Values.opencost.dataRetention.dailyResolutionDays | quote }}
+            - name: CLOUD_COST_ENABLED
+              value: {{ .Values.opencost.cloudCost.enabled | quote }}
+            - name: CLOUD_COST_MONTH_TO_DATE_INTERVAL
+              value: {{ .Values.opencost.cloudCost.monthToDateInterval | quote }}
+            - name: CLOUD_COST_REFRESH_RATE_HOURS
+              value: {{ .Values.opencost.cloudCost.refreshRateHours | quote }}
+            - name: CLOUD_COST_QUERY_WINDOW_DAYS
+              value: {{ .Values.opencost.cloudCost.queryWindowDays | quote }}
+            - name: CLOUD_COST_RUN_WINDOW_DAYS
+              value: {{ .Values.opencost.cloudCost.runWindowDays | quote }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- if or .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled}}
+          {{- if or .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
           volumeMounts:
             {{- if .Values.opencost.exporter.persistence.enabled }}
             - mountPath: /mnt/export
@@ -166,6 +178,10 @@ spec:
             - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
               readOnly: true
+            {{- end }}
+            {{- if .Values.opencost.cloudIntegrationSecret }}
+            - name: cloud-integration
+              mountPath: /var/configs/cloud-integration
             {{- end }}
             {{- with .Values.opencost.exporter.extraVolumeMounts }}
               {{- toYaml . | nindent 12 }}
@@ -240,7 +256,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled}}
+      {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
       volumes:
         {{- if .Values.opencost.customPricing.enabled }}
         - name: custom-configs
@@ -252,6 +268,14 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "opencost.fullname" . }}-pvc
         {{- end }}
+        {{- if .Values.opencost.cloudIntegrationSecret }}
+        - name: cloud-integration
+          secret:
+            secretName: {{ .Values.opencost.cloudIntegrationSecret }}
+            items:
+              - key: cloud-integration.json
+                path: cloud-integration.json
+          {{- end }}
         {{- with .Values.extraVolumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}

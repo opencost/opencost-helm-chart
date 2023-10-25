@@ -166,6 +166,21 @@ opencost:
       regionNetworkEgress: 0.01
       internetNetworkEgress: 0.12
 
+  dataRetention:
+    dailyResolutionDays: 15
+
+  cloudCost:
+    # -- Enable cloud cost ingestion and querying, dependant on valid integration credentials
+    enabled: false
+    # -- Number of hours between each run of the Cloud Cost pipeline
+    refreshRateHours: 6
+    # -- Number of days into the past that a Cloud Cost standard run will query for
+    runWindowDays: 3
+    # -- The number of standard runs before a Month-to-Date run occurs
+    monthToDateInterval: 6
+    # -- The max number of days that any single query will be made to construct Cloud Costs
+    queryWindowDays: 7
+
 
   metrics:
     serviceMonitor:
