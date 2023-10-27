@@ -1,6 +1,6 @@
 suite: test deployment
 templates:
-  - deployment.yaml
+  - templates/deployment.yaml
 tests:
   - it: should work
     set:
@@ -13,4 +13,4 @@ tests:
           pattern: -opencost$
       - matchRegex:
           path: spec.template.spec.containers[0].image
-          pattern: artifacts\.msap\.io\/mulesoft\/oversight-opencost-docker:[0-9]*\.[0-9]*\.[0-9]*
+          pattern: quay\.io\/kubecost1\/kubecost-cost-model:prod-[0-9]*\.[0-9]*\.[0-9]*

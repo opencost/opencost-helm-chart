@@ -1,6 +1,6 @@
 suite: test deployment snapshot
 templates:
-  - charts/templates/deployment.yaml
+  - templates/deployment.yaml
 tests:
   - it: pod spec should match snapshot
     asserts:

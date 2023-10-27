@@ -24,7 +24,7 @@ See the [Chart Documentation](https://github.com/opencost/opencost-helm-chart/bl
 
 [Testing](https://github.com/helm-unittest/helm-unittest) your chart (optional)
 
-Presumes you've got Helm unittest installed: (i.e. `helm plugin install unittest`)
+Presumes you've got Helm unittest installed: (i.e. `helm plugin install unittest`) and that your in the root directory of your cloned repo:
 
 ```console
 helm unittest charts/opencost
@@ -34,12 +34,14 @@ Should produce a result like this:
 ```
 ### Chart [ opencost ] charts/opencost
 
+ PASS  test deployment	charts/opencost/tests/deployment_test.yaml
+ PASS  test deployment snapshot	charts/opencost/tests/opencost_test.yaml
 
 Charts:      1 passed, 1 total
-Test Suites: 0 passed, 0 total
-Tests:       0 passed, 0 total
-Snapshot:    0 passed, 0 total
-Time:        3.207646ms
+Test Suites: 2 passed, 2 total
+Tests:       2 passed, 2 total
+Snapshot:    1 passed, 1 total
+Time:        31.011089ms
 ```
 
 ***
