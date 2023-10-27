@@ -20,6 +20,30 @@ helm repo add opencost https://opencost.github.io/opencost-helm-chart
 
 See the [Chart Documentation](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md) for chart install instructions.
 
+## Testing
+
+[Testing](https://github.com/helm-unittest/helm-unittest) your chart (optional)
+
+Presumes you've got Helm unittest installed: (i.e. `helm plugin install unittest`)
+
+```console
+helm unittest charts/opencost
+```
+Should produce a result like this:
+
+```
+### Chart [ opencost ] charts/opencost
+
+
+Charts:      1 passed, 1 total
+Test Suites: 0 passed, 0 total
+Tests:       0 passed, 0 total
+Snapshot:    0 passed, 0 total
+Time:        3.207646ms
+```
+
+***
+
 ## OpenCost Links
 * [OpenCost](https://github.com/opencost/opencost)
 * [Documentation](https://www.opencost.io/docs/)
