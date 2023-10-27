@@ -11,11 +11,7 @@ spec:
   replicas: {{ .Values.opencost.exporter.replicas }}
   selector:
     matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels:
@@ -53,6 +49,10 @@ spec:
         - name: {{ include "opencost.fullname" . }}
           image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
+          args:
+          {{- range .Values.opencost.exporter.extraArgs }}
+          - --{{ . }}
+          {{- end }}
           ports:
             - containerPort: 9003
               name: http
@@ -83,7 +83,10 @@ spec:
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
-              value: {{ .Values.opencost.exporter.cloudProviderApiKey | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opencost.prometheus.secretname" . }}
+                  key: CLOUD_PROVIDER_API_KEY
             {{- end }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
@@ -199,6 +202,42 @@ spec:
           {{- end }}
           {{- with .Values.opencost.ui.extraVolumeMounts }}
           volumeMounts: {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- with .Values.opencost.extraContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.opencost.prometheus.amp.enabled .Values.opencost.sigV4Proxy }}
+        - name: sigv4proxy
+          image: {{ .Values.opencost.sigV4Proxy.image }}
+          imagePullPolicy: {{ .Values.opencost.sigV4Proxy.imagePullPolicy }}
+          args:
+          - --name
+          - {{ .Values.opencost.sigV4Proxy.name }}
+          - --region
+          - {{ .Values.opencost.sigV4Proxy.region }}
+          - --host
+          - {{ .Values.opencost.sigV4Proxy.host }}
+          {{- if .Values.opencost.sigV4Proxy.role_arn }}
+          - --role-arn
+          - {{ .Values.opencost.sigV4Proxy.role_arn }}
+          {{- end }}
+          - --port
+          - :{{ .Values.opencost.sigV4Proxy.port }}
+          ports:
+          - name: aws-sigv4-proxy
+            containerPort: {{ .Values.opencost.sigV4Proxy.port | int }}
+          {{- with .Values.opencost.sigV4Proxy.extraEnv }}
+          env:
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+          {{- with .Values.opencost.sigV4Proxy.resources }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.opencost.sigV4Proxy.securityContext }}
+          securityContext:
+          {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
       {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled}}

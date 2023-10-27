@@ -18,6 +18,12 @@ serviceAccount:
   # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
+# --  Strategy to be used for the Deployment
+updateStrategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+  type: RollingUpdate
 # --  Annotations to add to the all the resources
 annotations: {}
 # --  Annotations to add to the OpenCost Pod
@@ -41,6 +47,14 @@ service:
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+  # -- extra ports.  Useful for sidecar pods such as oauth-proxy
+  extraPorts: []
+    # - name: oauth-proxy
+    #   port: 8081
+    #   targetPort: 8081
+    # - name: oauth-metrics
+    #   port: 8082
+    #   targetPort: 8082
 
 # Create cluster role policies
 rbac:
@@ -62,6 +76,8 @@ opencost:
       tag: ""
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
+    # -- List of extra arguments for the command, e.g.: log-format=json
+    extraArgs: []
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
@@ -169,6 +185,18 @@ opencost:
       relabelings: []
       # -- MetricRelabelConfigs to apply to samples before ingestion
       metricRelabelings: []
+      # -- extra Endpoints to add to the ServiceMonitor.  Useful for scraping sidecars
+      extraEndpoints: []
+        # - port: oauth-metrics
+        #   path: /metrics
+      # -- HTTP scheme used for scraping. Defaults to `http`
+      scheme: http
+      # -- TLS configuration for scraping metrics
+      tlsConfig: {}
+        # caFile: /etc/prom-certs/root-cert.pem
+        # certFile: /etc/prom-certs/cert-chain.pem
+        # insecureSkipVerify: true
+        # keyFile: /etc/prom-certs/key.pem
 
   prometheus:
     # -- Secret name that contains credentials for Prometheus
@@ -198,6 +226,11 @@ opencost:
       namespaceName: opencost
       # -- Service port of in-cluster Prometheus
       port: 9090
+    amp:
+      # -- Use Amazon Managed Service for Prometheus (AMP)
+      enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
+      # -- Workspace ID for AMP
+      workspaceId: ""
     thanos:
       enabled: false
       queryOffset: ''
@@ -279,11 +312,42 @@ opencost:
         - host: example.local
           paths:
             - /
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      servicePort: http-ui
+      # servicePort: oauth-proxy
       # -- Ingress TLS configuration
       tls: []
         #  - secretName: chart-example-tls
         #    hosts:
         #      - chart-example.local
+
+  sigV4Proxy:
+    image: public.ecr.aws/aws-observability/aws-sigv4-proxy:latest
+    imagePullPolicy: IfNotPresent
+    name: aps
+    port: 8005
+    region: us-west-2 # The AWS region
+    host: aps-workspaces.us-west-2.amazonaws.com # The hostname for AMP service.
+    # role_arn: arn:aws:iam::<account>:role/role-name # The AWS IAM role to assume.
+    extraEnv: # Pass extra env variables to sigV4Proxy
+    # - name: AWS_ACCESS_KEY_ID
+    #   value: <access_key>
+    # - name: AWS_SECRET_ACCESS_KEY
+    #   value: <secret_key>
+    resources: {}
+      # limits:
+      #   cpu: 200m
+      #   memory: 500Mi
+      # requests:
+      #   cpu: 20m
+      #   memory: 32Mi
+    securityContext: {}
+      # capabilities:
+      #   drop:
+      #   - ALL
+      # readOnlyRootFilesystem: true
+      # runAsNonRoot: true
+      # runAsUser: 65534
   # -- Toleration labels for pod assignment
   tolerations: []
   # -- Node labels for pod assignment
@@ -292,6 +356,24 @@ opencost:
   affinity: {}
   # -- Assign custom TopologySpreadConstraints rules
   topologySpreadConstraints: []
+
+  # -- extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI
+  extraContainers: []
+    # - name: oauth-proxy
+    #   image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0
+    #   args:
+    #     - --upstream=http://127.0.0.1:9090
+    #     - --http-address=0.0.0.0:8081
+    #     - --metrics-address=0.0.0.0:8082
+    #     - ...
+    #   ports:
+    #     - name: oauth-proxy
+    #       containerPort: 8081
+    #       protocol: TCP
+    #     - name: oauth-metrics
+    #       containerPort: 8082
+    #       protocol: TCP
+    #   resources: {}
 
 # -- A list of volumes to be added to the pod
 extraVolumes: []
