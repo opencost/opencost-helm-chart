@@ -146,16 +146,19 @@ opencost:
     extraEnv: {}
       # FOO: BAR
   customPricing:
-    # -- Enables custom pricing for on-premise setup.
+    # -- Enables custom pricing configuration
     enabled: false
+    # -- Customize the configmap name used for custom pricing
     configmapName: custom-pricing-model
     # -- Path for the pricing configuration.
     configPath: /tmp/custom-config
     # -- Configures the pricing model provided in the values file.
     createConfigmap: true
+    # -- Sets the provider type for the custom pricing file.
+    provider: custom
     # -- More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart
     costModel:
-      description: Modified prices based on your internal pricing
+      description: Modified pricing configuration.
       CPU: 1.25
       spotCPU: 0.006655
       RAM: 0.50
