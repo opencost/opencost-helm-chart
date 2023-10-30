@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.22.0](https://img.shields.io/badge/Version-1.22.0-informational?style=flat-square)
+![Version: 1.22.3](https://img.shields.io/badge/Version-1.22.3-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.106.3](https://img.shields.io/badge/AppVersion-1.106.3-informational?style=flat-square)
+![AppVersion: 1.106.4](https://img.shields.io/badge/AppVersion-1.106.4-informational?style=flat-square)
 
 ## Maintainers
 
@@ -32,16 +32,18 @@ $ helm install opencost opencost/opencost
 | nameOverride | string | `""` | Overwrite the default name of the chart |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
 | opencost.customPricing.configPath | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
-| opencost.customPricing.configmapName | string | `"custom-pricing-model"` |  |
-| opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified prices based on your internal pricing","internetNetworkEgress":0.12,"regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
+| opencost.customPricing.configmapName | string | `"custom-pricing-model"` | Customize the configmap name used for custom pricing |
+| opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified pricing configuration.","internetNetworkEgress":0.12,"regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
 | opencost.customPricing.createConfigmap | bool | `true` | Configures the pricing model provided in the values file. |
-| opencost.customPricing.enabled | bool | `false` | Enables custom pricing for on-premise setup. |
+| opencost.customPricing.enabled | bool | `false` | Enables custom pricing configuration |
+| opencost.customPricing.provider | string | `"custom"` | Sets the provider type for the custom pricing file. |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
 | opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.csv_path | string | `""` |  |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
 | opencost.exporter.env | list | `[]` | List of additional environment variables to set in the container |
+| opencost.exporter.extraArgs | list | `[]` | List of extra arguments for the command, e.g.: log-format=json |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
 | opencost.exporter.image.pullPolicy | string | `"IfNotPresent"` | Exporter container image pull policy |
@@ -65,8 +67,10 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.resources.limits | object | `{"cpu":"999m","memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.exporter.securityContext | object | `{}` | The security options the container should be run with |
+| opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
 | opencost.metrics.serviceMonitor.enabled | bool | `false` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
+| opencost.metrics.serviceMonitor.extraEndpoints | list | `[]` | extra Endpoints to add to the ServiceMonitor.  Useful for scraping sidecars |
 | opencost.metrics.serviceMonitor.honorLabels | bool | `true` | HonorLabels chooses the metric's labels on collisions with target labels |
 | opencost.metrics.serviceMonitor.metricRelabelings | list | `[]` | MetricRelabelConfigs to apply to samples before ingestion |
 | opencost.metrics.serviceMonitor.namespace | string | `""` | Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart) |
@@ -76,6 +80,8 @@ $ helm install opencost opencost/opencost
 | opencost.metrics.serviceMonitor.scrapeTimeout | string | `"10s"` | Timeout after which the scrape is ended |
 | opencost.metrics.serviceMonitor.tlsConfig | object | `{}` | TLS configuration for scraping metrics |
 | opencost.nodeSelector | object | `{}` | Node labels for pod assignment |
+| opencost.prometheus.amp.enabled | bool | `false` | Use Amazon Managed Service for Prometheus (AMP) |
+| opencost.prometheus.amp.workspaceId | string | `""` | Workspace ID for AMP |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
@@ -98,6 +104,15 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.thanos.queryOffset | string | `""` |  |
 | opencost.prometheus.username | string | `""` | Prometheus Basic auth username |
 | opencost.prometheus.username_key | string | `"DB_BASIC_AUTH_USERNAME"` | Key in the secret that references the username |
+| opencost.sigV4Proxy.extraEnv | string | `nil` |  |
+| opencost.sigV4Proxy.host | string | `"aps-workspaces.us-west-2.amazonaws.com"` |  |
+| opencost.sigV4Proxy.image | string | `"public.ecr.aws/aws-observability/aws-sigv4-proxy:latest"` |  |
+| opencost.sigV4Proxy.imagePullPolicy | string | `"IfNotPresent"` |  |
+| opencost.sigV4Proxy.name | string | `"aps"` |  |
+| opencost.sigV4Proxy.port | int | `8005` |  |
+| opencost.sigV4Proxy.region | string | `"us-west-2"` |  |
+| opencost.sigV4Proxy.resources | object | `{}` |  |
+| opencost.sigV4Proxy.securityContext | object | `{}` |  |
 | opencost.tolerations | list | `[]` | Toleration labels for pod assignment |
 | opencost.topologySpreadConstraints | list | `[]` | Assign custom TopologySpreadConstraints rules |
 | opencost.ui.enabled | bool | `true` | Enable OpenCost UI |
@@ -110,6 +125,7 @@ $ helm install opencost opencost/opencost
 | opencost.ui.ingress.enabled | bool | `false` | Ingress for OpenCost UI |
 | opencost.ui.ingress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the Ingress |
 | opencost.ui.ingress.ingressClassName | string | `""` | Ingress controller which implements the resource |
+| opencost.ui.ingress.servicePort | string | `"http-ui"` | Redirect ingress to an extraPort defined on the service such as oauth-proxy |
 | opencost.ui.ingress.tls | list | `[]` | Ingress TLS configuration |
 | opencost.ui.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
 | opencost.ui.livenessProbe.failureThreshold | int | `3` | Number of failures for probe to be considered failed |
@@ -130,12 +146,14 @@ $ helm install opencost opencost/opencost
 | secretAnnotations | object | `{}` | Annotations to add to the Secret |
 | service.annotations | object | `{}` | Annotations to add to the service |
 | service.enabled | bool | `true` |  |
+| service.extraPorts | list | `[]` | extra ports.  Useful for sidecar pods such as oauth-proxy |
 | service.labels | object | `{}` | Labels to add to the service account |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.automountServiceAccountToken | bool | `true` | Whether pods running as this service account should have an API token automatically mounted |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` |  |
+| updateStrategy | object | `{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"}` | Strategy to be used for the Deployment |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
