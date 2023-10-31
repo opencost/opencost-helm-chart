@@ -70,10 +70,10 @@ opencost:
       # -- Exporter container image registry
       registry: gcr.io
       # -- Exporter container image name
-      repository: kubecost1/opencost:latest
+      repository: kubecost1/opencost
       # -- Exporter container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: ""
+      tag: "latest"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
     # -- List of extra arguments for the command, e.g.: log-format=json
@@ -269,10 +269,10 @@ opencost:
       # -- UI container image registry
       registry: gcr.io
       # -- UI container image name
-      repository: kubecost1/opencost-ui:latest
+      repository: kubecost1/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: ""
+      tag: "latest"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
     resources:
