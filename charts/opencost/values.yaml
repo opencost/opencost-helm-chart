@@ -68,9 +68,9 @@ opencost:
     defaultClusterId: 'default-cluster'
     image:
       # -- Exporter container image registry
-      registry: quay.io
+      registry: gcr.io
       # -- Exporter container image name
-      repository: kubecost1/kubecost-cost-model
+      repository: kubecost1/opencost
       # -- Exporter container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
       tag: ""
@@ -267,7 +267,7 @@ opencost:
     enabled: true
     image:
       # -- UI container image registry
-      registry: quay.io
+      registry: gcr.io
       # -- UI container image name
       repository: kubecost1/opencost-ui
       # -- UI container image tag
