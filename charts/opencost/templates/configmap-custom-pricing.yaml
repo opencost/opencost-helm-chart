@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.opencost.customPricing.configmapName }}
 data:
-  default.json: |-
+  {{ include "opencost.configFileName" . }}.json: |-
     {
 {{- range $key, $val := .Values.opencost.customPricing.costModel }}
 {{ $key | quote | indent 6}}: {{ $val | quote }},
