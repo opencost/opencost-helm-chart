@@ -61,6 +61,9 @@ rbac:
   enabled: true
 
 opencost:
+  # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
+  # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
+  cloudIntegrationSecret: ""
   exporter:
     # -- The GCP Pricing API requires a key. This is supplied just for evaluation.
     cloudProviderApiKey: ""
