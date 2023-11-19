@@ -27,6 +27,8 @@ networkPolicies:
   prometheus:
     # -- Namespace where internal Prometheus is installed
     namespace: prometheus-system
+    # -- Pod port of in-cluster Prometheus
+    port: 9090
     # -- Labels applied to the Prometheus server pod(s)
     labels:
       app.kubernetes.io/name: prometheus
@@ -258,9 +260,7 @@ opencost:
       # -- Namespace of in-cluster Prometheus
       namespaceName: prometheus-system
       # -- Service port of in-cluster Prometheus
-      servicePort: 80
-      # -- Pod port of in-cluster Prometheus
-      podPort: 9090
+      port: 80
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
       enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
