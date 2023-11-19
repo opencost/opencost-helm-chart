@@ -90,7 +90,7 @@ Create the name of the controller service account to use
   {{- else -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
-    {{- $port := .Values.opencost.prometheus.internal.servicePort | int }}
+    {{- $port := .Values.opencost.prometheus.internal.port | int }}
     {{- printf "http://%s.%s.svc.cluster.local:%d" $host $ns $port -}}
   {{- end -}}
 {{- end -}}

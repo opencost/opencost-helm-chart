@@ -41,6 +41,6 @@ spec:
             name: {{ .Values.networkPolicies.prometheus.namespace }}
         {{- end }}
       ports:
-      - port: {{ .Values.opencost.prometheus.internal.podPort }}
+      - port: {{ .Values.networkPolicies.prometheus.port }}
 {{- end }}
 {{- end }}
