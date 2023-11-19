@@ -90,7 +90,7 @@ Create the name of the controller service account to use
   {{- else -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
-    {{- $port := .Values.opencost.prometheus.internal.port | int }}
+    {{- $port := .Values.opencost.prometheus.internal.servicePort | int }}
     {{- printf "http://%s.%s.svc.cluster.local:%d" $host $ns $port -}}
   {{- end -}}
 {{- end -}}
@@ -133,4 +133,15 @@ Define opencost config file name
   {{- else -}}
     {{- .Values.opencost.customPricing.provider -}}
   {{- end -}}
+{{- end -}}
+
+{{/*
+Get api version of networking.k8s.io
+*/}}
+{{- define "networkingAPIVersion" -}}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1" }}
+apiVersion: networking.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
 {{- end -}}
