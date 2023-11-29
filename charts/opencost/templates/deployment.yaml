@@ -202,6 +202,10 @@ spec:
           ports:
             - containerPort: 9090
               name: http-ui
+          {{- with .Values.opencost.ui.extraEnv }}
+          env:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources: {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
           {{- if .Values.opencost.ui.livenessProbe.enabled }}
           livenessProbe:

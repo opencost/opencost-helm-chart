@@ -317,6 +317,9 @@ opencost:
       # runAsNonRoot: true
       # runAsUser: 1000
 
+    # -- A list of environment variables to be added to the pod
+    extraEnv: []
+
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
 
