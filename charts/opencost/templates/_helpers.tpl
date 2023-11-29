@@ -123,3 +123,14 @@ Check that the config is valid
     {{- end -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Define opencost config file name
+*/}}
+{{- define "opencost.configFileName" -}}
+  {{- if  eq .Values.opencost.customPricing.provider "custom" -}}
+    {{- print "default" -}}
+  {{- else -}}
+    {{- .Values.opencost.customPricing.provider -}}
+  {{- end -}}
+{{- end -}}
