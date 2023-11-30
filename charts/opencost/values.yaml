@@ -91,6 +91,8 @@ opencost:
       tag: "latest"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
+      # -- Override the full image name for development purposes
+      fullImageName: null
     # -- List of extra arguments for the command, e.g.: log-format=json
     extraArgs: []
     # -- Number of OpenCost replicas to run
@@ -290,6 +292,8 @@ opencost:
       tag: "latest"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
+      # -- Override the full image name for development purposes
+      fullImageName: null
     resources:
       # -- CPU/Memory resource requests
       requests:
@@ -327,6 +331,9 @@ opencost:
       # readOnlyRootFilesystem: true
       # runAsNonRoot: true
       # runAsUser: 1000
+
+    # -- A list of environment variables to be added to the pod
+    extraEnv: []
 
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []

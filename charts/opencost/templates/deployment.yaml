@@ -47,7 +47,11 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
+          {{- if .Values.opencost.exporter.image.fullImageName }}
+          image: {{ .Values.opencost.exporter.image.fullImageName }}
+          {{- else }}
           image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+          {{- end}}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
@@ -189,11 +193,19 @@ spec:
           {{- end }}
         {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui
-          image:  "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+          {{- if .Values.opencost.ui.image.fullImageName }}
+          image: {{ .Values.opencost.ui.image.fullImageName }}
+          {{- else}}
+          image: "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:
             - containerPort: 9090
               name: http-ui
+          {{- with .Values.opencost.ui.extraEnv }}
+          env:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           resources: {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
           {{- if .Values.opencost.ui.livenessProbe.enabled }}
           livenessProbe:
