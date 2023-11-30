@@ -18,6 +18,21 @@ serviceAccount:
   # -- Whether pods running as this service account should have an API token automatically mounted
   automountServiceAccountToken: true
 
+# NetworkPolicies for ingress
+networkPolicies:
+  # -- Specifies whether networkpolicies should be created
+  enabled: false
+
+  # -- Internal Prometheus settings related to NetworkPolicies
+  prometheus:
+    # -- Namespace where internal Prometheus is installed
+    namespace: prometheus-system
+    # -- Pod port of in-cluster Prometheus
+    port: 9090
+    # -- Labels applied to the Prometheus server pod(s)
+    labels:
+      app.kubernetes.io/name: prometheus
+
 # --  Strategy to be used for the Deployment
 updateStrategy:
   rollingUpdate:
@@ -241,11 +256,11 @@ opencost:
       # -- Use in-cluster Prometheus
       enabled: true
       # -- Service name of in-cluster Prometheus
-      serviceName: my-prometheus
+      serviceName: prometheus-server
       # -- Namespace of in-cluster Prometheus
-      namespaceName: opencost
+      namespaceName: prometheus-system
       # -- Service port of in-cluster Prometheus
-      port: 9090
+      port: 80
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
       enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
