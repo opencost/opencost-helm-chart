@@ -58,14 +58,14 @@ spec:
           - --{{ . }}
           {{- end }}
           ports:
-            - containerPort: 9003
+            - containerPort: {{ .Values.opencost.exporter.apiPort }}
               name: http
           resources: {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
           {{- if .Values.opencost.exporter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 9003
+              port: {{ .Values.opencost.exporter.apiPort }}
             initialDelaySeconds: {{ .Values.opencost.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.exporter.livenessProbe.failureThreshold }}
@@ -74,7 +74,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 9003
+              port: {{ .Values.opencost.exporter.apiPort }}
             initialDelaySeconds: {{ .Values.opencost.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.exporter.readinessProbe.failureThreshold }}
@@ -83,6 +83,10 @@ spec:
           securityContext: {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            {{- if .Values.opencost.exporter.apiPort }}
+            - name: API_PORT
+              value: {{ .Values.opencost.exporter.apiPort | quote }}
+            {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
@@ -200,18 +204,30 @@ spec:
           {{- end }}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:
-            - containerPort: 9090
+            - containerPort: {{ .Values.opencost.ui.uiPort }}
               name: http-ui
-          {{- with .Values.opencost.ui.extraEnv }}
           env:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- with .Values.opencost.ui.extraEnv }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.opencost.ui.apiServer }}
+            - name: API_SERVER
+              value: {{ .Values.opencost.ui.apiServer | quote }}
+            {{- end }}
+            {{- if .Values.opencost.exporter.apiPort }}
+            - name: API_PORT
+              value: {{ .Values.opencost.exporter.apiPort | quote }}
+            {{- end }}
+            {{- if .Values.opencost.ui.uiPort }}
+            - name: UI_PORT
+              value: {{ .Values.opencost.ui.uiPort | quote }}
+            {{- end }}
           resources: {{- toYaml .Values.opencost.ui.resources | nindent 12 }}
           {{- if .Values.opencost.ui.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 9090
+              port: {{ .Values.opencost.ui.uiPort }}
             initialDelaySeconds: {{ .Values.opencost.ui.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.ui.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.ui.livenessProbe.failureThreshold }}
@@ -220,7 +236,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 9090
+              port: {{ .Values.opencost.ui.uiPort }}
             initialDelaySeconds: {{ .Values.opencost.ui.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.ui.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.ui.readinessProbe.failureThreshold }}
