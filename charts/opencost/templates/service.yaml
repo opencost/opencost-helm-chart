@@ -16,12 +16,12 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - name: http
-      port: 9003
-      targetPort: 9003
+      port: {{ .Values.opencost.exporter.apiPort }}
+      targetPort: {{ .Values.opencost.exporter.apiPort }}
     {{- if .Values.opencost.ui.enabled }}
     - name: http-ui
-      port: 9090
-      targetPort: 9090
+      port: {{ .Values.opencost.ui.uiPort }}
+      targetPort: {{ .Values.opencost.ui.uiPort }}
     {{- end }}
     {{- with .Values.service.extraPorts }}
       {{- toYaml . | nindent 4 }}
