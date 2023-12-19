@@ -77,6 +77,8 @@ rbac:
 
 opencost:
   exporter:
+    # API_PORT for the cost-model to listen on
+    apiPort: 9003
     # -- The GCP Pricing API requires a key. This is supplied just for evaluation.
     cloudProviderApiKey: ""
     # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
@@ -88,7 +90,7 @@ opencost:
       repository: kubecost1/kubecost-cost-model
       # -- Exporter container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "latest"
+      tag: ""
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -289,7 +291,7 @@ opencost:
       repository: kubecost1/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "latest"
+      tag: ""
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -303,6 +305,9 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # used in the default.nginx.conf if you want to switch for using with Docker
+    # apiServer: 0.0.0.0
+    uiPort: 9090
     # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
