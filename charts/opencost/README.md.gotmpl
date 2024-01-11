@@ -10,11 +10,30 @@
 
 ## Installing the Chart
 
-To install the chart with the release name `opencost`:
+To install the chart with the release name `opencost` on `opencost` namespace:
 
 ```console
-$ helm install opencost opencost/{{ template "chart.name" . }}
+$ helm install opencost opencost/{{ template "chart.name" . }} --namespace opencost --create-namespace
 ```
+
+In order to have a working opencost installation, you need to provide one running instance of Prometheus.
+The following will install a prometheus instance on the namespace `prometheus-system`, where the default helm chart is expecting:
+
+```
+helm install prometheus --repo https://prometheus-community.github.io/helm-charts prometheus \
+  --namespace prometheus-system --create-namespace \
+  --set prometheus-pushgateway.enabled=false \
+  --set alertmanager.enabled=false \
+  -f https://raw.githubusercontent.com/opencost/opencost/develop/kubernetes/prometheus/extraScrapeConfigs.yaml
+```
+
+During installation, you can specify the following parameters if you have your own internal Prometheus:
+
+```
+`--set opencost.prometheus.internal.namespace=<your-namespace>`
+`--set opencost.prometheus.internal.service=<your-service>`
+```
+
 
 {{ template "chart.requirementsSection" . }}
 

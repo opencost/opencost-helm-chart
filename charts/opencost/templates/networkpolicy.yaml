@@ -6,7 +6,7 @@
 kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}-opencost
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "opencost.namespace" . }}
 spec:
   podSelector:
     matchLabels:
