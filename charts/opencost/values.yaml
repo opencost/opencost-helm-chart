@@ -115,6 +115,8 @@ opencost:
     livenessProbe:
       # -- Whether probe is enabled
       enabled: true
+      # -- Probe path
+      path: /healthz
       # -- Number of seconds before probe is initiated
       initialDelaySeconds: 120
       # -- Probe frequency in seconds
@@ -125,6 +127,8 @@ opencost:
     readinessProbe:
       # -- Whether probe is enabled
       enabled: true
+      # -- Probe path
+      path: /healthz
       # -- Number of seconds before probe is initiated
       initialDelaySeconds: 120
       # -- Probe frequency in seconds
@@ -315,6 +319,8 @@ opencost:
     livenessProbe:
       # -- Whether probe is enabled
       enabled: true
+      # -- Probe path
+      path: /healthz
       # -- Number of seconds before probe is initiated
       initialDelaySeconds: 30
       # -- Probe frequency in seconds
@@ -325,6 +331,8 @@ opencost:
     readinessProbe:
       # -- Whether probe is enabled
       enabled: true
+      # -- Probe path
+      path: /healthz
       # -- Number of seconds before probe is initiated
       initialDelaySeconds: 30
       # -- Probe frequency in seconds
