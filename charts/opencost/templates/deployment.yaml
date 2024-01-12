@@ -64,7 +64,7 @@ spec:
           {{- if .Values.opencost.exporter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: {{ .Values.opencost.exporter.livenessProbe.path }}
               port: {{ .Values.opencost.exporter.apiPort }}
             initialDelaySeconds: {{ .Values.opencost.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.livenessProbe.periodSeconds }}
@@ -73,7 +73,7 @@ spec:
           {{- if .Values.opencost.exporter.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: {{ .Values.opencost.exporter.readinessProbe.path }}
               port: {{ .Values.opencost.exporter.apiPort }}
             initialDelaySeconds: {{ .Values.opencost.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.readinessProbe.periodSeconds }}
@@ -226,7 +226,7 @@ spec:
           {{- if .Values.opencost.ui.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: {{ .Values.opencost.ui.livenessProbe.path }}
               port: {{ .Values.opencost.ui.uiPort }}
             initialDelaySeconds: {{ .Values.opencost.ui.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.ui.livenessProbe.periodSeconds }}
@@ -235,7 +235,7 @@ spec:
           {{- if .Values.opencost.ui.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: {{ .Values.opencost.ui.readinessProbe.path }}
               port: {{ .Values.opencost.ui.uiPort }}
             initialDelaySeconds: {{ .Values.opencost.ui.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.ui.readinessProbe.periodSeconds }}

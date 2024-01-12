@@ -7,6 +7,7 @@
 | ---- | ------ | --- |
 | mattray | github@mattray.dev | <https://mattray.dev> |
 | toscott |  |
+| brito-rafa |  |
 
 ## Usage
 
