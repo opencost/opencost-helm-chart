@@ -23,6 +23,11 @@ spec:
       port: {{ .Values.opencost.ui.uiPort }}
       targetPort: {{ .Values.opencost.ui.uiPort }}
     {{- end }}
+    {{- if .Values.opencost.exporter.debugPort }}
+    - name: debug-port
+      port: {{ .Values.opencost.exporter.debugPort }}
+      targetPort: {{ .Values.opencost.debugPort }}
+    {{- end }}
     {{- with .Values.service.extraPorts }}
       {{- toYaml . | nindent 4 }}
     {{- end }}

@@ -82,6 +82,7 @@ opencost:
   exporter:
     # API_PORT for the cost-model to listen on
     apiPort: 9003
+    # debugPort: 40000 # for development purposes (debugging with delve) and not for production.
     # -- The GCP Pricing API requires a key. This is supplied just for evaluation.
     cloudProviderApiKey: ""
     # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
