@@ -3,11 +3,11 @@
 
 ## Maintainers
 
-| Name | Email | Url |
-| ---- | ------ | --- |
-| mattray | github@mattray.dev | <https://mattray.dev> |
-| toscott |  |
-| brito-rafa |  |
+| Name |
+| ---- |
+| mattray |
+| toscott |
+| brito-rafa |
 
 ## Usage
 
