@@ -2,6 +2,8 @@
 nameOverride: ""
 # -- Overwrite all resources name created by the chart
 fullnameOverride: ""
+# -- Override the deployment namespace
+namespaceOverride: ""
 
 # -- List of secret names to use for pulling the images
 imagePullSecrets: []

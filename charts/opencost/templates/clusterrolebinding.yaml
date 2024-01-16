@@ -14,5 +14,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "opencost.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: {{ include "opencost.namespace" . }}
 {{- end }}

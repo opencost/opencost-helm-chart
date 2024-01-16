@@ -9,9 +9,9 @@ keywords:
   - kubecost
   - opencost
   - monitoring
-version: 1.28.3
+version: 1.29.0
 maintainers:
   - name: mattray
-    url: https://mattray.dev
   - name: toscott
+  - name: brito-rafa
 home: https://github.com/opencost/opencost-helm-chart

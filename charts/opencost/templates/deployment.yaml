@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "opencost.fullname" . }}
+  namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
   annotations: {{- toYaml . | nindent 4 }}
