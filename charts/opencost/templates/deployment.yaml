@@ -62,6 +62,15 @@ spec:
             - containerPort: {{ .Values.opencost.exporter.apiPort }}
               name: http
           resources: {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
+          {{- if .Values.opencost.exporter.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ .Values.opencost.exporter.startupProbe.path }}
+              port: {{ .Values.opencost.exporter.apiPort }}
+            initialDelaySeconds: {{ .Values.opencost.exporter.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.opencost.exporter.startupProbe.periodSeconds }}
+            failureThreshold: {{ .Values.opencost.exporter.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.opencost.exporter.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
