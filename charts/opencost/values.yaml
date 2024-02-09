@@ -114,6 +114,18 @@ opencost:
       limits:
         cpu: '999m'
         memory: '1Gi'
+    # Startup probe configuration
+    startupProbe:
+      # -- Whether probe is enabled
+      enabled: true
+      # -- Probe path
+      path: /healthz
+      # -- Number of seconds before probe is initiated
+      initialDelaySeconds: 10
+      # -- Probe frequency in seconds
+      periodSeconds: 5
+      # -- Number of failures for probe to be considered failed
+      failureThreshold: 30
     # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
@@ -121,9 +133,9 @@ opencost:
       # -- Probe path
       path: /healthz
       # -- Number of seconds before probe is initiated
-      initialDelaySeconds: 120
+      initialDelaySeconds: 10
       # -- Probe frequency in seconds
-      periodSeconds: 10
+      periodSeconds: 20
       # -- Number of failures for probe to be considered failed
       failureThreshold: 3
     # Readiness probe configuration
@@ -133,7 +145,7 @@ opencost:
       # -- Probe path
       path: /healthz
       # -- Number of seconds before probe is initiated
-      initialDelaySeconds: 120
+      initialDelaySeconds: 10
       # -- Probe frequency in seconds
       periodSeconds: 10
       # -- Number of failures for probe to be considered failed
