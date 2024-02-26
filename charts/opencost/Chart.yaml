@@ -1,15 +1,15 @@
 apiVersion: v2
-appVersion: 1.108.0
+appVersion: 1.109.0
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
 keywords:
+  - cloud-costs
   - cost-optimization
   - finops
-  - kubecost
-  - opencost
   - monitoring
-version: 1.29.1
+  - opencost
+version: 1.30.0
 maintainers:
   - name: mattray
   - name: toscott
