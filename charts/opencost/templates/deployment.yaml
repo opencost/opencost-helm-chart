@@ -51,7 +51,7 @@ spec:
           {{- if .Values.opencost.exporter.image.fullImageName }}
           image: {{ .Values.opencost.exporter.image.fullImageName }}
           {{- else }}
-          image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+          image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}"
           {{- end}}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
@@ -210,7 +210,7 @@ spec:
           {{- if .Values.opencost.ui.image.fullImageName }}
           image: {{ .Values.opencost.ui.image.fullImageName }}
           {{- else}}
-          image: "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "prod-%s" .Chart.AppVersion) }}"
+          image: "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) }}"
           {{- end }}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:

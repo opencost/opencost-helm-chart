@@ -13,4 +13,4 @@ tests:
           pattern: -opencost$
       - matchRegex:
           path: spec.template.spec.containers[0].image
-          pattern: quay\.io\/kubecost1\/kubecost-cost-model:prod-[0-9]*\.[0-9]*\.[0-9]*
+          pattern: ghcr\.io\/opencost\/opencost:[0-9]*\.[0-9]*\.[0-9]*
