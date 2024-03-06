@@ -46,6 +46,17 @@ spec:
       {{- with.Values.opencost.topologySpreadConstraints }}
       topologySpreadConstraints: {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if (and .Values.plugins.enabled .Values.plugins.install.enabled )}}
+      initContainers:
+        - name: plugin-installer
+          image: {{ .Values.plugins.install.fullImageName }}
+          command: ["sh", "/install/install_plugins.sh"]
+          volumeMounts:
+            - name: install-script
+              mountPath: /install
+            - name: plugins-dir
+              mountPath: {{ .Values.plugins.folder }}
+      {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
           {{- if .Values.opencost.exporter.image.fullImageName }}
@@ -93,6 +104,10 @@ spec:
           securityContext: {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            - name: LOG_LEVEL
+              value: {{ .Values.loglevel }}
+            - name: CUSTOM_COST_ENABLED
+              value: {{ .Values.plugins.enabled | quote }}
             {{- if .Values.opencost.exporter.apiPort }}
             - name: API_PORT
               value: {{ .Values.opencost.exporter.apiPort | quote }}
@@ -185,8 +200,19 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- if or .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
+          {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
           volumeMounts:
+            {{- if .Values.plugins.enabled }} 
+            - mountPath: /opt/opencost/plugin
+              name: plugins-dir
+              readOnly: false
+            {{- range $key, $config := .Values.plugins.configs }}
+            - mountPath: /opt/opencost/plugin/config/{{$key}}_config.json
+              subPath: {{$key}}_config.json
+              name: plugins-config
+              readOnly: true
+            {{- end }}
+            {{- end }}
             {{- if .Values.opencost.exporter.persistence.enabled }}
             - mountPath: /mnt/export
               name: opencost-export
@@ -294,8 +320,20 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
+      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
       volumes:
+        {{- if .Values.plugins.enabled  }}
+        {{- if .Values.plugins.install.enabled}}
+        - name: install-script
+          configMap:
+            name: {{ template "opencost.fullname" . }}-install-plugins
+        {{- end }}
+        - name: plugins-dir
+          emptyDir: {}
+        - name: plugins-config
+          secret:
+            secretName:  {{ template "opencost.fullname" . }}-plugins-config
+        {{- end }}
         {{- if .Values.opencost.customPricing.enabled }}
         - name: custom-configs
           configMap:
