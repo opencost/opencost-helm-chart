@@ -9,7 +9,7 @@ keywords:
   - finops
   - monitoring
   - opencost
-version: 1.30.0
+version: 1.31.0
 maintainers:
   - name: mattray
   - name: toscott
