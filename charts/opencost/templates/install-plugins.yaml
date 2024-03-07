@@ -39,8 +39,8 @@ data:
       {{- end }}
 
       {{- range $pluginName := .Values.plugins.configs }}
-      curl -fsSLO "https://github.com/opencost/opencost-plugins/releases/download/$VER/datadog.ocplugin.$OS.$ARCH"
-      chmod a+rx "datadog.ocplugin.$OS.$ARCH"
+      curl -fsSLO "https://github.com/opencost/opencost-plugins/releases/download/$VER/$pluginName.ocplugin.$OS.$ARCH"
+      chmod a+rx "$pluginName.ocplugin.$OS.$ARCH"
       {{- end }}
     {{- end }}
 {{- end }}
