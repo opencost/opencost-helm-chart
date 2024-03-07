@@ -35,7 +35,7 @@ data:
       {{- if .Values.plugins.version  }}
       VER={{ .Values.plugins.version | quote}}
       {{- else }}
-      VER=$(curl --silent -qI https://github.com/opencost/opencost-plugins/releases/latest | awk -F '/' '/^location/ {print  substr($NF, 1, length($NF)-1)}');
+      VER=$(curl --silent https://api.github.com/repos/opencost/opencost-plugins/releases/latest | grep ".tag_name" | awk -F\" '{print $4}')
       {{- end }}
 
       {{- range $pluginName := .Values.plugins.configs }}
