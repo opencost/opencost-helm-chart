@@ -3,6 +3,27 @@ entries:
   opencost:
   - apiVersion: v2
     appVersion: 1.109.0
+    created: "2024-03-08T03:39:48.935083066Z"
+    description: OpenCost and OpenCost UI
+    digest: 411b95924c0db6a6d46991a8af427157cbc6fcf2e604245e53c682876539d405
+    home: https://github.com/opencost/opencost-helm-chart
+    keywords:
+    - cloud-costs
+    - cost-optimization
+    - finops
+    - monitoring
+    - opencost
+    maintainers:
+    - name: mattray
+    - name: toscott
+    - name: brito-rafa
+    name: opencost
+    type: application
+    urls:
+    - https://github.com/opencost/opencost-helm-chart/releases/download/1.31.0-helm/opencost-1.31.0.tgz
+    version: 1.31.0
+  - apiVersion: v2
+    appVersion: 1.109.0
     created: "2024-03-04T22:46:53.361406336Z"
     description: OpenCost and OpenCost UI
     digest: a8956a9116e409bd8e087536f34e5a6321492b547a0aab146123841028e8b96a
@@ -1313,4 +1334,4 @@ entries:
     urls:
     - https://github.com/opencost/opencost-helm-chart/releases/download/1.0.2-helm/opencost-1.0.2.tgz
     version: 1.0.2
-generated: "2024-03-04T22:46:53.361686557Z"
+generated: "2024-03-08T03:39:48.935322656Z"
