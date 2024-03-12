@@ -63,6 +63,9 @@ networkPolicies:
     labels:
       app.kubernetes.io/name: prometheus
 
+  # -- Extra egress rule
+  extraEgress: []
+
 # --  Strategy to be used for the Deployment
 updateStrategy:
   rollingUpdate:
