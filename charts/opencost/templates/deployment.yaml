@@ -111,6 +111,12 @@ spec:
               value: {{ .Values.loglevel }}
             - name: CUSTOM_COST_ENABLED
               value: {{ .Values.plugins.enabled | quote }}
+            - name: KUBECOST_NAMESPACE
+              value: {{ include "opencost.namespace" . }}
+            {{- if .Values.opencost.metrics.config.enabled }}
+            - name: METRICS_CONFIGMAP_NAME
+              value: {{ .Release.Name }}-metrics-config
+            {{- end }}
             {{- if .Values.opencost.exporter.apiPort }}
             - name: API_PORT
               value: {{ .Values.opencost.exporter.apiPort | quote }}

@@ -297,6 +297,14 @@ opencost:
         # certFile: /etc/prom-certs/cert-chain.pem
         # insecureSkipVerify: true
         # keyFile: /etc/prom-certs/key.pem
+    
+    config:
+      # -- Enables creating the metrics.json configuration as a ConfigMap
+      enabled: false
+      # -- List of metrics to be disabled
+      disabledMetrics: []
+      # - <metric-to-be-disabled>
+      # - <metric-to-be-disabled>
 
   prometheus:
     # -- Secret name that contains credentials for Prometheus
