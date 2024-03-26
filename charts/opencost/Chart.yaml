@@ -9,9 +9,11 @@ keywords:
   - finops
   - monitoring
   - opencost
-version: 1.33.0
+version: 1.33.1
 maintainers:
   - name: mattray
+    url: https://mattray.dev
   - name: toscott
   - name: brito-rafa
+    email: rafa@stormforge.io
 home: https://github.com/opencost/opencost-helm-chart
