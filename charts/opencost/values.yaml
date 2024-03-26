@@ -297,7 +297,7 @@ opencost:
         # certFile: /etc/prom-certs/cert-chain.pem
         # insecureSkipVerify: true
         # keyFile: /etc/prom-certs/key.pem
-    
+
     config:
       # -- Enables creating the metrics.json configuration as a ConfigMap
       enabled: false
