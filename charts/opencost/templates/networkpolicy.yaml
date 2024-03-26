@@ -42,5 +42,8 @@ spec:
         {{- end }}
       ports:
       - port: {{ .Values.networkPolicies.prometheus.port }}
+    {{- if .Values.networkPolicies.extraEgress -}}
+      {{ toYaml .Values.networkPolicies.extraEgress | nindent 4 }}
+    {{- end -}}
 {{- end }}
 {{- end }}
