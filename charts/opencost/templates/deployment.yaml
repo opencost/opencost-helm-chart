@@ -204,21 +204,21 @@ spec:
               value: {{ .Values.opencost.cloudCost.queryWindowDays | quote }}
             - name: CLOUD_COST_RUN_WINDOW_DAYS
               value: {{ .Values.opencost.cloudCost.runWindowDays | quote }}
-            {{- if .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations }}
+            {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations | empty ) }}
             - name: EMIT_POD_ANNOTATIONS_METRIC
-              value: {{ ( .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations) | quote }}
+              value: {{ .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations | quote }}
             {{- end }}
-            {{- if .Values.opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations }}
+            {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations | empty ) }}
             - name: EMIT_NAMESPACE_ANNOTATIONS_METRIC
-              value: {{ ( .Values.opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations) | quote}}
+              value: {{ .Values.opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations | quote }}
             {{- end }}
-            {{- if .Values.opencost.metrics.kubeStateMetrics.emitKsmV1Metrics }}
+            {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | empty ) }}
             - name: EMIT_KSM_V1_METRICS
-              value: {{ ( .Values.opencost.metrics.kubeStateMetrics.emitKsmV1Metrics) | quote }}
+              value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | quote }}
             {{- end }}
-            {{- if .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly }}
+            {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | empty ) }}
             - name: EMIT_KSM_V1_METRICS_ONLY 
-              value: {{ ( .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly) | quote }}
+              value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | quote }}
             {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
