@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.33.1](https://img.shields.io/badge/Version-1.33.1-informational?style=flat-square)
+![Version: 1.33.3](https://img.shields.io/badge/Version-1.33.3-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.109.0](https://img.shields.io/badge/AppVersion-1.109.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
@@ -97,10 +97,10 @@ $ helm install opencost opencost/opencost
 | opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
 | opencost.metrics.config.disabledMetrics | list | `[]` | List of metrics to be disabled |
 | opencost.metrics.config.enabled | bool | `false` | Enables creating the metrics.json configuration as a ConfigMap |
-| opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | string | `""` | Enable emission of KSM v1 metrics |
-| opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | string | `""` | Enable only emission of KSM v1 metrics that do not exist in KSM 2 by default |
-| opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations | string | `""` | Enable emission of namespace annotations |
-| opencost.metrics.kubeStateMetrics.emitPodAnnotations | string | `""` | Enable emission of pod annotations |
+| opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | bool | `nil` | Enable emission of KSM v1 metrics |
+| opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | bool | `nil` | Enable only emission of KSM v1 metrics that do not exist in KSM 2 by default |
+| opencost.metrics.kubeStateMetrics.emitNamespaceAnnotations | bool | `nil` | Enable emission of namespace annotations |
+| opencost.metrics.kubeStateMetrics.emitPodAnnotations | bool | `nil` | Enable emission of pod annotations |
 | opencost.metrics.serviceMonitor.additionalLabels | object | `{}` | Additional labels to add to the ServiceMonitor |
 | opencost.metrics.serviceMonitor.enabled | bool | `false` | Create ServiceMonitor resource for scraping metrics using PrometheusOperator |
 | opencost.metrics.serviceMonitor.extraEndpoints | list | `[]` | extra Endpoints to add to the ServiceMonitor.  Useful for scraping sidecars |
