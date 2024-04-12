@@ -9,11 +9,11 @@ schedule: "* * * * *"
 # -- Keep up to three successful jobs
 successfulJobsHistoryLimit: 3
 suspend: false
-# -- Keep job runnig (from start time) for [activeDeadlineSeconds]  
+# -- Keep job running (from start time) for [activeDeadlineSeconds]  
 activeDeadlineSeconds: 3600
 # -- Limit the lifetime of the execution
 ttlSecondsAfterFinished: 14400
-# --  ServiceAccount use to run this pod
+# --  Optional ServiceAccount use to run this pod
 serviceAccount:
   name: opencost
 securityContext:
@@ -25,7 +25,7 @@ securityContext:
     - ALL
 image:
   repository: ghcr.io/opencost/opencost-parquet-exporter
-  tag: main@sha256:29a5d8e7fb4af97c93f91b4d29872512d93080f88303047ff31cd3b263b48e4f
+  tag: main 
   imagePullPolicy: Always
 # -- List of env vars
 env:
@@ -40,7 +40,7 @@ env:
   - name: OPENCOST_PARQUET_S3_REGION
     value: YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME
   - name: OPENCOST_PARQUET_SVC_HOSTNAME
-    value: opencost.opencost.svc.cluster.local.
+    value: opencost.opencost.svc.cluster.local
   - name: OPENCOST_PARQUET_SVC_PORT
     value: "9003"
 envFrom:

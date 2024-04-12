@@ -1,6 +1,6 @@
 apiVersion: v2
-name: parquet-exporter
-description: A Helm chart for Kubernetes
+name: opencost-parquet-exporter
+description: OpenCost Parquet Exporter
 
 # A chart can be either an 'application' or a 'library' chart.
 #

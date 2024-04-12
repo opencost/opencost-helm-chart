@@ -1,26 +1,26 @@
-# parquet-exporter
+# opencost-parquet-exporter
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-A Helm chart for Kubernetes
+OpenCost Parquet Exporter
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| activeDeadlineSeconds | int | `3600` | Keep job runnig (from start time) for [activeDeadlineSeconds]   |
+| activeDeadlineSeconds | int | `3600` | Keep job running (from start time) for [activeDeadlineSeconds]   |
 | awsRolename | string | `"testrole"` | AWS IAM role to use when writing to the S3 Bucket.  |
 | concurrencyPolicy | string | `"Forbid"` | Do not allow multiple runs |
 | dnsConfig | object | `{"options":[{"name":"single-request-reopen"},{"name":"ndots","value":"2"}]}` | Specific DNS parameters of the pod |
 | dnsConfig.options[0] | object | `{"name":"single-request-reopen"}` | Turning this option on [...] so that if two requests from the same port are not handled correctly it will close the socket and open a new one before sending the second request. See also "[single-request-reopen](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)" |
 | dnsConfig.options[1] | object | `{"name":"ndots","value":"2"}` | Sets a threshold for the number of dots which must appear in a name [...] before an initial absolute query will be made. . See also "[ndots](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)"  |
 | dnsPolicy | string | `"ClusterFirst"` | A pod's [DNS polics](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy)  |
-| env | list | `[{"name":"AWS_REGION","value":"us-west-2"},{"name":"KUBE_CLUSTER","value":"YOUR_CLUSTER_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_FILE_KEY_PREFIX","value":"cluster=$(KUBE_CLUSTER)"},{"name":"OPENCOST_PARQUET_S3_BUCKET","value":"YOUR_S3_BUCKET_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_S3_REGION","value":"YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_SVC_HOSTNAME","value":"opencost.opencost.svc.cluster.local."},{"name":"OPENCOST_PARQUET_SVC_PORT","value":"9003"}]` | List of env vars |
+| env | list | `[{"name":"AWS_REGION","value":"us-west-2"},{"name":"KUBE_CLUSTER","value":"YOUR_CLUSTER_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_FILE_KEY_PREFIX","value":"cluster=$(KUBE_CLUSTER)"},{"name":"OPENCOST_PARQUET_S3_BUCKET","value":"YOUR_S3_BUCKET_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_S3_REGION","value":"YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_SVC_HOSTNAME","value":"opencost.opencost.svc.cluster.local"},{"name":"OPENCOST_PARQUET_SVC_PORT","value":"9003"}]` | List of env vars |
 | envFrom | string | `nil` |  |
 | failedJobsHistoryLimit | int | `3` | Keep up to three failed jobs |
 | image.imagePullPolicy | string | `"Always"` |  |
 | image.repository | string | `"ghcr.io/opencost/opencost-parquet-exporter"` |  |
-| image.tag | string | `"latest"` |  |
+| image.tag | string | `"main"` |  |
 | resources | object | `{"limits":{"cpu":2,"memory":"5Gi"},"requests":{"cpu":1,"memory":"1Gi"}}` | Compute resources required |
 | restartPolicy | string | `"Never"` |  |
 | schedule | string | `"* * * * *"` | Schedule on which to run the cron job |
@@ -28,7 +28,7 @@ A Helm chart for Kubernetes
 | securityContext.readOnlyRootFilesystem | bool | `true` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
 | securityContext.runAsUser | int | `1001` |  |
-| serviceAccount | object | `{"name":"opencost"}` | ServiceAccount use to run this pod |
+| serviceAccount | object | `{"name":"opencost"}` | Optional ServiceAccount use to run this pod |
 | successfulJobsHistoryLimit | int | `3` | Keep up to three successful jobs |
 | suspend | bool | `false` |  |
 | terminationGracePeriodSeconds | int | `30` |  |
