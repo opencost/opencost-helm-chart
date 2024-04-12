@@ -9,7 +9,7 @@ keywords:
   - finops
   - monitoring
   - opencost
-version: 1.33.2
+version: 1.33.3
 maintainers:
   - name: mattray
     url: https://mattray.dev

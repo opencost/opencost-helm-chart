@@ -259,14 +259,14 @@ opencost:
 
   metrics:
     kubeStateMetrics:
-      # -- Enable emission of pod annotations
-      emitPodAnnotations: ""
-      # -- Enable emission of namespace annotations
-      emitNamespaceAnnotations: ""
-      # -- Enable emission of KSM v1 metrics
-      emitKsmV1Metrics: ""
-      # -- Enable only emission of KSM v1 metrics that do not exist in KSM 2 by default
-      emitKsmV1MetricsOnly: ""
+      # -- (bool) Enable emission of pod annotations
+      emitPodAnnotations: ~
+      # -- (bool) Enable emission of namespace annotations
+      emitNamespaceAnnotations: ~
+      # -- (bool) Enable emission of KSM v1 metrics
+      emitKsmV1Metrics: ~
+      # -- (bool) Enable only emission of KSM v1 metrics that do not exist in KSM 2 by default
+      emitKsmV1MetricsOnly: ~
 
     serviceMonitor:
       # -- Create ServiceMonitor resource for scraping metrics using PrometheusOperator
