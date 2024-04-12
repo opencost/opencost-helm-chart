@@ -33,8 +33,8 @@ spec:
 {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- if and (hasKey .Values "serviceAccount") (hasKey .Values.serviceAccount "name") }}
-          serviceAccountName: {{ .Values.serviceAccount.name }}
+          {{- if not ( .Values.existingServiceAccount | empty ) }}
+          serviceAccountName: {{ .Values.existingServiceAccount }}
           {{- end }}
           {{- if hasKey .Values "securityContext" }}
           {{- with .Values.securityContext }} 

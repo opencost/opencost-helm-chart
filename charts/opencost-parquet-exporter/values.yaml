@@ -14,8 +14,7 @@ activeDeadlineSeconds: 3600
 # -- Limit the lifetime of the execution
 ttlSecondsAfterFinished: 14400
 # --  Optional ServiceAccount use to run this pod
-serviceAccount:
-  name: opencost
+existingServiceAccount:
 securityContext:
   runAsUser: 1001
   readOnlyRootFilesystem: true

@@ -17,6 +17,7 @@ OpenCost Parquet Exporter
 | dnsPolicy | string | `"ClusterFirst"` | A pod's [DNS polics](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy)  |
 | env | list | `[{"name":"AWS_REGION","value":"us-west-2"},{"name":"KUBE_CLUSTER","value":"YOUR_CLUSTER_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_FILE_KEY_PREFIX","value":"cluster=$(KUBE_CLUSTER)"},{"name":"OPENCOST_PARQUET_S3_BUCKET","value":"YOUR_S3_BUCKET_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_S3_REGION","value":"YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_SVC_HOSTNAME","value":"opencost.opencost.svc.cluster.local"},{"name":"OPENCOST_PARQUET_SVC_PORT","value":"9003"}]` | List of env vars |
 | envFrom | string | `nil` |  |
+| existingServiceAccount | string | `nil` | Optional ServiceAccount use to run this pod |
 | failedJobsHistoryLimit | int | `3` | Keep up to three failed jobs |
 | image.imagePullPolicy | string | `"Always"` |  |
 | image.repository | string | `"ghcr.io/opencost/opencost-parquet-exporter"` |  |
@@ -28,7 +29,6 @@ OpenCost Parquet Exporter
 | securityContext.readOnlyRootFilesystem | bool | `true` |  |
 | securityContext.runAsNonRoot | bool | `true` |  |
 | securityContext.runAsUser | int | `1001` |  |
-| serviceAccount | object | `{"name":"opencost"}` | Optional ServiceAccount use to run this pod |
 | successfulJobsHistoryLimit | int | `3` | Keep up to three successful jobs |
 | suspend | bool | `false` |  |
 | terminationGracePeriodSeconds | int | `30` |  |
