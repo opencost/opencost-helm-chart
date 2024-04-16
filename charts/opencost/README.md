@@ -117,7 +117,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.amp.workspaceId | string | `""` | Workspace ID for AMP |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
-| opencost.prometheus.existing_secret_name | string | `nil` | Existing secret name that contains credentials for Prometheus |
+| opencost.prometheus.existingSecretName | string | `nil` | Existing secret name that contains credentials for Prometheus |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
 | opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
