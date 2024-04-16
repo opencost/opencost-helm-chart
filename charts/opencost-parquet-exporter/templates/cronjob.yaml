@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "parquet-exporter.name" $ }}
+  name: {{ include "opencost-parquet-exporter.name" $ }}
   annotations:
 {{- include "parquet-exporter.annotations" $ | indent 4 }}
   labels:
-{{ include "parquet-exporter.labels" . | indent 4 }}
+{{ include "opencost-parquet-exporter.labels" . | indent 4 }}
 spec:
   concurrencyPolicy: {{ .Values.concurrencyPolicy | quote}}
   failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
@@ -14,7 +14,7 @@ spec:
   suspend: {{ .Values.suspend }}
   jobTemplate:
     metadata:
-      name: {{ include "parquet-exporter.name" $ }}
+      name: {{ include "opencost-parquet-exporter.name" $ }}
     spec:
       activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
       ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
@@ -24,8 +24,8 @@ spec:
           annotations:
             {{- include "parquet-exporter.annotations" $ | indent 12 }}
           labels:
-{{ include "parquet-exporter.labels" . | indent 12 }}
-          name: {{ include "parquet-exporter.name" $ }}
+{{ include "opencost-parquet-exporter.labels" . | indent 12 }}
+          name: {{ include "opencost-parquet-exporter.name" $ }}
         spec:
           {{- if .Values.imagePullSecrets }}
           {{- with .Values.imagePullSecrets }} 
@@ -47,7 +47,7 @@ spec:
           containers:
             - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
               imagePullPolicy: {{ .Values.image.imagePullPolicy }}
-              name: {{ include "parquet-exporter.name" $ }} 
+              name: {{ include "opencost-parquet-exporter.name" $ }} 
               {{- with .Values.resources }}
               resources:
 {{ toYaml . | indent 16 }}
