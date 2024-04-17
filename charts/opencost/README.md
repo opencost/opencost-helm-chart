@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.33.3](https://img.shields.io/badge/Version-1.33.3-informational?style=flat-square)
+![Version: 1.34.0](https://img.shields.io/badge/Version-1.34.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.109.0](https://img.shields.io/badge/AppVersion-1.109.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
@@ -117,6 +117,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.amp.workspaceId | string | `""` | Workspace ID for AMP |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
+| opencost.prometheus.existingSecretName | string | `nil` | Existing secret name that contains credentials for Prometheus |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
 | opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |

@@ -146,25 +146,24 @@ spec:
                   name: {{ include "opencost.prometheus.secretname" . }}
                   key: AWS_SECRET_ACCESS_KEY
             {{- end }}
-            # If username, password or bearer_token are defined, pull from secrets
-            {{- if or .Values.opencost.prometheus.username (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.username_key) }}
+            {{- if and .Values.opencost.prometheus.username_key (or .Values.opencost.prometheus.username .Values.opencost.prometheus.existingSecretName) }}
             - name: DB_BASIC_AUTH_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.prometheus.secretname" . }}
+                  name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.username_key }}
             {{- end }}
-            {{- if or .Values.opencost.prometheus.password (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.password_key) }}
+            {{- if and .Values.opencost.prometheus.password_key (or .Values.opencost.prometheus.password .Values.opencost.prometheus.existingSecretName) }}
             - name: DB_BASIC_AUTH_PW
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.prometheus.secretname" . }}
+                  name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.password_key }}
-            {{- else if or .Values.opencost.prometheus.bearer_token (and .Values.opencost.prometheus.secret_name .Values.opencost.prometheus.bearer_token_key) }}
+            {{- else if and .Values.opencost.prometheus.bearer_token_key (or .Values.opencost.prometheus.bearer_token .Values.opencost.prometheus.existingSecretName) }}
             - name: DB_BEARER_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "opencost.prometheus.secretname" . }}
+                  name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.bearer_token_key }}
             {{- end }}
             {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
@@ -217,7 +216,7 @@ spec:
               value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | quote }}
             {{- end }}
             {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | empty ) }}
-            - name: EMIT_KSM_V1_METRICS_ONLY 
+            - name: EMIT_KSM_V1_METRICS_ONLY
               value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | quote }}
             {{- end }}
             # Add any additional provided variables
@@ -227,7 +226,7 @@ spec:
             {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
           volumeMounts:
-            {{- if .Values.plugins.enabled }} 
+            {{- if .Values.plugins.enabled }}
             - mountPath: /opt/opencost/plugin
               name: plugins-dir
               readOnly: false
