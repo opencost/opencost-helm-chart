@@ -105,7 +105,8 @@ service:
     # - name: oauth-metrics
     #   port: 8082
     #   targetPort: 8082
-  # loadBalancerSourceRanges: []
+  # -- LoadBalancer Source IP CIDR if service type is LoadBalancer and cloud provider supports this
+  loadBalancerSourceRanges: []
 
 # Create cluster role policies
 rbac:
