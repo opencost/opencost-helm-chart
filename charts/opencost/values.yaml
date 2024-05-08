@@ -301,6 +301,8 @@ opencost:
     config:
       # -- Enables creating the metrics.json configuration as a ConfigMap
       enabled: false
+      # -- Customize the configmap name used for metrics
+      configmapName: custom-metrics
       # -- List of metrics to be disabled
       disabledMetrics: []
       # - <metric-to-be-disabled>
