@@ -115,7 +115,7 @@ spec:
               value: {{ include "opencost.namespace" . }}
             {{- if .Values.opencost.metrics.config.enabled }}
             - name: METRICS_CONFIGMAP_NAME
-              value: {{ .Release.Name }}-metrics-config
+              value: {{ .Values.opencost.metrics.config.configmapName }}
             {{- end }}
             {{- if .Values.opencost.exporter.apiPort }}
             - name: API_PORT
@@ -245,6 +245,13 @@ spec:
             {{- if .Values.opencost.customPricing.enabled }}
             - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
+              subPath: {{ include "opencost.configFileName" . }}.json
+              readOnly: true
+            {{- end }}
+            {{- if .Values.opencost.metrics.config.enabled }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}
+              name: custom-metrics
+              subPath: metrics.json
               readOnly: true
             {{- end }}
             {{- if .Values.opencost.cloudIntegrationSecret }}
@@ -362,6 +369,11 @@ spec:
         - name: custom-configs
           configMap:
             name: {{ .Values.opencost.customPricing.configmapName }}
+        {{- end }}
+        {{- if .Values.opencost.metrics.config.enabled }}
+        - name: custom-metrics
+          configMap:
+            name: {{ .Values.opencost.config.metrics.configmapName }}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
