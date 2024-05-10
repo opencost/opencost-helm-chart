@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-metrics-config
+  name: {{ .Values.opencost.metrics.config.configmapName }}
   namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
 data:
