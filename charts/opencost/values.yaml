@@ -95,6 +95,8 @@ service:
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+  # -- NodePort if service type is NodePort
+  nodePort: {}
   # -- extra ports.  Useful for sidecar pods such as oauth-proxy
   extraPorts: []
     # - name: oauth-proxy
@@ -103,6 +105,8 @@ service:
     # - name: oauth-metrics
     #   port: 8082
     #   targetPort: 8082
+  # -- LoadBalancer Source IP CIDR if service type is LoadBalancer and cloud provider supports this
+  loadBalancerSourceRanges: []
 
 # Create cluster role policies
 rbac:

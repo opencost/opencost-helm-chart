@@ -198,6 +198,8 @@ $ helm install opencost opencost/opencost
 | service.enabled | bool | `true` |  |
 | service.extraPorts | list | `[]` | extra ports.  Useful for sidecar pods such as oauth-proxy |
 | service.labels | object | `{}` | Labels to add to the service account |
+| service.loadBalancerSourceRanges | list | `[]` | LoadBalancer Source IP CIDR if service type is LoadBalancer and cloud provider supports this |
+| service.nodePort | object | `{}` | NodePort if service type is NodePort |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.automountServiceAccountToken | bool | `true` | Whether pods running as this service account should have an API token automatically mounted |
