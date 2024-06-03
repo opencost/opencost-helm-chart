@@ -243,7 +243,7 @@ spec:
               readOnly: false
             {{- end }}
             {{- if .Values.opencost.customPricing.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}/{{ include "opencost.configFileName" . }}.json
               name: custom-configs
               subPath: {{ include "opencost.configFileName" . }}.json
               readOnly: true
