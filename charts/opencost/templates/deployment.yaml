@@ -249,7 +249,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.opencost.metrics.config.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}/metrics.json
               name: custom-metrics
               subPath: metrics.json
               readOnly: true
@@ -373,7 +373,7 @@ spec:
         {{- if .Values.opencost.metrics.config.enabled }}
         - name: custom-metrics
           configMap:
-            name: {{ .Values.opencost.config.metrics.configmapName }}
+            name: {{ .Values.opencost.metrics.config.configmapName }}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
