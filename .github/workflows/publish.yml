@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -39,20 +39,20 @@ jobs:
         run: |
           helm-docs .
       - name: Login to GHCR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${ GITHUB_REPOSITORY_OWNER }
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@a917fd15b20e8b64b94d9158ad54cd6345335584 # v1.6.0
+        uses: helm/chart-releaser-action@1.6.0
         with:
           charts_dir: charts
           config: './.github/configs/cr.yaml'
         env:
           CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           CR_RELEASE_NAME_TEMPLATE: '{{ .Version }}-helm'
-      - uses: sigstore/cosign-installer@e1523de7571e31dbe865fd2e80c5c7c23ae71eb4 # v3.4.0
+      - uses: sigstore/cosign-installer@3.5.0
       - name: Push chart to GHCR
         env:
           COSIGN_EXPERIMENTAL: 1
