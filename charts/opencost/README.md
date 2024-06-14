@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.37.1](https://img.shields.io/badge/Version-1.37.1-informational?style=flat-square)
+![Version: 1.39.0](https://img.shields.io/badge/Version-1.39.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.110.0](https://img.shields.io/badge/AppVersion-1.110.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
@@ -42,6 +42,7 @@ $ helm install opencost opencost/opencost
 | networkPolicies.prometheus.namespace | string | `"prometheus-system"` | Namespace where internal Prometheus is installed |
 | networkPolicies.prometheus.port | int | `9090` | Pod port of in-cluster Prometheus |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
+| opencost.carbonCost.enabled | bool | `false` | Enable carbon cost exposed in the API |
 | opencost.cloudCost.enabled | bool | `false` | Enable cloud cost ingestion and querying, dependant on valid integration credentials |
 | opencost.cloudCost.monthToDateInterval | int | `6` | The number of standard runs before a Month-to-Date run occurs |
 | opencost.cloudCost.queryWindowDays | int | `7` | The max number of days that any single query will be made to construct Cloud Costs |
@@ -95,6 +96,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.startupProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.startupProbe.periodSeconds | int | `5` | Probe frequency in seconds |
 | opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
+| opencost.metrics.config.configmapName | string | `"custom-metrics"` | Customize the configmap name used for metrics |
 | opencost.metrics.config.disabledMetrics | list | `[]` | List of metrics to be disabled |
 | opencost.metrics.config.enabled | bool | `false` | Enables creating the metrics.json configuration as a ConfigMap |
 | opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | bool | `nil` | Enable emission of KSM v1 metrics |
