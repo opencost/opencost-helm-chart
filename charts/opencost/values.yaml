@@ -248,6 +248,10 @@ opencost:
   dataRetention:
     dailyResolutionDays: 15
 
+  carbonCost:
+    # -- Enable carbon cost exposed in the API
+    enabled: false
+
   cloudCost:
     # -- Enable cloud cost ingestion and querying, dependant on valid integration credentials
     enabled: false

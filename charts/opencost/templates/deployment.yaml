@@ -121,6 +121,10 @@ spec:
             - name: API_PORT
               value: {{ .Values.opencost.exporter.apiPort | quote }}
             {{- end }}
+            {{- if .Values.opencost.carbonCost.enabled }}
+            - name: CARBON_ESTIMATES_ENABLED
+              value: {{ .Values.opencost.carbonCost.enabled | quote }}
+            {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
