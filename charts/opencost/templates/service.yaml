@@ -14,7 +14,15 @@ metadata:
   {{- end }}
 spec:
   selector: {{- include "opencost.selectorLabels" . | nindent 4 }}
-  type: {{ .Values.service.type }}
+  {{- if and .Values.service .Values.service.type }}
+  type: "{{ .Values.service.type }}"
+  {{- end }}
+  {{- if (eq .Values.service.type "LoadBalancer") }}
+    {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{ toYaml .Values.service.loadBalancerSourceRanges | indent 4 }}
+    {{- end -}}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.opencost.exporter.apiPort }}
@@ -23,6 +31,11 @@ spec:
     - name: http-ui
       port: {{ .Values.opencost.ui.uiPort }}
       targetPort: {{ .Values.opencost.ui.uiPort }}
+      {{- if (eq .Values.service.type "NodePort") }}
+        {{- if .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.opencost.exporter.debugPort }}
     - name: debug-port

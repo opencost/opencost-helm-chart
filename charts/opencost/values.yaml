@@ -95,6 +95,8 @@ service:
   labels: {}
   # --  Kubernetes Service type
   type: ClusterIP
+  # -- NodePort if service type is NodePort
+  nodePort: {}
   # -- extra ports.  Useful for sidecar pods such as oauth-proxy
   extraPorts: []
     # - name: oauth-proxy
@@ -103,6 +105,8 @@ service:
     # - name: oauth-metrics
     #   port: 8082
     #   targetPort: 8082
+  # -- LoadBalancer Source IP CIDR if service type is LoadBalancer and cloud provider supports this
+  loadBalancerSourceRanges: []
 
 # Create cluster role policies
 rbac:
@@ -244,6 +248,10 @@ opencost:
   dataRetention:
     dailyResolutionDays: 15
 
+  carbonCost:
+    # -- Enable carbon cost exposed in the API
+    enabled: false
+
   cloudCost:
     # -- Enable cloud cost ingestion and querying, dependant on valid integration credentials
     enabled: false
@@ -301,6 +309,8 @@ opencost:
     config:
       # -- Enables creating the metrics.json configuration as a ConfigMap
       enabled: false
+      # -- Customize the configmap name used for metrics
+      configmapName: custom-metrics
       # -- List of metrics to be disabled
       disabledMetrics: []
       # - <metric-to-be-disabled>
@@ -309,6 +319,8 @@ opencost:
   prometheus:
     # -- Secret name that contains credentials for Prometheus
     secret_name: ~
+    # -- Existing secret name that contains credentials for Prometheus
+    existingSecretName: ~
     # -- Prometheus Basic auth username
     username: ""
     # -- Key in the secret that references the username

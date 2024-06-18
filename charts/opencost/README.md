@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 1.33.3](https://img.shields.io/badge/Version-1.33.3-informational?style=flat-square)
+![Version: 1.39.0](https://img.shields.io/badge/Version-1.39.0-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.109.0](https://img.shields.io/badge/AppVersion-1.109.0-informational?style=flat-square)
+![AppVersion: 1.110.0](https://img.shields.io/badge/AppVersion-1.110.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost-oci)](https://artifacthub.io/packages/search?repo=opencost-oci)
 
@@ -42,6 +42,7 @@ $ helm install opencost opencost/opencost
 | networkPolicies.prometheus.namespace | string | `"prometheus-system"` | Namespace where internal Prometheus is installed |
 | networkPolicies.prometheus.port | int | `9090` | Pod port of in-cluster Prometheus |
 | opencost.affinity | object | `{}` | Affinity settings for pod assignment |
+| opencost.carbonCost.enabled | bool | `false` | Enable carbon cost exposed in the API |
 | opencost.cloudCost.enabled | bool | `false` | Enable cloud cost ingestion and querying, dependant on valid integration credentials |
 | opencost.cloudCost.monthToDateInterval | int | `6` | The number of standard runs before a Month-to-Date run occurs |
 | opencost.cloudCost.queryWindowDays | int | `7` | The max number of days that any single query will be made to construct Cloud Costs |
@@ -95,6 +96,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.startupProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.startupProbe.periodSeconds | int | `5` | Probe frequency in seconds |
 | opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
+| opencost.metrics.config.configmapName | string | `"custom-metrics"` | Customize the configmap name used for metrics |
 | opencost.metrics.config.disabledMetrics | list | `[]` | List of metrics to be disabled |
 | opencost.metrics.config.enabled | bool | `false` | Enables creating the metrics.json configuration as a ConfigMap |
 | opencost.metrics.kubeStateMetrics.emitKsmV1Metrics | bool | `nil` | Enable emission of KSM v1 metrics |
@@ -117,6 +119,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.amp.workspaceId | string | `""` | Workspace ID for AMP |
 | opencost.prometheus.bearer_token | string | `""` | Prometheus Bearer token |
 | opencost.prometheus.bearer_token_key | string | `"DB_BEARER_TOKEN"` |  |
+| opencost.prometheus.existingSecretName | string | `nil` | Existing secret name that contains credentials for Prometheus |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
 | opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
@@ -197,6 +200,8 @@ $ helm install opencost opencost/opencost
 | service.enabled | bool | `true` |  |
 | service.extraPorts | list | `[]` | extra ports.  Useful for sidecar pods such as oauth-proxy |
 | service.labels | object | `{}` | Labels to add to the service account |
+| service.loadBalancerSourceRanges | list | `[]` | LoadBalancer Source IP CIDR if service type is LoadBalancer and cloud provider supports this |
+| service.nodePort | object | `{}` | NodePort if service type is NodePort |
 | service.type | string | `"ClusterIP"` | Kubernetes Service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.automountServiceAccountToken | bool | `true` | Whether pods running as this service account should have an API token automatically mounted |
