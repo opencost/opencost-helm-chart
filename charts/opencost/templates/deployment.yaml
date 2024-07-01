@@ -62,11 +62,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
-          {{- if .Values.opencost.exporter.image.fullImageName }}
-          image: {{ .Values.opencost.exporter.image.fullImageName }}
-          {{- else }}
-          image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}"
-          {{- end}}
+          image: {{ include "opencost.fullImageName" . }}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
@@ -268,11 +264,7 @@ spec:
           {{- end }}
         {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui
-          {{- if .Values.opencost.ui.image.fullImageName }}
-          image: {{ .Values.opencost.ui.image.fullImageName }}
-          {{- else}}
-          image: "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) }}"
-          {{- end }}
+          image: {{ include "opencostUi.fullImageName" .}}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.opencost.ui.uiPort }}
