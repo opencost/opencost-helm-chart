@@ -65,3 +65,11 @@ jobs:
             helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
             cosign sign $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
           done
+      - uses: oras-project/setup-oras@v1
+        with:
+          version: 1.2.0
+      - name: Push chart to GHCR
+        run: |
+          oras push ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts/opencost \
+          --config /dev/null:application/vnd.cncf.artifacthub.config.v1+yaml \
+          artifacthub-repo.yml:application/vnd.cncf.artifacthub.repository-metadata.layer.v1.yaml
