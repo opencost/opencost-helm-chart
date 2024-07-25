@@ -220,9 +220,8 @@ spec:
               value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | quote }}
             {{- end }}
             # Add any additional provided variables
-            {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
+            {{- with .Values.opencost.exporter.extraEnv }}
+            {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
           volumeMounts:

@@ -218,8 +218,14 @@ opencost:
     # -- List of additional environment variables to set in the container
     env: []
     # -- Any extra environment variables you would like to pass on to the pod
-    extraEnv: {}
-      # FOO: BAR
+    extraEnv: []
+    # - name: FOO
+    #   value: bar
+    # - name: SECRET_FOO
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: secret-foo
+    #       key: bar
   customPricing:
     # -- Enables custom pricing configuration
     enabled: false
