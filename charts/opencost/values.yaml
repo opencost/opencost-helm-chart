@@ -220,6 +220,8 @@ opencost:
     # -- Any extra environment variables you would like to pass on to the pod
     extraEnv: {}
       # FOO: BAR
+      # For example, if accessing mimir directly and getting 401 Unauthorized
+      # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
   customPricing:
     # -- Enables custom pricing configuration
     enabled: false
