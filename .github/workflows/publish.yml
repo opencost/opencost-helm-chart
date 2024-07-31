@@ -55,8 +55,6 @@ jobs:
 
       - uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
       - name: Push chart to GHCR
-        env:
-          COSIGN_EXPERIMENTAL: 1
         run: |
           shopt -s nullglob
           for pkg in .cr-release-packages/*; do
@@ -64,7 +62,7 @@ jobs:
               break
             fi
             helm push "${pkg}" oci://ghcr.io/"${GITHUB_REPOSITORY_OWNER}"/charts |& tee .digest
-            cosign sign $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
+            cosign sign --yes $(cat .digest | awk -F "[, ]+" '/Pushed/{print $NF}')
           done
       - uses: oras-project/setup-oras@ca28077386065e263c03428f4ae0c09024817c93 # v1
         with:
