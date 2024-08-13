@@ -98,7 +98,7 @@ Create the name of the controller service account to use
     {{- $port := .Values.opencost.sigV4Proxy.port | int }}
     {{- $ws := .Values.opencost.prometheus.amp.workspaceId }}
     {{- printf "http://localhost:%d/workspaces/%v" $port $ws -}}
-  {{- else -}}
+  {{- else if .Values.opencost.prometheus.internal.enabled -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
