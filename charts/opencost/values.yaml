@@ -213,6 +213,11 @@ opencost:
       secret_access_key: ""
       # -- AWS secret key id
       access_key_id: ""
+
+    linode:
+      # -- Linode API token secret name
+      tokenSecret: ""
+
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
     # -- List of additional environment variables to set in the container
