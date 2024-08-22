@@ -146,6 +146,13 @@ spec:
                   name: {{ include "opencost.prometheus.secretname" . }}
                   key: AWS_SECRET_ACCESS_KEY
             {{- end }}
+            {{- if .Values.opencost.exporter.linode.tokenSecret }}
+            - name: LINODE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.opencost.exporter.linode.tokenSecret | quote }}
+                  key: token
+            {{- end }}
             {{- if and .Values.opencost.prometheus.username_key (or .Values.opencost.prometheus.username .Values.opencost.prometheus.existingSecretName) }}
             - name: DB_BASIC_AUTH_USERNAME
               valueFrom:
