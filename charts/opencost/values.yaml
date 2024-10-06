@@ -126,11 +126,11 @@ opencost:
     defaultClusterId: 'default-cluster'
     image:
       # -- Exporter container image registry
-      registry: ghcr.io
+      registry: docker.io
       # -- Exporter container image name
-      repository: opencost/opencost
+      repository: ishaanmittal/opencost
       # -- Exporter container image tag
-      tag: "1.111.0@sha256:6aa68e52a24b14ba41f23db08d1b9db1429a1c0300f4c0381ecc2c61fc311a97"
+      tag: "test-amd64"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -333,6 +333,10 @@ opencost:
     # -- Prometheus Bearer token
     bearer_token: ""
     bearer_token_key: DB_BEARER_TOKEN
+    # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
+    kubeRBACProxy: false
+    # -- If true, opencost will create a ClusterRoleBinding to allow using in-cluster Prometheus for openshift
+    createPrometheusClusterRoleBinding: false
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
@@ -369,15 +373,14 @@ opencost:
     # -- Enable OpenCost UI
     enabled: true
     image:
-      # -- UI container image registry
-      registry: ghcr.io
-      # -- UI container image name
-      repository: opencost/opencost-ui
-      # -- UI container image tag
-      # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.111.0@sha256:f7221e7a708d71663f5eca6c238268757eb4352f3e9f46b1029d33ab4e53fd8a"
+      # -- Exporter container image registry
+      registry: docker.io
+      # -- Exporter container image name
+      repository: ishaanmittal/opencost-ui
+      # -- Exporter container image tag
+      tag: "test-amd64"
       # -- UI container image pull policy
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
       # -- Override the full image name for development purposes
       fullImageName: null
     resources:
