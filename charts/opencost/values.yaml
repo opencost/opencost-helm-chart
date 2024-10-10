@@ -126,11 +126,11 @@ opencost:
     defaultClusterId: 'default-cluster'
     image:
       # -- Exporter container image registry
-      registry: docker.io
+      registry: ghcr.io
       # -- Exporter container image name
-      repository: ishaanmittal/opencost
+      repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "test-amd64"
+      tag: "1.111.0@sha256:6aa68e52a24b14ba41f23db08d1b9db1429a1c0300f4c0381ecc2c61fc311a97"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -336,7 +336,12 @@ opencost:
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
     # -- If true, opencost will create a ClusterRoleBinding to allow using in-cluster Prometheus for openshift
-    createPrometheusClusterRoleBinding: false
+    createMonitoringClusterRoleBinding: false
+    # -- If true, opencost will create a role and role binding to allow in-cluster prometheus to list and watch resources
+    # This will be necessary if you are not using bundled prometheus and need to add scrape config for resources.
+    createMonitoringResourceReaderRoleBinding: false
+    # -- Name of the service account to bind to the ClusterRoleBinding
+    monitoringServiceAccountName: prometheus-k8s
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
@@ -373,14 +378,15 @@ opencost:
     # -- Enable OpenCost UI
     enabled: true
     image:
-      # -- Exporter container image registry
-      registry: docker.io
-      # -- Exporter container image name
-      repository: ishaanmittal/opencost-ui
-      # -- Exporter container image tag
-      tag: "test-amd64"
+      # -- UI container image registry
+      registry: ghcr.io
+      # -- UI container image name
+      repository: opencost/opencost-ui
+      # -- UI container image tag
+      # @default -- `""` (use appVersion in Chart.yaml)
+      tag: "1.111.0@sha256:f7221e7a708d71663f5eca6c238268757eb4352f3e9f46b1029d33ab4e53fd8a"
       # -- UI container image pull policy
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
       fullImageName: null
     resources:

@@ -166,9 +166,9 @@ spec:
                   name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.bearer_token_key }}
             {{- end }}
-            {{- if .Values.opencost.prometheus.kubeRbacProxy }}
+            {{- if .Values.opencost.prometheus.kubeRBACProxy }}
             - name: ENABLE_KUBE_RBAC_PROXY
-              value: {{ (quote .Values.opencost.prometheus.kubeRbacProxy) }}
+              value: {{ (quote .Values.opencost.prometheus.kubeRBACProxy) }}
             {{- end }}
             {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
