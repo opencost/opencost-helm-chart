@@ -1,0 +1,65 @@
+# -- AWS IAM role to use when writing to the S3 Bucket.
+awsRolename: testrole
+# -- Do not allow multiple runs
+concurrencyPolicy: Forbid
+# -- Keep up to three failed jobs
+failedJobsHistoryLimit: 3
+# -- Schedule on which to run the cron job
+schedule: "* * * * *"
+# -- Keep up to three successful jobs
+successfulJobsHistoryLimit: 3
+suspend: false
+# -- Keep job running (from start time) for [activeDeadlineSeconds]
+activeDeadlineSeconds: 3600
+# -- Limit the lifetime of the execution
+ttlSecondsAfterFinished: 14400
+# --  Optional ServiceAccount use to run this pod
+existingServiceAccount:
+securityContext:
+  runAsUser: 1001
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  capabilities:
+    drop:
+    - ALL
+image:
+  repository: ghcr.io/opencost/opencost-parquet-exporter
+  tag: main
+  imagePullPolicy: Always
+# -- List of env vars
+env:
+  - name: AWS_REGION
+    value: us-west-2
+  - name: KUBE_CLUSTER
+    value: YOUR_CLUSTER_NAME_CHANGE_ME
+  - name: OPENCOST_PARQUET_FILE_KEY_PREFIX
+    value: cluster=$(KUBE_CLUSTER)
+  - name: OPENCOST_PARQUET_S3_BUCKET
+    value: YOUR_S3_BUCKET_NAME_CHANGE_ME
+  - name: OPENCOST_PARQUET_S3_REGION
+    value: YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME
+  - name: OPENCOST_PARQUET_SVC_HOSTNAME
+    value: opencost.opencost.svc.cluster.local
+  - name: OPENCOST_PARQUET_SVC_PORT
+    value: "9003"
+envFrom:
+# -- Compute resources required
+resources:
+  limits:
+    cpu: 2
+    memory: 5Gi
+  requests:
+    cpu: 1
+    memory: 1Gi
+# -- Specific DNS parameters of the pod
+dnsConfig:
+  options:
+    # -- Turning this option on [...] so that if two requests from the same port are not handled correctly it will close the socket and open a new one before sending the second request. See also "[single-request-reopen](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)"
+    - name: single-request-reopen
+    # -- Sets a threshold for the number of dots which must appear in a name [...] before an initial absolute query will be made. . See also "[ndots](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)"
+    - name: ndots
+      value: "2"
+# -- A pod's [DNS polics](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy)
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+terminationGracePeriodSeconds: 30
