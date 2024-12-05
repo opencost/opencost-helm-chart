@@ -335,13 +335,15 @@ opencost:
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
-    # -- If true, opencost will create a ClusterRoleBinding to allow using in-cluster Prometheus for openshift
+    # OPTIONAL. The following configs only to be enabled when using a Prometheus instance already installed in the cluster.
+    # -- If true, opencost will create a ClusterRoleBinding to grant the Kubecost serviceaccount access to query Prometheus.
     createMonitoringClusterRoleBinding: false
-    # -- If true, opencost will create a role and role binding to allow in-cluster prometheus to list and watch resources
-    # This will be necessary if you are not using bundled prometheus and need to add scrape config for resources.
+    # -- If true, opencost will rreate a Role and Role Binding to allow Prometheus to list and watch Kubecost resources.
     createMonitoringResourceReaderRoleBinding: false
-    # -- Name of the service account to bind to the ClusterRoleBinding
+    # -- Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
     monitoringServiceAccountName: prometheus-k8s
+    # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
+    monitoringServiceAccountNamespace: openshift-monitoring
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false

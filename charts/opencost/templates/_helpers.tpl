@@ -121,7 +121,7 @@ Check that either thanos external or internal is defined
 {{- end -}}
 
 {{/*
-  Verify if both kube-rbac-proxy and bearer token are set
+  Fail if both kube-rbac-proxy and bearer token are set
 }}
 {{- define "kubeRBACProxyBearerTokenCheck" -}}
 {{- if and (.Values.opencost.prometheus.kubeRBACProxy .Values.opencost.prometheus.bearer_token) }}
