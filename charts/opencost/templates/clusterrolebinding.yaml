@@ -27,8 +27,8 @@ metadata:
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 roleRef:
-  # Grant the kubecost service account the cluster-monitoring-view role to enable it to query OpenShift Prometheus.
-  # This is necessary for Kubecost to get access and query the in-cluster Prometheus instance using its service account token.
+  # Grant the OpenCost ServiceAccount the cluster-monitoring-view role to enable it to query a KUBE_RBAC_PROXY enabled Prometheus.
+  # This is necessary for OpenCost to get access and query the in-cluster Prometheus instance using its service account token.
   # https://docs.redhat.com/en/documentation/openshift_container_platform/4.2/html/monitoring/cluster-monitoring#monitoring-accessing-prometheus-alerting-ui-grafana-using-the-web-console_accessing-prometheus
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
