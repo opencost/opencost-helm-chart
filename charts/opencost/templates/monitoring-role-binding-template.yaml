@@ -1,4 +1,4 @@
-{{- if (.Values.opencost.prometheus.createMonitoringResourceReaderRoleBinding) }}
+{{- if and .Values.opencost.platforms.openshift.enabled .Values.opencost..platforms.openshift.createMonitoringResourceReaderRoleBinding }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -6,8 +6,8 @@ metadata:
   name: {{ include "opencost.fullname" . }}-reader
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.opencost.prometheus.monitoringServiceAccountName | quote }}
-  namespace: {{ .Values.opencost.prometheus.monitoringServiceAccountNamespace | quote }}
+  name: {{ .Values.opencost.platforms.openshift.monitoringServiceAccountName | quote }}
+  namespace: {{ .Values.opencost.platforms.openshift.monitoringServiceAccountNamespace | quote }}
 roleRef:
   kind: Role
   name: {{ include "opencost.fullname" . }}-reader

@@ -17,7 +17,7 @@ subjects:
     namespace: {{ include "opencost.namespace" . }}
 ---
 {{- end }}
-{{- if .Values.opencost.prometheus.createMonitoringClusterRoleBinding }}
+{{- if and .Values.opencost.platforms.openshift.enabled .Values.opencost.platforms.openshift.createMonitoringClusterRoleBinding }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
