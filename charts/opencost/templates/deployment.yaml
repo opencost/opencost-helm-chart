@@ -1,4 +1,5 @@
 {{- include  "isPrometheusConfigValid" . }}
+{{- include  "kubeRBACProxyBearerTokenCheck" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -165,6 +166,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.bearer_token_key }}
+            {{- end }}
+            {{- if .Values.opencost.prometheus.kubeRBACProxy }}
+            - name: KUBE_RBAC_PROXY_ENABLED
+              value: {{ (quote .Values.opencost.prometheus.kubeRBACProxy) }}
             {{- end }}
             {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
