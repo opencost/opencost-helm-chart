@@ -215,8 +215,8 @@ opencost:
       access_key_id: ""
 
     linode:
-      # -- Linode API token secret name
-      tokenSecret: ""
+      # -- Linode API token
+      token: ""
 
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []

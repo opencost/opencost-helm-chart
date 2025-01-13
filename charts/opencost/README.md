@@ -59,7 +59,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.apiPort | int | `9003` |  |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
 | opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |
-| opencost.exporter.linode.tokenSecret | string | `""` | Linode API token secret name |
+| opencost.exporter.linode.token | string | `""` | Linode API token |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.csv_path | string | `""` |  |
 | opencost.exporter.defaultClusterId | string | `"default-cluster"` | Default cluster ID to use if cluster_id is not set in Prometheus metrics. |
