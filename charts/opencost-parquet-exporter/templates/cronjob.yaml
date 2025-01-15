@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ include "opencost-parquet-exporter.name" $ }}
   annotations:
-{{- include "parquet-exporter.annotations" $ | indent 4 }}
+{{- include "opencost-parquet-exporter.annotations" $ | indent 4 }}
   labels:
 {{ include "opencost-parquet-exporter.labels" . | indent 4 }}
 spec:
@@ -22,7 +22,7 @@ spec:
       template:
         metadata:
           annotations:
-            {{- include "parquet-exporter.annotations" $ | indent 12 }}
+            {{- include "opencost-parquet-exporter.annotations" $ | indent 12 }}
           labels:
 {{ include "opencost-parquet-exporter.labels" . | indent 12 }}
           name: {{ include "opencost-parquet-exporter.name" $ }}

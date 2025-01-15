@@ -1,7 +1,7 @@
 {{/*
 Common labels
 */}}
-{{- define "parquet-exporter.annotations" -}}
+{{- define "opencost-parquet-exporter.annotations" -}}
 {{- if .Values.awsRolename }}
 iam.amazonaws.com/role: {{ .Values.awsRolename }}
 {{- end }}
