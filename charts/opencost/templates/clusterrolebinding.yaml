@@ -37,5 +37,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "opencost.serviceAccountName" . }}
     namespace: {{ include "opencost.namespace" . }}
-{{- end }}
 ---
+{{- end }}
