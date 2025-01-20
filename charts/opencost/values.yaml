@@ -4,6 +4,8 @@ nameOverride: ""
 fullnameOverride: ""
 # -- Override the deployment namespace
 namespaceOverride: ""
+# -- Override the default name of cluster - Can be found in /etc/kubernetes/admin.conf: clusters -> cluster -> name
+clusterName: "cluster.local"
 
 loglevel: info
 
