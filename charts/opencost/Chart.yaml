@@ -11,9 +11,9 @@ keywords:
   - opencost
 version: 1.44.0
 maintainers:
-  - name: mattray
-    url: https://mattray.dev
+  - name: jessegoodier
   - name: toscott
+  - name: mittal-ishaan
   - name: brito-rafa
     email: rafa@stormforge.io
 home: https://github.com/opencost/opencost-helm-chart
