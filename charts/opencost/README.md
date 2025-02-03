@@ -56,6 +56,12 @@ $ helm install opencost opencost/opencost
 | opencost.customPricing.enabled | bool | `false` | Enables custom pricing configuration |
 | opencost.customPricing.provider | string | `"custom"` | Sets the provider type for the custom pricing file. |
 | opencost.dataRetention.dailyResolutionDays | int | `15` |  |
+| opencost.exporter.apiIngress.annotations | object | `{}` | Annotations for API Ingress resource |
+| opencost.exporter.apiIngress.enabled | bool | `false` | Ingress for OpenCost API |
+| opencost.exporter.apiIngress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the API Ingress |
+| opencost.exporter.apiIngress.ingressClassName | string | `""` | Ingress controller which implements the resource |
+| opencost.exporter.apiIngress.servicePort | string | `"http"` | Redirect ingress to an extraPort defined on the service such as oauth-proxy |
+| opencost.exporter.apiIngress.tls | list | `[]` | Ingress TLS configuration |
 | opencost.exporter.apiPort | int | `9003` |  |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
 | opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |

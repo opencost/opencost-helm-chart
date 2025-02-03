@@ -224,6 +224,28 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+    apiIngress:
+      # -- Ingress for OpenCost API
+      enabled: false
+      # -- Ingress controller which implements the resource
+      ingressClassName: ""
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # kubernetes.io/tls-acme: "true"
+      # -- A list of host rules used to configure the Ingress
+      # @default -- See [values.yaml](values.yaml)
+      hosts:
+        - host: example.local
+          paths:
+            - /
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      servicePort: http
+      # servicePort: oauth-proxy
+      # -- Ingress TLS configuration
+      tls: []
+        #  - secretName: chart-example-tls
+        #    hosts:
+        #      - chart-example.local
   customPricing:
     # -- Enables custom pricing configuration
     enabled: false
