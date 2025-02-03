@@ -3,13 +3,15 @@
 ![Chart Publish](https://github.com/opencost/opencost-helm-chart/workflows/chart-publish/badge.svg?branch=main)
 [![Releases downloads](https://img.shields.io/github/downloads/opencost/opencost-helm-chart/total.svg)](https://github.com/opencost/opencost-helm-charts/releases)
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?org=opencost)
+
 ## Maintainers
 
 | Name |
 | ---- |
-| mattray |
-| toscott |
-| brito-rafa |
+| @jessegoodier |
+| @mittal-ishaan |
+| @toscott |
+| @brito-rafa |
 
 ## Usage
 
