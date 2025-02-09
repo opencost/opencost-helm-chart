@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "opencost-parquet-exporter.name" $ }}
+  annotations:
+{{- include "opencost-parquet-exporter.annotations" $ | indent 4 }}
+  labels:
+{{ include "opencost-parquet-exporter.labels" . | indent 4 }}
+spec:
+  concurrencyPolicy: {{ .Values.concurrencyPolicy | quote}}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  schedule: {{ .Values.schedule | quote}}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  suspend: {{ .Values.suspend }}
+  jobTemplate:
+    metadata:
+      name: {{ include "opencost-parquet-exporter.name" $ }}
+    spec:
+      activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+      ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
+      backoffLimit: 3
+      template:
+        metadata:
+          annotations:
+            {{- include "opencost-parquet-exporter.annotations" $ | indent 12 }}
+          labels:
+{{ include "opencost-parquet-exporter.labels" . | indent 12 }}
+          name: {{ include "opencost-parquet-exporter.name" $ }}
+        spec:
+          {{- if .Values.imagePullSecrets }}
+          {{- with .Values.imagePullSecrets }} 
+          imagePullSecrets:
+{{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if not ( .Values.existingServiceAccount | empty ) }}
+          serviceAccountName: {{ .Values.existingServiceAccount }}
+          {{- end }}
+          {{- if hasKey .Values "securityContext" }}
+          {{- with .Values.securityContext }} 
+          securityContext:
+{{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- else}}
+          securityContext: {}
+          {{- end }}
+          containers:
+            - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+              name: {{ include "opencost-parquet-exporter.name" $ }} 
+              {{- with .Values.resources }}
+              resources:
+{{ toYaml . | indent 16 }}
+              {{- end }}
+              {{- with .Values.env }}
+              env:
+{{ toYaml . | indent 16 }}
+              {{- end }}
+              {{- with .Values.envFrom }}
+              envFrom:
+{{ toYaml . | indent 16 }}
+              {{- end }}    
+          {{- with .Values.dnsConfig }}
+          dnsConfig:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- if .Values.dnsPolicy}}
+          dnsPolicy: {{ .Values.dnsPolicy }}
+          {{- end }}
+          restartPolicy: {{ .Values.restartPolicy }}
+          {{- if .Values.terminationGracePeriodSeconds }}
+          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds}}
+          {{- end }}

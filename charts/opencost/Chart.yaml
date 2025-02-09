@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 1.113.0
+appVersion: 1.114.0
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
@@ -11,9 +11,9 @@ keywords:
   - opencost
 version: 2.0.0
 maintainers:
-  - name: mattray
-    url: https://mattray.dev
+  - name: jessegoodier
   - name: toscott
+  - name: mittal-ishaan
   - name: brito-rafa
     email: rafa@stormforge.io
 home: https://github.com/opencost/opencost-helm-chart
