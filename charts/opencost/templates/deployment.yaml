@@ -316,10 +316,10 @@ spec:
           {{- with .Values.opencost.ui.extraVolumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.opencost.platforms.openshift.enabled }}
-          - name: empty-var-www
-            mountPath: /var/www
-          {{- end }}
+            {{- if .Values.opencost.platforms.openshift.enabled }}
+            - name: empty-var-www
+              mountPath: /var/www
+            {{- end }}
         {{- end }}
         {{- with .Values.opencost.extraContainers }}
           {{- toYaml . | nindent 8 }}
@@ -394,10 +394,10 @@ spec:
               - key: cloud-integration.json
                 path: cloud-integration.json
           {{- end }}
-          {{- if .Values.opencost.platforms.openshift.enabled }}
-          - name: empty-var-www
-            emptyDir: {}
-          {{- end }}
+        {{- if .Values.opencost.platforms.openshift.enabled }}
+        - name: empty-var-www
+          emptyDir: {}
+        {{- end }}
         {{- with .Values.extraVolumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
