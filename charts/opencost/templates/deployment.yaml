@@ -394,11 +394,11 @@ spec:
               - key: cloud-integration.json
                 path: cloud-integration.json
           {{- end }}
+        {{- with .Values.extraVolumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if .Values.opencost.platforms.openshift.enabled }}
         - name: empty-var-www
           emptyDir: {}
-        {{- end }}
-        {{- with .Values.extraVolumes }}
-          {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
