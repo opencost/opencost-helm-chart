@@ -356,7 +356,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled }}
+      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.ui.enabled }}
       volumes:
         {{- if .Values.plugins.enabled  }}
         {{- if .Values.plugins.install.enabled}}
