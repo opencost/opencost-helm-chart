@@ -24,7 +24,8 @@ securityContext:
     - ALL
 image:
   repository: ghcr.io/opencost/opencost-parquet-exporter
-  tag: main
+  # @default -- `""` (use appVersion in Chart.yaml)
+  tag: ""
   imagePullPolicy: Always
 # -- List of env vars
 env:
