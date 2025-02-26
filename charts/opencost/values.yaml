@@ -148,7 +148,6 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # Startup probe configuration
     startupProbe:
@@ -400,7 +399,6 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # used in the default.nginx.conf if you want to switch for using with Docker
     # apiServer: 0.0.0.0
