@@ -1,4 +1,4 @@
-{{- if and .Values.opencost.ui.enabled .Values.opencost.ui.route.enabled }}
+{{- if and .Capabilities.APIVersions.Has "route.openshift.io/v1/Route" .Values.opencost.ui.enabled .Values.opencost.ui.route.enabled }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -17,7 +17,7 @@ spec:
     targetPort: {{ .Values.opencost.ui.route.targetPort }}
   to:
     kind: Service
-    name: opencost
+    name: {{ include "opencost.fullname" . }}
     weight: 100
   wildcardPolicy: None
   {{- if .Values.opencost.ui.route.tls }}
