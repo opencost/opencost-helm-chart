@@ -237,7 +237,8 @@ opencost:
       hosts:
         - host: example.local
           paths:
-            - /
+            - path: /
+              pathType: Prefix
       # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
       servicePort: http
       # servicePort: oauth-proxy
