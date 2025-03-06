@@ -148,7 +148,6 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # Startup probe configuration
     startupProbe:
@@ -400,7 +399,6 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # used in the default.nginx.conf if you want to switch for using with Docker
     # apiServer: 0.0.0.0
@@ -472,6 +470,22 @@ opencost:
         #  - secretName: chart-example-tls
         #    hosts:
         #      - chart-example.local
+    route:
+      # -- OpenShift route for OpenCost UI
+      enabled: false
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # haproxy.router.openshift.io/timeout: 1m
+      # @default -- See [values.yaml](values.yaml)
+      host: example.local
+      path:
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      targetPort: http-ui
+      # targetPort: oauth-proxy
+      # -- Ingress TLS configuration
+      tls: []
+        # insecureEdgeTerminationPolicy: Redirect
+        # termination: edge
 
   sigV4Proxy:
     image: public.ecr.aws/aws-observability/aws-sigv4-proxy:latest
