@@ -140,6 +140,11 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.thanos.queryOffset | string | `""` |  |
 | opencost.prometheus.username | string | `""` | Prometheus Basic auth username |
 | opencost.prometheus.username_key | string | `"DB_BASIC_AUTH_USERNAME"` | Key in the secret that references the username |
+| opencost.platforms.openshift.enabled | bool | `false` | Enable OpenShift specific configurations |
+| opencost.platforms.openshift.createMonitoringClusterRoleBinding | bool | `false` | Create a ClusterRoleBinding to grant the OpenCost ServiceAccount access to query Prometheus. (Only when using in-cluster prometheus) |
+| opencost.platforms.openshift.createMonitoringResourceReaderRoleBinding | bool | `false` | Create a Role and RoleBinding to allow Prometheus to list and watch OpenCost resources. (Only when using in-cluster prometheus) |
+| opencost.platforms.openshift.monitoringServiceAccountName | string | `prometheus-k8s` | Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding. (Only when using in-cluster prometheus) |
+| opencost.platforms.openshift.monitoringServiceAccountNamespace | string | `openshift-monitoring` | Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.. (Only when using in-cluster prometheus) |
 | opencost.sigV4Proxy.extraEnv | string | `nil` |  |
 | opencost.sigV4Proxy.host | string | `"aps-workspaces.us-west-2.amazonaws.com"` |  |
 | opencost.sigV4Proxy.image | string | `"public.ecr.aws/aws-observability/aws-sigv4-proxy:latest"` |  |
@@ -179,6 +184,8 @@ $ helm install opencost opencost/opencost
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.ui.uiPort | int | `9090` |  |
+| opencost.ui.useDefaultFqdn | bool | false | To use `<service>.<namespace>.svc.cluster.local` or `<service>.<namespace>` |
+| opencost.ui.modelFqdn | string | `nil` | Set the model fqdn to use for the upstream |
 | plugins.configs | string | `nil` |  |
 | plugins.enabled | bool | `false` |  |
 | plugins.folder | string | `"/opt/opencost/plugin"` |  |
