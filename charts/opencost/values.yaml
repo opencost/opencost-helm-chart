@@ -433,6 +433,12 @@ opencost:
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
 
+    # set to true to set upstream to use <service>.<namespace>.svc.cluster.local instead of just <service>.<namespace>
+    useDefaultFqdn: false
+
+    # Set the model fqdn to use for the upstream
+    # modelFqdn: opencost.opencost.svc.cluster.local:9003
+
     ingress:
       # -- Ingress for OpenCost UI
       enabled: false
