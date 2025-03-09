@@ -397,19 +397,19 @@ spec:
               - key: cloud-integration.json
                 path: cloud-integration.json
           {{- end }}
-          {{- if .Values.opencost.ui.enabled }}
+        {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui-nginx-config-volume
           configMap:
             name: opencost-ui-nginx-config
             items:
               - key: nginx.conf
                 path: default.nginx.conf
-          {{- end }}
-        {{- with .Values.extraVolumes }}
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
         {{- if .Values.opencost.platforms.openshift.enabled }}
         - name: empty-var-www
           emptyDir: {}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.extraVolumes }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
       {{- end }}
