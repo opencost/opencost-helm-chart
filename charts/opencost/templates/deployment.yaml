@@ -312,9 +312,17 @@ spec:
           {{- with .Values.opencost.ui.securityContext }}
           securityContext: {{- toYaml . | nindent 12 }}
           {{- end }}
+          volumeMounts:
           {{- with .Values.opencost.ui.extraVolumeMounts }}
-          volumeMounts: {{- toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
+            - name: opencost-ui-nginx-config-volume
+              mountPath: /etc/nginx/conf.d/default.nginx.conf
+              subPath: default.nginx.conf
+            {{- if .Values.opencost.platforms.openshift.enabled }}
+            - name: empty-var-www
+              mountPath: /var/www
+            {{- end }}
         {{- end }}
         {{- with .Values.opencost.extraContainers }}
           {{- toYaml . | nindent 8 }}
@@ -352,7 +360,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret}}
+      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.ui.enabled }}
       volumes:
         {{- if .Values.plugins.enabled  }}
         {{- if .Values.plugins.install.enabled}}
@@ -389,6 +397,18 @@ spec:
               - key: cloud-integration.json
                 path: cloud-integration.json
           {{- end }}
+        {{- if .Values.opencost.ui.enabled }}
+        - name: opencost-ui-nginx-config-volume
+          configMap:
+            name: opencost-ui-nginx-config
+            items:
+              - key: nginx.conf
+                path: default.nginx.conf
+        {{- if .Values.opencost.platforms.openshift.enabled }}
+        - name: empty-var-www
+          emptyDir: {}
+        {{- end }}
+        {{- end }}
         {{- with .Values.extraVolumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
