@@ -6,8 +6,19 @@ metadata:
   name: {{ include "opencost.fullname" . }}
   namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
-  {{- with .Values.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
+  {{- if or .Values.annotations .Values.opencost.metrics.config.enabled (and .Values.opencost.customPricing.createConfigmap .Values.opencost.customPricing.enabled) }}
+  annotations:
+    {{- if and .Values.opencost.customPricing.createConfigmap .Values.opencost.customPricing.enabled }}
+    checksum/config-custom-pricing: {{ include (print $.Template.BasePath "/configmap-custom-pricing.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if .Values.opencost.metrics.config.enabled }}
+    checksum/config-metrics-config: {{ include (print $.Template.BasePath "/configmap-metrics-config.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if and .Values.opencost.customPricing.createConfigmap .Values.opencost.customPricing.enabled }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.opencost.exporter.replicas }}
