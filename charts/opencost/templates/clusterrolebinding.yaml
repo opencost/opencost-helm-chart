@@ -52,7 +52,7 @@ subjects:
     namespace: {{include "opencost.namespace"}}
 roleRef:
   kind: Role
-  name: system:openshift:scc:{{include "openshift.fullname"}}-scc
+  name: system:openshift:scc:{{ include "opencost.sccName" }}
   apiGroup: rbac.authorization.k8s.io
 
   {{- end}}
