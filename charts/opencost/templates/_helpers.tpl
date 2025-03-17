@@ -191,3 +191,20 @@ apiVersion: networking.k8s.io/v1beta1
 {{- .Values.opencost.ui.image.registry -}}/{{- .Values.opencost.ui.image.repository -}}:{{- include "opencostUi.imageTag" . -}}
 {{- end -}}
 {{- end -}}
+
+{{- /*
+  Compute a checksum based on the rendered content of specific ConfigMaps and Secrets.
+*/ -}}
+{{- define "configsChecksum" -}}
+{{- $files := list
+  "configmap-custom-pricing.yaml"
+  "configmap-frontend.yaml"
+  "configmap-metrics-config.yaml"
+-}}
+{{- $checksum := "" -}}
+{{- range $files -}}
+  {{- $content := include (print $.Template.BasePath (printf "/%s" .)) $ -}}
+  {{- $checksum = printf "%s%s" $checksum $content | sha256sum -}}
+{{- end -}}
+{{- $checksum | sha256sum -}}
+{{- end -}}
