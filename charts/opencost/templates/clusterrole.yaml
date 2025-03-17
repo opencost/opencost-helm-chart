@@ -78,4 +78,16 @@ rules:
       - get
       - list
       - watch
+
+{{- if .Values.opencost.platforms.openshift.enabled }}
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - prometheuses
+      - thanosrulers
+    verbs:
+      - get
+      - list
+      - watch
+{{- end }}
 {{- end }}
