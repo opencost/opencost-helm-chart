@@ -200,6 +200,7 @@ apiVersion: networking.k8s.io/v1beta1
   "configmap-custom-pricing.yaml"
   "configmap-frontend.yaml"
   "configmap-metrics-config.yaml"
+  "secret.yaml"
 -}}
 {{- $checksum := "" -}}
 {{- range $files -}}
