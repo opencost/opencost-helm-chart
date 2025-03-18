@@ -191,3 +191,8 @@ apiVersion: networking.k8s.io/v1beta1
 {{- .Values.opencost.ui.image.registry -}}/{{- .Values.opencost.ui.image.repository -}}:{{- include "opencostUi.imageTag" . -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "opencost.sccName" -}}
+opencost-scc
+{{- end -}}
+
