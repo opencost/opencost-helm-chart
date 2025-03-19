@@ -345,25 +345,27 @@ opencost:
       # -- Use in-cluster Prometheus
       enabled: false
       # -- Service name of in-cluster Prometheus
-      serviceName: prometheus-server
+      serviceName: thanos-querier
       # -- Namespace of in-cluster Prometheus
-      namespaceName: prometheus-system
+      namespaceName: openshift-monitoring
       # -- Service port of in-cluster Prometheus
-      port: 80
+      port: 9091
+      scheme: https
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
       enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
       # -- Workspace ID for AMP
       workspaceId: ""
     thanos:
-      enabled: true
+      enabled: false
       queryOffset: ''
       maxSourceResolution: ''
       internal:
-        enabled: true
-        serviceName: thanos-querier.openshift-monitoring.svc.cluster.local
+        enabled: false
+        serviceName: thanos-querier
         namespaceName: openshift-monitoring
-        port: 9094
+        port: 9091
+        scheme: https
       external:
         enabled: false
         url: 'https://thanos-query.example.com/thanos'
@@ -537,9 +539,9 @@ opencost:
       enabled: true
       # OPTIONAL. The following configs only to be enabled when using a Prometheus instance already installed in the cluster.
       # -- If true, the helm chart will create a ClusterRoleBinding to grant the OpenCost ServiceAccount access to query Prometheus.
-      createMonitoringClusterRoleBinding: false
+      createMonitoringClusterRoleBinding: true
       # -- If true, create a Role and RoleBinding to allow Prometheus to list and watch OpenCost resources.
-      createMonitoringResourceReaderRoleBinding: false
+      createMonitoringResourceReaderRoleBinding: true
       # -- Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
       monitoringServiceAccountName: opencost
       # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
