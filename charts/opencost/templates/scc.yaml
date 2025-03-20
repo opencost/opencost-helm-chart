@@ -23,7 +23,8 @@ allowedCapabilities:
   - SETPCAP
   - SETUID
 runAsUser:
-  type: RunAsAny
+  type: MustRunAs
+  uid: 1001
 seLinuxContext:
   type: MustRunAs
 fsGroup:

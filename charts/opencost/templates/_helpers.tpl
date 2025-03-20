@@ -84,7 +84,7 @@ Create the name of the controller service account to use
   {{- if .Values.serviceAccount.create -}}
     {{- default (include "opencost.fullname" .) .Values.serviceAccount.name }}
   {{- else -}}
-    {{- default "default" .Values.serviceAccount.name }}
+    {{- default "opencost" .Values.serviceAccount.name }}
   {{- end -}}
 {{- end -}}
 

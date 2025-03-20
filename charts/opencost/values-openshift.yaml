@@ -156,11 +156,11 @@ opencost:
       # -- Probe path
       path: /healthz
       # -- Number of seconds before probe is initiated
-      initialDelaySeconds: 10
+      initialDelaySeconds: 30
       # -- Probe frequency in seconds
       periodSeconds: 5
       # -- Number of failures for probe to be considered failed
-      failureThreshold: 30
+      failureThreshold: 60
     # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
@@ -280,7 +280,7 @@ opencost:
 
     serviceMonitor:
       # -- Create ServiceMonitor resource for scraping metrics using PrometheusOperator
-      enabled: false
+      enabled: true
       # -- Additional labels to add to the ServiceMonitor
       additionalLabels: {}
       # -- Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart)
@@ -326,16 +326,16 @@ opencost:
     # -- Prometheus Basic auth username
     username: ""
     # -- Key in the secret that references the username
-    username_key: DB_BASIC_AUTH_USERNAME
+    username_key: ""
     # -- Prometheus Basic auth password
     password: ""
     # -- Key in the secret that references the password
-    password_key: DB_BASIC_AUTH_PW
+    password_key: ""
     # -- Prometheus Bearer token
     bearer_token: ""
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
-    kubeRBACProxy: false
+    kubeRBACProxy: true
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
@@ -345,7 +345,7 @@ opencost:
       # -- Use in-cluster Prometheus
       enabled: false
       # -- Service name of in-cluster Prometheus
-      serviceName: thanos-querier
+      serviceName: prometheus-k8s
       # -- Namespace of in-cluster Prometheus
       namespaceName: openshift-monitoring
       # -- Service port of in-cluster Prometheus
@@ -372,7 +372,7 @@ opencost:
 
   ui:
     # -- Enable OpenCost UI
-    enabled: false
+    enabled: true
     image:
       # -- UI container image registry
       registry: ghcr.io

@@ -166,6 +166,12 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.opencost.prometheus.existingSecretName | default (include "opencost.prometheus.secretname" .) }}
                   key: {{ .Values.opencost.prometheus.bearer_token_key }}
+            {{- else if and .Values.opencost.platforms.openshift.enabled}}
+            - name: DB_BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{.Values.opencost.prometheus.existingSecretName}}
+                  key: {{ .Values.opencost.prometheus.bearer_token_key }}
             {{- end }}
             {{- if .Values.opencost.prometheus.kubeRBACProxy }}
             - name: KUBE_RBAC_PROXY_ENABLED
