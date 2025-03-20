@@ -8,14 +8,6 @@ OpenCost and OpenCost UI
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost-oci)](https://artifacthub.io/packages/search?repo=opencost-oci)
 
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| mattray |  | <https://mattray.dev> |
-| toscott |  |  |
-| brito-rafa | <rafa@stormforge.io> |  |
-
 ## Installing the Chart
 
 To install the chart with the release name `opencost`:
