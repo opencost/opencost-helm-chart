@@ -6,9 +6,11 @@ metadata:
   name: {{ include "opencost.fullname" . }}
   namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
-  {{- with .Values.annotations }}
-  annotations: {{- toYaml . | nindent 4 }}
-  {{- end }}
+  annotations:
+    checksum/configs: {{ include "configsChecksum" . }}
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.opencost.exporter.replicas }}
   selector:
