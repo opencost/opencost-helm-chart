@@ -2,7 +2,7 @@
 apiVersion: security.openshift.io/v1
 kind: SecurityContextConstraints
 metadata:
-  name: {{include "opencost.fullname" .}}-scc
+  name: {{include "opencost.sccName" .}}
 priority: 10
 allowPrivilegedContainer: false
 allowHostDirVolumePlugin: false
