@@ -1,0 +1,94 @@
+loglevel: info
+extraVolumes:
+  - name: service-key-secret
+    secret:
+      secretName: azure-service-key
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+
+opencost:
+  metrics:
+   serviceMonitor:
+      enabled: true
+      additionalLabels: {}
+      scrapeInterval: 30s
+      scrapeTimeout: 10s
+      honorLabels: true
+      relabelings: []
+      extraEndpoints: 
+         - port: oauth-metrics
+           path: /metrics
+      scheme: http
+  cloudIntegrationSecret: cloud-costs
+  cloudCost:
+    enabled: true
+  customPricing:
+    enabled: false
+  serviceMonitor:
+    enabled: true
+  exporter:
+    image:
+      registry: ghcr.io
+      repository: opencost/opencost
+      tag: "1.114.0"
+    resources:
+      requests:
+        cpu: '10m'
+        memory: '55Mi'
+    extraVolumeMounts:
+      - mountPath: /var/secrets
+        name: service-key-secret
+    defaultClusterId: aro-lab-dev1
+    extraEnv:
+      EMIT_KSM_V1_METRICS: "true"
+      EMIT_KSM_V1_METRICS_ONLY: "true"
+      AZURE_BILLING_ACCOUNT: bcbf1fc3-0f60-586e-e40b-cdb819c74602:f48d5b8f-152d-4b7b-af43-29a44249aeee_2019-05-31
+      AZURE_OFFER_ID: ms-azr-0017g
+  prometheus:
+    existingSecretName: promcreds
+    bearer_token_key: DB_BEARER_TOKEN
+    kubeRBACProxy:
+      enabled: false
+    external:
+      enabled: true
+      url: "https://thanos-querier-openshift-monitoring.apps.aro-lab-dev1.az.eika.cloud"
+    internal:
+      enabled: false
+    thanos:
+      enabled: false
+      internal:
+        enabled: false
+      external:
+        enabled: true
+        url: "https://thanos-querier-openshift-monitoring.apps.aro-lab-dev1.az.eika.cloud"
+
+  ui:
+    enabled: true
+    route:
+      enabled: true
+      host: opencostui.opencost.apps.aro-lab-dev1.az.eika.cloud
+      path: /
+      targetPort: http-ui
+      tls: 
+        termination: edge
+
+  metrics:
+    serviceMonitor:
+      enabled: true
+      namespace: opencost
+    thanosSidecar:
+      enabled: false
+      serviceMonitor:
+        enabled: true
+        namespace: openshift-monitoring
+
+  platforms:
+    openshift:
+      enabled: true
+      createMonitoringClusterRoleBinding: true
+      createMonitoringResourceReaderRoleBinding: true
+      monitoringServiceAccountName: opencost
+      monitoringServiceAccountNamespace: opencost
+      enableSCC: true
