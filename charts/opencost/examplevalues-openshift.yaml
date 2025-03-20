@@ -546,6 +546,8 @@ opencost:
       monitoringServiceAccountName: opencost
       # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
       monitoringServiceAccountNamespace: opencost
+      # -- If true, set Security Context Constraints on serviceaccount for read/write premissions
+      enableSCC: true 
 
 # -- A list of volumes to be added to the pod
 extraVolumes: []
