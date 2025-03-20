@@ -195,6 +195,6 @@ apiVersion: networking.k8s.io/v1beta1
 {{- end -}}
 
 {{- define "opencost.sccName" -}}
-opencost-scc
+{{include "opencost.fullname" .}}-scc
 {{- end -}}
 
