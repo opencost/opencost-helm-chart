@@ -79,7 +79,7 @@ rules:
       - list
       - watch
 
-{{- if .Values.opencost.platforms.openshift.enabled }}
+{{- if .Values.opencost.platforms.openshift.enablePromAccess }}
   - apiGroups:
       - monitoring.coreos.com
     resources:
@@ -89,5 +89,8 @@ rules:
       - get
       - list
       - watch
+      - create
+      - update
+      - patch
 {{- end }}
 {{- end }}
