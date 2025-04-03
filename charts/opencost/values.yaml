@@ -547,8 +547,7 @@ opencost:
       monitoringServiceAccountNamespace: openshift-monitoring
       # -- If true, set Security Context Constraints on serviceaccount for read/write premissions
       enableSCC: false
-      # -- If true, 
+      # -- If true, enable internal prom access
       enablePromAccess: false
-
 # -- A list of volumes to be added to the pod
 extraVolumes: []
