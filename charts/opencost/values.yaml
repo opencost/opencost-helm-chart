@@ -364,6 +364,7 @@ opencost:
         serviceName: my-thanos-query
         namespaceName: opencost
         port: 10901
+        scheme: http
       external:
         enabled: false
         url: 'https://thanos-query.example.com/thanos'
