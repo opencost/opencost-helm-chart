@@ -119,7 +119,7 @@ Check that either thanos external or internal is defined
     {{- $ns := .Values.opencost.prometheus.thanos.internal.namespaceName }}
     {{- $clusterName := .Values.clusterName }}
     {{- $port := .Values.opencost.prometheus.thanos.internal.port | int }}
-    {{- $scheme := .Values.opencost.prometheus.thanos.internal.scheme}}
+    {{- $scheme := .Values.opencost.prometheus.thanos.internal.scheme | default "http"}}
     {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
   {{- end -}}
 {{- end -}}
