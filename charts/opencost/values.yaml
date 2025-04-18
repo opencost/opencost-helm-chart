@@ -148,7 +148,6 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # Startup probe configuration
     startupProbe:
@@ -337,15 +336,6 @@ opencost:
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
-    # OPTIONAL. The following configs only to be enabled when using a Prometheus instance already installed in the cluster.
-    # -- If true, the helm chart will create a ClusterRoleBinding to grant the OpenCost ServiceAccount access to query Prometheus.
-    createMonitoringClusterRoleBinding: false
-    # -- If true, create a Role and RoleBinding to allow Prometheus to list and watch OpenCost resources.
-    createMonitoringResourceReaderRoleBinding: false
-    # -- Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
-    monitoringServiceAccountName: prometheus-k8s
-    # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
-    monitoringServiceAccountNamespace: openshift-monitoring
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
@@ -400,11 +390,12 @@ opencost:
         memory: '55Mi'
       # -- CPU/Memory resource limits
       limits:
-        cpu: '999m'
         memory: '1Gi'
     # used in the default.nginx.conf if you want to switch for using with Docker
     # apiServer: 0.0.0.0
     uiPort: 9090
+    # Set to true to use IPv6
+    useIPv6: true
     # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
@@ -444,6 +435,12 @@ opencost:
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
 
+    # set to true to set upstream to use <service>.<namespace>.svc.cluster.local instead of just <service>.<namespace>
+    useDefaultFqdn: false
+
+    # Set the model fqdn to use for the upstream
+    # modelFqdn: opencost.opencost.svc.cluster.local:9003
+
     ingress:
       # -- Ingress for OpenCost UI
       enabled: false
@@ -466,6 +463,22 @@ opencost:
         #  - secretName: chart-example-tls
         #    hosts:
         #      - chart-example.local
+    route:
+      # -- OpenShift route for OpenCost UI
+      enabled: false
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # haproxy.router.openshift.io/timeout: 1m
+      # @default -- See [values.yaml](values.yaml)
+      host: example.local
+      path:
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      targetPort: http-ui
+      # targetPort: oauth-proxy
+      # -- Ingress TLS configuration
+      tls: []
+        # insecureEdgeTerminationPolicy: Redirect
+        # termination: edge
 
   sigV4Proxy:
     image: public.ecr.aws/aws-observability/aws-sigv4-proxy:latest
@@ -520,6 +533,20 @@ opencost:
     #       containerPort: 8082
     #       protocol: TCP
     #   resources: {}
+
+  platforms:
+    openshift:
+      # -- Enable OpenShift specific configurations
+      enabled: false
+      # OPTIONAL. The following configs only to be enabled when using a Prometheus instance already installed in the cluster.
+      # -- If true, the helm chart will create a ClusterRoleBinding to grant the OpenCost ServiceAccount access to query Prometheus.
+      createMonitoringClusterRoleBinding: false
+      # -- If true, create a Role and RoleBinding to allow Prometheus to list and watch OpenCost resources.
+      createMonitoringResourceReaderRoleBinding: false
+      # -- Name of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
+      monitoringServiceAccountName: prometheus-k8s
+      # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
+      monitoringServiceAccountNamespace: openshift-monitoring
 
 # -- A list of volumes to be added to the pod
 extraVolumes: []
