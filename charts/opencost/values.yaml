@@ -364,6 +364,7 @@ opencost:
         serviceName: my-thanos-query
         namespaceName: opencost
         port: 10901
+        scheme: http
       external:
         enabled: false
         url: 'https://thanos-query.example.com/thanos'
@@ -547,6 +548,9 @@ opencost:
       monitoringServiceAccountName: prometheus-k8s
       # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
       monitoringServiceAccountNamespace: openshift-monitoring
-
+      # -- If true, set Security Context Constraints on serviceaccount for read/write premissions
+      enableSCC: false
+      # -- If true, enable internal prom access
+      enablePromAccess: false
 # -- A list of volumes to be added to the pod
 extraVolumes: []
