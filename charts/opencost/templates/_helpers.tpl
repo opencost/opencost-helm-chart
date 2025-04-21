@@ -84,7 +84,7 @@ Create the name of the controller service account to use
   {{- if .Values.serviceAccount.create -}}
     {{- default (include "opencost.fullname" .) .Values.serviceAccount.name }}
   {{- else -}}
-    {{- default "default" .Values.serviceAccount.name }}
+    {{- default "opencost" .Values.serviceAccount.name }}
   {{- end -}}
 {{- end -}}
 
@@ -102,8 +102,9 @@ Create the name of the controller service account to use
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
     {{- $clusterName := .Values.clusterName }}
+    {{- $scheme := .Values.opencost.prometheus.internal.scheme | default "http"}}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
-    {{- printf "http://%s.%s.svc.%s:%d" $host $ns $clusterName $port -}}
+    {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
   {{- end -}}
 {{- end -}}
 
@@ -118,7 +119,8 @@ Check that either thanos external or internal is defined
     {{- $ns := .Values.opencost.prometheus.thanos.internal.namespaceName }}
     {{- $clusterName := .Values.clusterName }}
     {{- $port := .Values.opencost.prometheus.thanos.internal.port | int }}
-    {{- printf "http://%s.%s.svc.%s:%d" $host $ns $clusterName $port -}}
+    {{- $scheme := .Values.opencost.prometheus.thanos.internal.scheme | default "http"}}
+    {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
   {{- end -}}
 {{- end -}}
 
@@ -192,6 +194,11 @@ apiVersion: networking.k8s.io/v1beta1
 {{- end -}}
 {{- end -}}
 
+
+{{- define "opencost.sccName" -}}
+{{include "opencost.fullname" .}}-scc
+{{- end -}}
+
 {{- /*
   Compute a checksum based on the rendered content of specific ConfigMaps and Secrets.
 */ -}}
@@ -209,3 +216,4 @@ apiVersion: networking.k8s.io/v1beta1
 {{- end -}}
 {{- $checksum | sha256sum -}}
 {{- end -}}
+
