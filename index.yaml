@@ -1953,6 +1953,18 @@ entries:
     version: 1.0.2
   opencost-parquet-exporter:
   - apiVersion: v2
+    appVersion: 0.2.1
+    created: "2025-04-24T10:28:47.720535018Z"
+    description: OpenCost Parquet Exporter
+    digest: 26c9315d3142b3dca100369a770ad8886d6f17ad5737ddeec8e52f92c742cb59
+    maintainers:
+    - name: cklingspor
+    name: opencost-parquet-exporter
+    type: application
+    urls:
+    - https://github.com/opencost/opencost-helm-chart/releases/download/opencost-parquet-exporter-0.2.0/opencost-parquet-exporter-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2025-01-20T01:59:48.625702673Z"
     description: OpenCost Parquet Exporter
@@ -1964,4 +1976,4 @@ entries:
     urls:
     - https://github.com/opencost/opencost-helm-chart/releases/download/0.1.0-helm/opencost-parquet-exporter-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-21T09:54:44.702486672Z"
+generated: "2025-04-24T10:28:47.720711595Z"
