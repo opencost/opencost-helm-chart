@@ -72,7 +72,7 @@ data:
 
         add_header ETag "1.96.0";
         listen {{ .Values.opencost.ui.uiPort }};
-        {{- if .Values.opencost.ui.useIPv6 | default true }}
+        {{- if .Values.opencost.ui.useIPv6 }}
         listen [::]:{{ .Values.opencost.ui.uiPort }};
         {{- end }}
         resolver 127.0.0.1 valid=5s;
