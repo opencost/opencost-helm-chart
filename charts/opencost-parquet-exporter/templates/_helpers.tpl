@@ -34,7 +34,7 @@ Create chart name and version as used by the chart label.
 Create default image tag taken from the AppVersion.
 */}}
 {{- define "opencost-parquet-exporter.imageTag" -}}
-{{ .Values.image.tag | default (printf "%s" .Chart.AppVersion) }}
+{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}
 {{- end }}
 
 {{- define "opencost-parquet-exporter.fullImageName" -}}
