@@ -177,6 +177,7 @@ $ helm install opencost opencost/opencost
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.ui.uiPort | int | `9090` |  |
+| opencost.ui.useIPv6 | bool | `true` |  |
 | opencost.ui.useDefaultFqdn | bool | false | To use `<service>.<namespace>.svc.cluster.local` or `<service>.<namespace>` |
 | opencost.ui.modelFqdn | string | `nil` | Set the model fqdn to use for the upstream |
 | plugins.configs | string | `nil` |  |
