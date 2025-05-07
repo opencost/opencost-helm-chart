@@ -45,7 +45,7 @@ spec:
           securityContext: {}
           {{- end }}
           containers:
-            - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+            - image: {{ include "opencost-parquet-exporter.fullImageName" . }}
               imagePullPolicy: {{ .Values.image.imagePullPolicy }}
               name: {{ include "opencost-parquet-exporter.name" $ }} 
               {{- with .Values.resources }}
