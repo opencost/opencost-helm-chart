@@ -112,6 +112,32 @@ spec:
               value: {{ .Values.plugins.enabled | quote }}
             - name: KUBECOST_NAMESPACE
               value: {{ include "opencost.namespace" . }}
+            {{- with .Values.opencost.exporter.collectorDataSource }}
+            {{- if .enabled }}
+            - name: COLLECTOR_DATA_SOURCE_ENABLED
+              value: true
+            {{- if .scrapeInterval }}
+            - name: COLLECTOR_SCRAPE_INTERVAL
+              value: {{ .scrapeInterval | quote }}
+            {{- end }}
+            {{- if .networkPort }}
+            - name: NETWORK_PORT
+              value: {{ .networkPort }}
+            {{- end }}
+            {{- if .retentionResolution10m }}
+            - name: COLLECTOR_10m_RESOLUTION_RETENTION
+              value: {{ .retentionResolution10m  }}
+            {{- end }}
+            {{- if .retentionResolution1h }}
+            - name: COLLECTOR_1H_RESOLUTION_RETENTION
+              value: {{ .retentionResolution1h }}
+            {{- end }}
+            {{- if .retentionResolution1d }}
+            - name: COLLECTOR_1D_RESOLUTION_RETENTION
+              value: {{ .retentionResolution1d }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.opencost.metrics.config.enabled }}
             - name: METRICS_CONFIGMAP_NAME
               value: {{ .Values.opencost.metrics.config.configmapName }}
@@ -173,9 +199,13 @@ spec:
             - name: KUBE_RBAC_PROXY_ENABLED
               value: {{ (quote .Values.opencost.prometheus.kubeRBACProxy) }}
             {{- end }}
-            {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
+            {{- if  .Values.opencost.exporter.persistence.enabled }}
+            - name: PV_MOUNT_PATH
+              value: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") | quote }}
+            {{- if .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
               value: {{ .Values.opencost.exporter.csv_path | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.opencost.prometheus.thanos.enabled }}
             - name: THANOS_ENABLED
@@ -245,7 +275,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.opencost.exporter.persistence.enabled }}
-            - mountPath: /mnt/export
+            - mountPath: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") }}
               name: opencost-export
               readOnly: false
             {{- end }}
