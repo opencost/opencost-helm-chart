@@ -115,26 +115,26 @@ spec:
             {{- with .Values.opencost.exporter.collectorDataSource }}
             {{- if .enabled }}
             - name: COLLECTOR_DATA_SOURCE_ENABLED
-              value: true
+              value: "true"
             {{- if .scrapeInterval }}
             - name: COLLECTOR_SCRAPE_INTERVAL
               value: {{ .scrapeInterval | quote }}
             {{- end }}
             {{- if .networkPort }}
             - name: NETWORK_PORT
-              value: {{ .networkPort }}
+              value: {{ .networkPort | quote }}
             {{- end }}
             {{- if .retentionResolution10m }}
             - name: COLLECTOR_10m_RESOLUTION_RETENTION
-              value: {{ .retentionResolution10m  }}
+              value: {{ .retentionResolution10m | quote }}
             {{- end }}
             {{- if .retentionResolution1h }}
             - name: COLLECTOR_1H_RESOLUTION_RETENTION
-              value: {{ .retentionResolution1h }}
+              value: {{ .retentionResolution1h | quote }}
             {{- end }}
             {{- if .retentionResolution1d }}
             - name: COLLECTOR_1D_RESOLUTION_RETENTION
-              value: {{ .retentionResolution1d }}
+              value: {{ .retentionResolution1d | quote }}
             {{- end }}
             {{- end }}
             {{- end }}
