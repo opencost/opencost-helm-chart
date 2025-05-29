@@ -106,9 +106,9 @@ Create the name of the controller service account to use
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
     {{- $path := .Values.opencost.prometheus.internal.path | default "" }}
     {{- if $path }}
-      {{- printf "http://%s.%s.svc.%s:%d%s" $host $ns $clusterName $port $path -}}
+      {{- printf "%s://%s.%s.svc.%s:%d%s" $scheme $host $ns $clusterName $port $path -}}
     {{- else }}
-      {{- printf "http://%s.%s.svc.%s:%d" $ scheme $host $ns $clusterName $port -}}
+      {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
     {{- end }}
 {{- end -}}
 {{- end -}}
