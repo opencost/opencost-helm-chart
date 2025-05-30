@@ -197,9 +197,27 @@ opencost:
     # Path of CSV file
     csv_path: ""
 
+    # Collector DataSource collects cluster data without a dependency on Prometheus
+    # It is recommended that persistence is enabled alongside it to preserve the state
+    # between pod restarts
+    collectorDataSource:
+      enabled: false
+      # -- define the interval at which the collector scrapes for data points (10s, 15s, 1m)
+      scrapeInterval: 30s
+      # -- The port at which network pods are open to egress
+      networkPort: 3001
+      # -- The number of 10m intervals the Collector DataSource should maintain
+      retentionResolution10m: 36
+      # -- The number of 1h intervals the Collector DataSource should maintain
+      retentionResolution1h: 49
+      # -- The number of 1d intervals the Collector DataSource should maintain
+      retentionResolution1d: 15
+      
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
       enabled: false
+      # -- The path that the PV will be mounted to the exporter at
+      mountPath: /mnt/export
       # -- Annotations for persistent volume
       annotations: {}
       # -- Access mode for persistent volume
