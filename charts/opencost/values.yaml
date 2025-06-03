@@ -212,7 +212,7 @@ opencost:
       retentionResolution1h: 49
       # -- The number of 1d intervals the Collector DataSource should maintain
       retentionResolution1d: 15
-      
+
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
       enabled: false
