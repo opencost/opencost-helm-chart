@@ -132,7 +132,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.114.0@sha256:e0e6d87827559544d19d0096f3a0c0a62e2bcac4479031f7849f3ee823ad19fb"
+      tag: "1.115.0@sha256:fb6468a1ef45dbd4a9e521122c8d306f882bb33d1657d28d21aeaef79412e9e1"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -212,7 +212,7 @@ opencost:
       retentionResolution1h: 49
       # -- The number of 1d intervals the Collector DataSource should maintain
       retentionResolution1d: 15
-      
+
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
       enabled: false
@@ -422,7 +422,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.114.0@sha256:09edc15c5f917c82a8a10f840595e7f3768e767546c19f05c2364378aa9883e0"
+      tag: "1.115.0@sha256:6a7bdf50abff92ce16be62fb43c3a0c53d2e98c77e6bc9359962dcf10634e8ac"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
