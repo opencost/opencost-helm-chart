@@ -11,4 +11,3 @@ validate-maintainers: true
 validate-yaml: true
 exclude-deprecated: true
 excluded-charts: []
-helm-extra-set-args: "--set=opencost.exporter.collectorDataSource.enabled=true"
