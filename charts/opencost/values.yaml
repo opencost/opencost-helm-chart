@@ -197,6 +197,9 @@ opencost:
     # Path of CSV file
     csv_path: ""
 
+    prometheusDataSource:
+      queryResolution: 300
+
     # Collector DataSource collects cluster data without a dependency on Prometheus
     # It is recommended that persistence is enabled alongside it to preserve the state
     # between pod restarts
@@ -212,7 +215,7 @@ opencost:
       retentionResolution1h: 49
       # -- The number of 1d intervals the Collector DataSource should maintain
       retentionResolution1d: 15
-      
+
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
       enabled: false
