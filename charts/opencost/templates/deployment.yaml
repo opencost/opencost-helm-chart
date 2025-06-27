@@ -37,6 +37,7 @@ spec:
       securityContext: {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.podAutomountServiceAccountToken }}
       {{- with .Values.opencost.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
