@@ -29,7 +29,7 @@ See the [Chart Documentation](https://github.com/opencost/opencost-helm-chart/bl
 
 [Testing](https://github.com/helm-unittest/helm-unittest) your chart (optional)
 
-Presumes you've got Helm unittest installed: (i.e. `helm plugin install unittest`) and that your in the root directory of your cloned repo:
+Presumes you've got Helm unittest installed: (i.e. `helm plugin install https://github.com/helm-unittest/helm-unittest`) and that your in the root directory of your cloned repo:
 
 ```console
 helm unittest charts/opencost
