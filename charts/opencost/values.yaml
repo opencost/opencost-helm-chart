@@ -84,6 +84,8 @@ secretAnnotations: {}
 podLabels: {}
 # --  Pod priority
 priorityClassName: ~
+# --  Enable automounting of service account token at the pod level
+podAutomountServiceAccountToken: true
 
 # -- Holds pod-level security attributes and common container settings
 podSecurityContext: {}
