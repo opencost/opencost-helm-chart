@@ -199,6 +199,11 @@ opencost:
     # Path of CSV file
     csv_path: ""
 
+
+    prometheusDataSource:
+      # Set the resolution in second that prometheus queries will be performed at
+      queryResolutionSeconds: 300
+
     # Collector DataSource collects cluster data without a dependency on Prometheus
     # It is recommended that persistence is enabled alongside it to preserve the state
     # between pod restarts
