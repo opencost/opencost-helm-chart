@@ -113,9 +113,9 @@ spec:
             - name: KUBECOST_NAMESPACE
               value: {{ include "opencost.namespace" . }}
             {{- with .Values.opencost.exporter.prometheusDataSource }}
-            {{- if .queryResolution }}
+            {{- if .queryResolutionSeconds }}
             - name: ETL_RESOLUTION_SECONDS
-              value: {{ .queryResolution | quote }}
+              value: {{ .queryResolutionSeconds | quote }}
             {{- end }}
             {{- end }}
             {{- with .Values.opencost.exporter.collectorDataSource }}
