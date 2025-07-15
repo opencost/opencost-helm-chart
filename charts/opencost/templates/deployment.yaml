@@ -115,7 +115,7 @@ spec:
               value: {{ include "opencost.namespace" . }}
             {{- with .Values.opencost.exporter.prometheusDataSource }}
             {{- if .queryResolutionSeconds }}
-            - name: ETL_RESOLUTION_SECONDS
+            - name: PROMETHEUS_QUERY_RESOLUTION_SECONDS
               value: {{ .queryResolutionSeconds | quote }}
             {{- end }}
             {{- end }}
