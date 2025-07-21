@@ -116,6 +116,14 @@ service:
 rbac:
   enabled: true
 
+# PodDisruptionBudget for high availability
+pdb:
+  enabled: false
+  # -- Minimum number of pods that must be available after the eviction
+  minAvailable: ~
+  # -- Maximum number of pods that can be unavailable after the eviction
+  maxUnavailable: ~
+
 opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
