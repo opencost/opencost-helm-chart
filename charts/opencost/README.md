@@ -212,6 +212,9 @@ $ helm install opencost opencost/opencost
 | opencost.ui.uiPort | int | `9090` |  |
 | opencost.ui.useDefaultFqdn | bool | `false` |  |
 | opencost.ui.useIPv6 | bool | `true` |  |
+| pdb.enabled | bool | `false` |  |
+| pdb.minAvailable | int | `nil` | Minimum number of pods that must be available after the eviction |
+| pdb.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after the eviction |
 | plugins.configs | string | `nil` |  |
 | plugins.enabled | bool | `false` |  |
 | plugins.folder | string | `"/opt/opencost/plugin"` |  |
