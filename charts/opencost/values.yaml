@@ -149,6 +149,8 @@ opencost:
       fullImageName: null
     # -- List of extra arguments for the command, e.g.: log-format=json
     extraArgs: []
+    # -- Optional command to override the default container command
+    command: []
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
