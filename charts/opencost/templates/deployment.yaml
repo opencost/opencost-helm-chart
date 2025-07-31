@@ -68,6 +68,11 @@ spec:
         - name: {{ include "opencost.fullname" . }}
           image: {{ include "opencost.fullImageName" . }}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
+          {{- with .Values.opencost.exporter.command }}
+          {{- if . }}
+          command: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
           - --{{ . }}

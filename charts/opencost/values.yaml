@@ -116,6 +116,14 @@ service:
 rbac:
   enabled: true
 
+# PodDisruptionBudget for high availability
+pdb:
+  enabled: false
+  # -- Minimum number of pods that must be available after the eviction
+  minAvailable: ~
+  # -- Maximum number of pods that can be unavailable after the eviction
+  maxUnavailable: ~
+
 opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
@@ -141,6 +149,8 @@ opencost:
       fullImageName: null
     # -- List of extra arguments for the command, e.g.: log-format=json
     extraArgs: []
+    # -- Optional command to override the default container command
+    command: []
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
