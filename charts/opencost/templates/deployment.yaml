@@ -116,11 +116,11 @@ spec:
               value: {{ .Values.loglevel }}
             - name: CUSTOM_COST_ENABLED
               value: {{ .Values.plugins.enabled | quote }}
-            - name: KUBECOST_NAMESPACE
+            - name: INSTALL_NAMESPACE
               value: {{ include "opencost.namespace" . }}
             {{- with .Values.opencost.exporter.prometheusDataSource }}
             {{- if .queryResolutionSeconds }}
-            - name: ETL_RESOLUTION_SECONDS
+            - name: PROMETHEUS_QUERY_RESOLUTION_SECONDS
               value: {{ .queryResolutionSeconds | quote }}
             {{- end }}
             {{- end }}
