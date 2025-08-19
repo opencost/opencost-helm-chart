@@ -145,6 +145,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
 | opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
+| opencost.prometheus.internal.insecureSkipVerify | bool | `false` | Whether to disable SSL certificate verification |
 | opencost.prometheus.internal.namespaceName | string | `"prometheus-system"` | Namespace of in-cluster Prometheus |
 | opencost.prometheus.internal.port | int | `80` | Service port of in-cluster Prometheus |
 | opencost.prometheus.internal.scheme | string | `"http"` | Scheme to use for in-cluster Prometheus |
