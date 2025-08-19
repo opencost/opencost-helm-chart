@@ -399,6 +399,8 @@ opencost:
       enabled: false
       # -- External Prometheus url
       url: "https://prometheus.example.com/prometheus"
+      # -- Whether to disable SSL certificate verification
+      insecureSkipVerify: false
     internal:
       # -- Use in-cluster Prometheus
       enabled: true
@@ -410,8 +412,6 @@ opencost:
       port: 80
       # -- Scheme to use for in-cluster Prometheus
       scheme: http
-      # -- Whether to disable SSL certificate verification
-      insecureSkipVerify: false
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
       enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
