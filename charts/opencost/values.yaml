@@ -142,7 +142,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.116.0@sha256:e4658c3be1119f2ab57c5a57c3e19b785d525de63f4cc57111d0da3e0a6654c0"
+      tag: "1.117.0@sha256:fbf33f76ed081a49aba9c2f3ecb71de84b619ded2e0dccc2fbe53b97695e85eb"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
