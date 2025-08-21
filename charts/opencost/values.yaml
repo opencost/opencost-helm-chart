@@ -394,13 +394,13 @@ opencost:
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
+     # -- Whether to disable SSL certificate verification
+    insecureSkipVerify: false
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
       # -- External Prometheus url
       url: "https://prometheus.example.com/prometheus"
-      # -- Whether to disable SSL certificate verification
-      insecureSkipVerify: false
     internal:
       # -- Use in-cluster Prometheus
       enabled: true
