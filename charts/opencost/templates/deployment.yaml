@@ -164,6 +164,8 @@ spec:
             {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
+            - name: INSECURE_SKIP_VERIFY
+              value: {{ .Values.opencost.prometheus.insecureSkipVerify | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
               valueFrom:
