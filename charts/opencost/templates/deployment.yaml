@@ -133,15 +133,15 @@ spec:
             {{- end }}
             {{- if .retentionResolution10m }}
             - name: COLLECTOR_RESOLUTION_10M_RETENTION
-              value: {{ .retentionResolution10m | quote }}
+              value: {{ .retention10m | quote }}
             {{- end }}
             {{- if .retentionResolution1h }}
             - name: COLLECTOR_RESOLUTION_1H_RETENTION
-              value: {{ .retentionResolution1h | quote }}
+              value: {{ .retention1h | quote }}
             {{- end }}
             {{- if .retentionResolution1d }}
             - name: COLLECTOR_RESOLUTION_1D_RETENTION
-              value: {{ .retentionResolution1d | quote }}
+              value: {{ .retention1d | quote }}
             {{- end }}
             {{- end }}
             {{- end }}
