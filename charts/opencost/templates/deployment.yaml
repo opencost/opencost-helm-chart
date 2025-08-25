@@ -68,6 +68,11 @@ spec:
         - name: {{ include "opencost.fullname" . }}
           image: {{ include "opencost.fullImageName" . }}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
+          {{- with .Values.opencost.exporter.command }}
+          {{- if . }}
+          command: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
           - --{{ . }}
@@ -111,11 +116,11 @@ spec:
               value: {{ .Values.loglevel }}
             - name: CUSTOM_COST_ENABLED
               value: {{ .Values.plugins.enabled | quote }}
-            - name: KUBECOST_NAMESPACE
+            - name: INSTALL_NAMESPACE
               value: {{ include "opencost.namespace" . }}
             {{- with .Values.opencost.exporter.prometheusDataSource }}
             {{- if .queryResolutionSeconds }}
-            - name: ETL_RESOLUTION_SECONDS
+            - name: PROMETHEUS_QUERY_RESOLUTION_SECONDS
               value: {{ .queryResolutionSeconds | quote }}
             {{- end }}
             {{- end }}
@@ -159,6 +164,8 @@ spec:
             {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
+            - name: INSECURE_SKIP_VERIFY
+              value: {{ .Values.opencost.prometheus.insecureSkipVerify | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
               valueFrom:

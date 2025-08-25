@@ -116,6 +116,14 @@ service:
 rbac:
   enabled: true
 
+# PodDisruptionBudget for high availability
+pdb:
+  enabled: false
+  # -- Minimum number of pods that must be available after the eviction
+  minAvailable: ~
+  # -- Maximum number of pods that can be unavailable after the eviction
+  maxUnavailable: ~
+
 opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
@@ -134,13 +142,15 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.115.0@sha256:fb6468a1ef45dbd4a9e521122c8d306f882bb33d1657d28d21aeaef79412e9e1"
+      tag: "1.117.1@sha256:875bfc5f976ef866ceb69b50ec26884a4c86f6a858ff1ab379bedac336233e72"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
       fullImageName: null
     # -- List of extra arguments for the command, e.g.: log-format=json
     extraArgs: []
+    # -- Optional command to override the default container command
+    command: []
     # -- Number of OpenCost replicas to run
     replicas: 1
     resources:
@@ -384,6 +394,8 @@ opencost:
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
+     # -- Whether to disable SSL certificate verification
+    insecureSkipVerify: false
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
@@ -429,7 +441,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.115.0@sha256:d544b2f16b76540606acb3d25e029e368611feb2751b86cb5903b0212b75a71e"
+      tag: "1.117.1@sha256:83fbb29fb3332791ed357c0eea010c556fd3ec670b64465a5b4a13dae2c410ce"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes

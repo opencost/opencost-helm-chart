@@ -144,6 +144,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.existingSecretName | string | `nil` | Existing secret name that contains credentials for Prometheus |
 | opencost.prometheus.external.enabled | bool | `false` | Use external Prometheus (eg. Grafana Cloud) |
 | opencost.prometheus.external.url | string | `"https://prometheus.example.com/prometheus"` | External Prometheus url |
+| opencost.prometheus.insecureSkipVerify | bool | `false` | Whether to disable SSL certificate verification |
 | opencost.prometheus.internal.enabled | bool | `true` | Use in-cluster Prometheus |
 | opencost.prometheus.internal.namespaceName | string | `"prometheus-system"` | Namespace of in-cluster Prometheus |
 | opencost.prometheus.internal.port | int | `80` | Service port of in-cluster Prometheus |
@@ -212,6 +213,9 @@ $ helm install opencost opencost/opencost
 | opencost.ui.uiPort | int | `9090` |  |
 | opencost.ui.useDefaultFqdn | bool | `false` |  |
 | opencost.ui.useIPv6 | bool | `true` |  |
+| pdb.enabled | bool | `false` |  |
+| pdb.minAvailable | int | `nil` | Minimum number of pods that must be available after the eviction |
+| pdb.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after the eviction |
 | plugins.configs | string | `nil` |  |
 | plugins.enabled | bool | `false` |  |
 | plugins.folder | string | `"/opt/opencost/plugin"` |  |
