@@ -211,6 +211,7 @@ $ helm install opencost opencost/opencost
 | opencost.ui.route.tls | list | `[]` | Ingress TLS configuration |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.ui.uiPort | int | `9090` |  |
+| opencost.ui.uiPath | string | `/` | Base path for serving the UI. Requires building a custom image using the build argument "ui_path". |
 | opencost.ui.useDefaultFqdn | bool | `false` |  |
 | opencost.ui.useIPv6 | bool | `true` |  |
 | pdb.enabled | bool | `false` |  |
