@@ -224,11 +224,11 @@ opencost:
       # -- The port at which network pods are open to egress
       networkPort: 3001
       # -- The number of 10m intervals the Collector DataSource should maintain
-      retentionResolution10m: 36
+      retention10m: 36
       # -- The number of 1h intervals the Collector DataSource should maintain
-      retentionResolution1h: 49
+      retention1h: 49
       # -- The number of 1d intervals the Collector DataSource should maintain
-      retentionResolution1d: 15
+      retention1d: 15
 
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
@@ -305,8 +305,8 @@ opencost:
       regionNetworkEgress: 0.01
       internetNetworkEgress: 0.12
 
-  dataRetention:
-    dailyResolutionDays: 15
+  retention1d: 15
+  retention1h: 49
 
   carbonCost:
     # -- Enable carbon cost exposed in the API
