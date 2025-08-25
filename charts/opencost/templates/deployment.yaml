@@ -137,16 +137,16 @@ spec:
               value: {{ .networkPort | quote }}
             {{- end }}
             {{- if .retentionResolution10m }}
-            - name: COLLECTOR_10m_RESOLUTION_RETENTION
-              value: {{ .retentionResolution10m | quote }}
+            - name: COLLECTOR_RESOLUTION_10M_RETENTION
+              value: {{ .retention10m | quote }}
             {{- end }}
             {{- if .retentionResolution1h }}
-            - name: COLLECTOR_1H_RESOLUTION_RETENTION
-              value: {{ .retentionResolution1h | quote }}
+            - name: COLLECTOR_RESOLUTION_1H_RETENTION
+              value: {{ .retention1h | quote }}
             {{- end }}
             {{- if .retentionResolution1d }}
-            - name: COLLECTOR_1D_RESOLUTION_RETENTION
-              value: {{ .retentionResolution1d | quote }}
+            - name: COLLECTOR_RESOLUTION_1D_RETENTION
+              value: {{ .retention1d | quote }}
             {{- end }}
             {{- end }}
             {{- end }}
@@ -242,8 +242,14 @@ spec:
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}
             {{- end }}
-            - name: DATA_RETENTION_DAILY_RESOLUTION_DAYS
+            - name: RESOLUTION_1D_RETENTION
+            {{- if (.Values.opencost.dataRetention).dailyResolutionDays}}
               value: {{ .Values.opencost.dataRetention.dailyResolutionDays | quote }}
+            {{- else }}
+              value: {{ .Values.opencost.retention1d | quote }}
+            {{- end }}
+            - name: RESOLUTION_1H_RETENTION
+              value: {{ .Values.opencost.retention1h | quote }}
             - name: CLOUD_COST_ENABLED
               value: {{ .Values.opencost.cloudCost.enabled | quote }}
             - name: CLOUD_COST_MONTH_TO_DATE_INTERVAL
