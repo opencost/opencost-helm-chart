@@ -37,6 +37,7 @@ spec:
       securityContext: {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "opencost.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.podAutomountServiceAccountToken }}
       {{- with .Values.opencost.tolerations }}
       tolerations: {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -67,6 +68,11 @@ spec:
         - name: {{ include "opencost.fullname" . }}
           image: {{ include "opencost.fullImageName" . }}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
+          {{- with .Values.opencost.exporter.command }}
+          {{- if . }}
+          command: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
           - --{{ . }}
@@ -110,8 +116,40 @@ spec:
               value: {{ .Values.loglevel }}
             - name: CUSTOM_COST_ENABLED
               value: {{ .Values.plugins.enabled | quote }}
-            - name: KUBECOST_NAMESPACE
+            - name: INSTALL_NAMESPACE
               value: {{ include "opencost.namespace" . }}
+            {{- with .Values.opencost.exporter.prometheusDataSource }}
+            {{- if .queryResolutionSeconds }}
+            - name: PROMETHEUS_QUERY_RESOLUTION_SECONDS
+              value: {{ .queryResolutionSeconds | quote }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.opencost.exporter.collectorDataSource }}
+            {{- if .enabled }}
+            - name: COLLECTOR_DATA_SOURCE_ENABLED
+              value: "true"
+            {{- if .scrapeInterval }}
+            - name: COLLECTOR_SCRAPE_INTERVAL
+              value: {{ .scrapeInterval | quote }}
+            {{- end }}
+            {{- if .networkPort }}
+            - name: NETWORK_PORT
+              value: {{ .networkPort | quote }}
+            {{- end }}
+            {{- if .retentionResolution10m }}
+            - name: COLLECTOR_RESOLUTION_10M_RETENTION
+              value: {{ .retention10m | quote }}
+            {{- end }}
+            {{- if .retentionResolution1h }}
+            - name: COLLECTOR_RESOLUTION_1H_RETENTION
+              value: {{ .retention1h | quote }}
+            {{- end }}
+            {{- if .retentionResolution1d }}
+            - name: COLLECTOR_RESOLUTION_1D_RETENTION
+              value: {{ .retention1d | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.opencost.metrics.config.enabled }}
             - name: METRICS_CONFIGMAP_NAME
               value: {{ .Values.opencost.metrics.config.configmapName }}
@@ -126,6 +164,8 @@ spec:
             {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
+            - name: INSECURE_SKIP_VERIFY
+              value: {{ .Values.opencost.prometheus.insecureSkipVerify | quote }}
             {{- if .Values.opencost.exporter.cloudProviderApiKey }}
             - name: CLOUD_PROVIDER_API_KEY
               valueFrom:
@@ -173,9 +213,13 @@ spec:
             - name: KUBE_RBAC_PROXY_ENABLED
               value: {{ (quote .Values.opencost.prometheus.kubeRBACProxy) }}
             {{- end }}
-            {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
+            {{- if  .Values.opencost.exporter.persistence.enabled }}
+            - name: PV_MOUNT_PATH
+              value: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") | quote }}
+            {{- if .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
               value: {{ .Values.opencost.exporter.csv_path | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.opencost.prometheus.thanos.enabled }}
             - name: THANOS_ENABLED
@@ -198,8 +242,14 @@ spec:
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}
             {{- end }}
-            - name: DATA_RETENTION_DAILY_RESOLUTION_DAYS
+            - name: RESOLUTION_1D_RETENTION
+            {{- if (.Values.opencost.dataRetention).dailyResolutionDays}}
               value: {{ .Values.opencost.dataRetention.dailyResolutionDays | quote }}
+            {{- else }}
+              value: {{ .Values.opencost.retention1d | quote }}
+            {{- end }}
+            - name: RESOLUTION_1H_RETENTION
+              value: {{ .Values.opencost.retention1h | quote }}
             - name: CLOUD_COST_ENABLED
               value: {{ .Values.opencost.cloudCost.enabled | quote }}
             - name: CLOUD_COST_MONTH_TO_DATE_INTERVAL
@@ -245,7 +295,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.opencost.exporter.persistence.enabled }}
-            - mountPath: /mnt/export
+            - mountPath: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") }}
               name: opencost-export
               readOnly: false
             {{- end }}

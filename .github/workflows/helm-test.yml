@@ -53,5 +53,5 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --config ./.github/configs/ct.yaml
+        run: ct install --config ./.github/configs/ct.yaml --helm-extra-set-args "--set=opencost.exporter.collectorDataSource.enabled=true"
         if: steps.list-changed.outputs.changed == 'true'
