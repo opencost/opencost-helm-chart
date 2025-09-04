@@ -459,6 +459,9 @@ opencost:
     # used in the default.nginx.conf if you want to switch for using with Docker
     # apiServer: 0.0.0.0
     uiPort: 9090
+    # Base path for serving the UI.
+    # Requires building a custom image using the build argument "ui_path".
+    uiPath: /
     # Set to true to use IPv6
     useIPv6: true
     # Liveness probe configuration
