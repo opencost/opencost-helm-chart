@@ -48,6 +48,12 @@ $ helm install opencost opencost/opencost
 | opencost.customPricing.enabled | bool | `false` | Enables custom pricing configuration |
 | opencost.customPricing.provider | string | `"custom"` | Sets the provider type for the custom pricing file. |
 | opencost.dataRetention.dailyResolutionDays | int | `15` |  |
+| opencost.exporter.apiIngress.annotations | object | `{}` | Annotations for API Ingress resource |
+| opencost.exporter.apiIngress.enabled | bool | `false` | Ingress for OpenCost API |
+| opencost.exporter.apiIngress.hosts | list | See [values.yaml](values.yaml) | A list of host rules used to configure the API Ingress |
+| opencost.exporter.apiIngress.ingressClassName | string | `""` | Ingress controller which implements the resource |
+| opencost.exporter.apiIngress.servicePort | string | `"http"` | Redirect ingress to an extraPort defined on the service such as oauth-proxy |
+| opencost.exporter.apiIngress.tls | list | `[]` | Ingress TLS configuration |
 | opencost.exporter.apiPort | int | `9003` |  |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
 | opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |
@@ -118,6 +124,7 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.internal.namespaceName | string | `"prometheus-system"` | Namespace of in-cluster Prometheus |
 | opencost.prometheus.internal.port | int | `80` | Service port of in-cluster Prometheus |
 | opencost.prometheus.internal.serviceName | string | `"prometheus-server"` | Service name of in-cluster Prometheus |
+| opencost.prometheus.internal.path | string | `""` | Set path to prometheus if behind reverse proxy(mimir) |
 | opencost.prometheus.password | string | `""` | Prometheus Basic auth password |
 | opencost.prometheus.password_key | string | `"DB_BASIC_AUTH_PW"` | Key in the secret that references the password |
 | opencost.prometheus.secret_name | string | `nil` | Secret name that contains credentials for Prometheus |
@@ -176,6 +183,7 @@ $ helm install opencost opencost/opencost
 | opencost.ui.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.ui.uiPort | int | `9090` |  |
+| opencost.ui.useIPv6 | bool | `true` |  |
 | opencost.ui.useDefaultFqdn | bool | false | To use `<service>.<namespace>.svc.cluster.local` or `<service>.<namespace>` |
 | opencost.ui.modelFqdn | string | `nil` | Set the model fqdn to use for the upstream |
 | plugins.configs | string | `nil` |  |

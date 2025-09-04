@@ -223,6 +223,29 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+    apiIngress:
+      # -- Ingress for OpenCost API
+      enabled: false
+      # -- Ingress controller which implements the resource
+      ingressClassName: ""
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # kubernetes.io/tls-acme: "true"
+      # -- A list of host rules used to configure the Ingress
+      # @default -- See [values.yaml](values.yaml)
+      hosts:
+        - host: example.local
+          paths:
+            - path: /
+              pathType: Prefix
+      # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
+      servicePort: http
+      # servicePort: oauth-proxy
+      # -- Ingress TLS configuration
+      tls: []
+        #  - secretName: chart-example-tls
+        #    hosts:
+        #      - chart-example.local
   customPricing:
     # -- Enables custom pricing configuration
     enabled: false
@@ -350,6 +373,10 @@ opencost:
       namespaceName: prometheus-system
       # -- Service port of in-cluster Prometheus
       port: 80
+      # -- Path to access the Prometheus API, this is neccesary if the Prometheus server is behind a reverse proxy(mimir) or has a different path.
+      path: ""
+      # -- Scheme to use for in-cluster Prometheus
+      scheme: http
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
       enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
@@ -364,6 +391,7 @@ opencost:
         serviceName: my-thanos-query
         namespaceName: opencost
         port: 10901
+        scheme: http
       external:
         enabled: false
         url: 'https://thanos-query.example.com/thanos'
@@ -394,6 +422,8 @@ opencost:
     # used in the default.nginx.conf if you want to switch for using with Docker
     # apiServer: 0.0.0.0
     uiPort: 9090
+    # Set to true to use IPv6
+    useIPv6: true
     # Liveness probe configuration
     livenessProbe:
       # -- Whether probe is enabled
@@ -545,6 +575,9 @@ opencost:
       monitoringServiceAccountName: prometheus-k8s
       # -- Namespace of the Prometheus serviceaccount to bind to the Resource Reader Role Binding.
       monitoringServiceAccountNamespace: openshift-monitoring
-
+      # -- If true, set Security Context Constraints on serviceaccount for read/write premissions
+      enableSCC: false
+      # -- If true, enable internal prom access
+      enablePromAccess: false
 # -- A list of volumes to be added to the pod
 extraVolumes: []
