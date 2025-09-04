@@ -410,6 +410,8 @@ opencost:
       namespaceName: prometheus-system
       # -- Service port of in-cluster Prometheus
       port: 80
+      # -- Path to access the Prometheus API, this is neccesary if the Prometheus server is behind a reverse proxy(mimir) or has a different path.
+      path: ""
       # -- Scheme to use for in-cluster Prometheus
       scheme: http
     amp:

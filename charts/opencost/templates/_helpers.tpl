@@ -98,14 +98,19 @@ Create the name of the controller service account to use
     {{- $port := .Values.opencost.sigV4Proxy.port | int }}
     {{- $ws := .Values.opencost.prometheus.amp.workspaceId }}
     {{- printf "http://localhost:%d/workspaces/%v" $port $ws -}}
-  {{- else -}}
+{{- else -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
     {{- $clusterName := .Values.clusterName }}
     {{- $scheme := .Values.opencost.prometheus.internal.scheme | default "http"}}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
-    {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
-  {{- end -}}
+    {{- $path := .Values.opencost.prometheus.internal.path | default "" }}
+    {{- if $path }}
+      {{- printf "%s://%s.%s.svc.%s:%d%s" $scheme $host $ns $clusterName $port $path -}}
+    {{- else }}
+      {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
+    {{- end }}
+{{- end -}}
 {{- end -}}
 
 {{/*
