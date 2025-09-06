@@ -220,7 +220,6 @@ $ helm install opencost opencost/opencost
 | opencost.updateCaTrust.caCertsSecret | string | `"ca-certs-secret"` | Name of the Secret containing custom CA certificates to mount to the opencost container |
 | opencost.updateCaTrust.caCertsConfig | string | `"ca-certs-config"` | Name of the ConfigMap containing CA certificates to mount to the opencost container |
 | opencost.updateCaTrust.resources | object | `{}` | Resources for the init container |
-| opencost.updateCaTrust.caCertsMountPath | string | `"/etc/pki/ca-trust/source/anchors"` | Path where the custom CA certificates will be mounted in the opencost container |
 | pdb.enabled | bool | `false` |  |
 | pdb.minAvailable | int | `nil` | Minimum number of pods that must be available after the eviction |
 | pdb.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after the eviction |
