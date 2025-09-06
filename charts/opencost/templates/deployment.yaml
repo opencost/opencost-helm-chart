@@ -51,8 +51,8 @@ spec:
       {{- with.Values.opencost.topologySpreadConstraints }}
       topologySpreadConstraints: {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or (and .Values.plugins.enabled .Values.plugins.install.enabled ) .Values.opencost.updateCaTrust.enabled }}
       initContainers:
+        {{- if (and .Values.plugins.enabled .Values.plugins.install.enabled ) }}
         - name: plugin-installer
           image: {{ .Values.plugins.install.fullImageName }}
           command: ["sh", "/install/install_plugins.sh"]
@@ -64,6 +64,7 @@ spec:
               mountPath: /install
             - name: plugins-dir
               mountPath: {{ .Values.plugins.folder }}
+        {{- end }}
         {{- if .Values.opencost.updateCaTrust.enabled }}
         - name: update-ca-trust
           image: {{ include "opencost.fullImageName" . }}
@@ -79,16 +80,15 @@ spec:
             - 'sh'
             - '-c'
             - >
-              mkdir -p /etc/pki/ca-trust/extracted/{edk2,java,openssl,pem};
-              /usr/bin/update-ca-trust extract;
+              mkdir -p /etc/ssl/certs;
+              update-ca-certificates;
           volumeMounts:
             - name: ca-certs-secret
               mountPath: {{ .Values.opencost.updateCaTrust.caCertsMountPath | quote }}
             - name: ssl-path
-              mountPath: "/etc/pki/ca-trust/extracted"
+              mountPath: "/etc/ssl/certs"
               readOnly: false
           {{- end}}
-      {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
           image: {{ include "opencost.fullImageName" . }}
@@ -344,7 +344,7 @@ spec:
             - name: ca-certs-secret
               mountPath: {{ .Values.opencost.updateCaTrust.caCertsMountPath | quote }}
             - name: ssl-path
-              mountPath: "/etc/pki/ca-trust/extracted"
+              mountPath: "/etc/ssl/certs"
               readOnly: false
             {{- end }}
             {{- with .Values.opencost.exporter.extraVolumeMounts }}
