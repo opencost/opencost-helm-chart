@@ -84,7 +84,7 @@ spec:
               update-ca-certificates;
           volumeMounts:
             - name: ca-certs-secret
-              mountPath: {{ .Values.opencost.updateCaTrust.caCertsMountPath | quote }}
+              mountPath: "/usr/local/share/ca-certificates"
             - name: ssl-path
               mountPath: "/etc/ssl/certs"
               readOnly: false
@@ -342,7 +342,7 @@ spec:
             {{- end }}
             {{- if .Values.opencost.updateCaTrust.enabled }}
             - name: ca-certs-secret
-              mountPath: {{ .Values.opencost.updateCaTrust.caCertsMountPath | quote }}
+              mountPath: "/usr/local/share/ca-certificates"
             - name: ssl-path
               mountPath: "/etc/ssl/certs"
               readOnly: false

@@ -614,7 +614,6 @@ opencost:
     caCertsSecret: ca-certs-secret # The name of the Secret containing custom CA certificates to mount to the opencost container.
     # caCertsConfig: ca-certs-config  # The name of the ConfigMap containing the CA trust configuration.
     resources: {}
-    caCertsMountPath: /usr/local/share/ca-certificates # The path where the custom CA certificates will be mounted in the init container
 
   platforms:
     openshift:
