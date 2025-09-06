@@ -222,3 +222,12 @@ apiVersion: networking.k8s.io/v1beta1
 {{- $checksum | sha256sum -}}
 {{- end -}}
 
+{{- define "opencost.caCertsSecretConfig.check" }}
+  {{- if .Values.opencost.updateCaTrust.enabled }}
+    {{- if and .Values.opencost.updateCaTrust.caCertsSecret .Values.opencost.updateCaTrust.caCertsConfig }}
+      {{- fail "Both caCertsSecret and caCertsConfig are defined. Please specify only one." }}
+    {{- else if and (not .Values.opencost.updateCaTrust.caCertsSecret) (not .Values.opencost.updateCaTrust.caCertsConfig) }}
+      {{- fail "Neither caCertsSecret nor caCertsConfig is defined, but updateCaTrust is enabled. Please specify one." }}
+    {{- end }}
+  {{- end }}
+{{- end }}
