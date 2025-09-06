@@ -209,7 +209,6 @@ opencost:
     # Path of CSV file
     csv_path: ""
 
-
     prometheusDataSource:
       # Set the resolution in second that prometheus queries will be performed at
       queryResolutionSeconds: 300
@@ -269,10 +268,10 @@ opencost:
       # -- A list of host rules used to configure the Ingress
       # @default -- See [values.yaml](values.yaml)
       hosts:
-        - host: example.local
-          paths:
-            - path: /
-              pathType: Prefix
+      - host: example.local
+        paths:
+        - path: /
+          pathType: Prefix
       # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
       servicePort: http
       # servicePort: oauth-proxy
@@ -323,7 +322,6 @@ opencost:
     monthToDateInterval: 6
     # -- The max number of days that any single query will be made to construct Cloud Costs
     queryWindowDays: 7
-
 
   metrics:
     kubeStateMetrics:
@@ -394,7 +392,7 @@ opencost:
     bearer_token_key: DB_BEARER_TOKEN
     # -- If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift
     kubeRBACProxy: false
-     # -- Whether to disable SSL certificate verification
+    # -- Whether to disable SSL certificate verification
     insecureSkipVerify: false
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
@@ -416,7 +414,7 @@ opencost:
       scheme: http
     amp:
       # -- Use Amazon Managed Service for Prometheus (AMP)
-      enabled: false  # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
+      enabled: false # If true, opencost will be configured to remote_write and query from Amazon Managed Service for Prometheus.
       # -- Workspace ID for AMP
       workspaceId: ""
     thanos:
@@ -520,9 +518,9 @@ opencost:
       # -- A list of host rules used to configure the Ingress
       # @default -- See [values.yaml](values.yaml)
       hosts:
-        - host: example.local
-          paths:
-            - /
+      - host: example.local
+        paths:
+        - /
       # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
       servicePort: http-ui
       # servicePort: oauth-proxy
@@ -601,6 +599,22 @@ opencost:
     #       containerPort: 8082
     #       protocol: TCP
     #   resources: {}
+
+  updateCaTrust:
+    enabled: false
+    ## Security context settings for the init container.
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      runAsNonRoot: false
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      seccompProfile:
+        type: RuntimeDefault
+    caCertsSecret: ca-certs-secret # The name of the Secret containing custom CA certificates to mount to the opencost container.
+    # caCertsConfig: ca-certs-config  # The name of the ConfigMap containing the CA trust configuration.
+    resources: {}
+    caCertsMountPath: /etc/pki/ca-trust/source/anchors # The path where the custom CA certificates will be mounted in the init container
 
   platforms:
     openshift:
