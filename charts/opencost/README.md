@@ -215,6 +215,12 @@ $ helm install opencost opencost/opencost
 | opencost.ui.uiPath | string | `/` | Base path for serving the UI. Requires building a custom image using the build argument "ui_path". |
 | opencost.ui.useDefaultFqdn | bool | `false` |  |
 | opencost.ui.useIPv6 | bool | `true` |  |
+| opencost.updateCaTrust.enabled | bool | `false` | Enable update of CA trust(Mount custom CA certificates to the opencost container) |
+| opencost.updateCaTrust.securityContext | object | `{}` | Security context for the init container that mounts the custom CA certificates |
+| opencost.updateCaTrust.caCertsSecret | string | `"ca-certs-secret"` | Name of the Secret containing custom CA certificates to mount to the opencost container |
+| opencost.updateCaTrust.caCertsConfig | string | `"ca-certs-config"` | Name of the ConfigMap containing CA certificates to mount to the opencost container |
+| opencost.updateCaTrust.resources | object | `{}` | Resources for the init container |
+| opencost.updateCaTrust.caCertsMountPath | string | `"/etc/pki/ca-trust/source/anchors"` | Path where the custom CA certificates will be mounted in the opencost container |
 | pdb.enabled | bool | `false` |  |
 | pdb.minAvailable | int | `nil` | Minimum number of pods that must be available after the eviction |
 | pdb.maxUnavailable | int | `nil` | Maximum number of pods that can be unavailable after the eviction |
