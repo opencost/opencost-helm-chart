@@ -173,8 +173,17 @@ spec:
                   name: {{ include "opencost.prometheus.secretname" . }}
                   key: CLOUD_PROVIDER_API_KEY
             {{- end }}
+            {{- if and (.Values.opencost.exporter.defaultClusterId) (not .Values.opencost.exporter.clusterIdConfigmap) }}
             - name: CLUSTER_ID
               value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
+            {{- end }}
+            {{- if .Values.opencost.exporter.clusterIdConfigmap }}
+            - name: CLUSTER_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.opencost.exporter.clusterIdConfigmap }}
+                  key: CLUSTER_ID
+            {{- end }}
             {{- if .Values.opencost.exporter.aws.access_key_id }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
