@@ -136,6 +136,9 @@ opencost:
     cloudProviderApiKey: ""
     # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
     defaultClusterId: 'default-cluster'
+    # -- If clusterIdConfigmap is defined, use user-generated ConfigMap with key CLUSTER_ID as default cluster ID.
+    # -- This overrides the above defaultClusterId. Ensure the ConfigMap exists and contains the required CLUSTER_ID key.
+    # clusterIdConfigmap: cluster-id-configmap
     image:
       # -- Exporter container image registry
       registry: ghcr.io
