@@ -51,7 +51,7 @@ subjects:
     name: {{template "opencost.serviceAccountName"}}
     namespace: {{include "opencost.namespace" .}}
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: system:openshift:scc:{{ include "opencost.sccName" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end}}
