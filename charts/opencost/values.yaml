@@ -128,6 +128,23 @@ opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
   cloudIntegrationSecret: ""
+  
+  # -- MCP (Model Context Protocol) Server Configuration
+  # The MCP server provides AI agents with access to cost allocation and asset data
+  mcp:
+    # -- Enable MCP server for AI agent integration (default: true)
+    # Set to false to disable MCP server completely
+    enabled: true
+    # -- HTTP port for MCP server (default: 8081)
+    # Change this if port 8081 conflicts with other services
+    port: 8081
+    # -- Additional MCP server environment variables
+    # Useful for advanced configuration like logging levels, connection limits, etc.
+    extraEnv: {}
+      # MCP_LOG_LEVEL: debug
+      # MCP_MAX_CONNECTIONS: 100
+      # MCP_TIMEOUT_SECONDS: 30
+
   exporter:
     # API_PORT for the cost-model to listen on
     apiPort: 9003

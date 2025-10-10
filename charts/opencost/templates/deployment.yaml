@@ -105,6 +105,10 @@ spec:
           ports:
             - containerPort: {{ .Values.opencost.exporter.apiPort }}
               name: http
+            {{- if .Values.opencost.mcp.enabled }}
+            - containerPort: {{ .Values.opencost.mcp.port }}
+              name: mcp-server
+            {{- end }}
           resources: {{- toYaml .Values.opencost.exporter.resources | nindent 12 }}
           {{- if .Values.opencost.exporter.startupProbe.enabled }}
           startupProbe:
@@ -314,6 +318,17 @@ spec:
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+            {{- end }}
+            {{- if .Values.opencost.mcp.enabled }}
+            # MCP Server Configuration
+            - name: MCP_SERVER_ENABLED
+              value: "true"
+            - name: MCP_HTTP_PORT
+              value: {{ .Values.opencost.mcp.port | quote }}
+            {{- range $key, $value := .Values.opencost.mcp.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
             {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
