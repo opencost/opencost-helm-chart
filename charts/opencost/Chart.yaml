@@ -4,16 +4,16 @@ name: opencost
 description: OpenCost and OpenCost UI
 type: application
 keywords:
-- cloud-costs
-- cost-optimization
-- finops
-- monitoring
-- opencost
-version: 2.3.1
+  - cloud-costs
+  - cost-optimization
+  - finops
+  - monitoring
+  - opencost
+version: 2.3.2
 maintainers:
-- name: jessegoodier
-- name: toscott
-- name: mittal-ishaan
-- name: brito-rafa
-  email: rafa@stormforge.io
+  - name: jessegoodier
+  - name: toscott
+  - name: mittal-ishaan
+  - name: brito-rafa
+    email: rafa@stormforge.io
 home: https://github.com/opencost/opencost-helm-chart

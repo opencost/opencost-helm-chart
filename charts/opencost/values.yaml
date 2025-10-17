@@ -138,12 +138,6 @@ opencost:
     # -- HTTP port for MCP server (default: 8081)
     # Change this if port 8081 conflicts with other services
     port: 8081
-    # -- Additional MCP server environment variables
-    # Useful for advanced configuration like logging levels, connection limits, etc.
-    extraEnv: {}
-      # MCP_LOG_LEVEL: debug
-      # MCP_MAX_CONNECTIONS: 100
-      # MCP_TIMEOUT_SECONDS: 30
 
   exporter:
     # API_PORT for the cost-model to listen on
