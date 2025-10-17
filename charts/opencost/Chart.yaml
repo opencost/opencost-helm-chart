@@ -4,11 +4,11 @@ name: opencost
 description: OpenCost and OpenCost UI
 type: application
 keywords:
-  - cloud-costs
-  - cost-optimization
-  - finops
-  - monitoring
-  - opencost
+- cloud-costs
+- cost-optimization
+- finops
+- monitoring
+- opencost
 version: 2.3.2
 maintainers:
   - name: jessegoodier
