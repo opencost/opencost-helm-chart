@@ -138,6 +138,26 @@ opencost:
     # -- HTTP port for MCP server (default: 8081)
     # Change this if port 8081 conflicts with other services
     port: 8081
+    ingress:
+      # -- Ingress for MCP server
+      enabled: false
+      # -- Ingress controller which implements the resource
+      ingressClassName: ""
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # kubernetes.io/tls-acme: "true"
+      # -- A list of host rules used to configure the Ingress
+      # @default -- See [values.yaml](values.yaml)
+      hosts:
+      - host: example.local
+        paths:
+        - path: /
+          pathType: Prefix
+      # -- Ingress TLS configuration
+      tls: []
+        #  - secretName: chart-example-tls
+        #    hosts:
+        #      - chart-example.local
 
   exporter:
     # API_PORT for the cost-model to listen on
