@@ -128,7 +128,7 @@ opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
   cloudIntegrationSecret: ""
-  
+
   # -- MCP (Model Context Protocol) Server Configuration
   # The MCP server provides AI agents with access to cost allocation and asset data
   mcp:
