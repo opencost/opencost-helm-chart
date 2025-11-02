@@ -346,17 +346,9 @@ spec:
               name: opencost-export
               readOnly: false
             {{- end }}
-            {{- if .Values.opencost.customPricing.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}/{{ include "opencost.configFileName" . }}.json
+            {{- if or .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
-              subPath: {{ include "opencost.configFileName" . }}.json
-              readOnly: true
-            {{- end }}
-            {{- if .Values.opencost.metrics.config.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}/metrics.json
-              name: custom-metrics
-              subPath: metrics.json
-              readOnly: true
             {{- end }}
             {{- if .Values.opencost.cloudIntegrationSecret }}
             - name: cloud-integration
@@ -480,15 +472,9 @@ spec:
           secret:
             secretName:  {{ template "opencost.fullname" . }}-plugins-config
         {{- end }}
-        {{- if .Values.opencost.customPricing.enabled }}
+        {{- if or .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled }}
         - name: custom-configs
-          configMap:
-            name: {{ .Values.opencost.customPricing.configmapName }}
-        {{- end }}
-        {{- if .Values.opencost.metrics.config.enabled }}
-        - name: custom-metrics
-          configMap:
-            name: {{ .Values.opencost.metrics.config.configmapName }}
+          emptyDir: {}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
