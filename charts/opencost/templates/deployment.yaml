@@ -279,6 +279,8 @@ spec:
             {{- if .Values.opencost.customPricing.enabled }}
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}
+            - name: PRICING_CONFIGMAP_NAME
+              value: {{ .Values.opencost.customPricing.configmapName }}
             {{- end }}
             - name: RESOLUTION_1D_RETENTION
             {{- if (.Values.opencost.dataRetention).dailyResolutionDays}}
