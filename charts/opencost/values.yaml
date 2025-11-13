@@ -128,6 +128,37 @@ opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
   cloudIntegrationSecret: ""
+
+  # -- MCP (Model Context Protocol) Server Configuration
+  # The MCP server provides AI agents with access to cost allocation and asset data
+  mcp:
+    # -- Enable MCP server for AI agent integration (default: true)
+    # Set to false to disable MCP server completely
+    enabled: true
+    # -- HTTP port for MCP server (default: 8081)
+    # Change this if port 8081 conflicts with other services
+    port: 8081
+    ingress:
+      # -- Ingress for MCP server
+      enabled: false
+      # -- Ingress controller which implements the resource
+      ingressClassName: ""
+      # -- Annotations for Ingress resource
+      annotations: {}
+        # kubernetes.io/tls-acme: "true"
+      # -- A list of host rules used to configure the Ingress
+      # @default -- See [values.yaml](values.yaml)
+      hosts:
+      - host: example.local
+        paths:
+        - path: /
+          pathType: Prefix
+      # -- Ingress TLS configuration
+      tls: []
+        #  - secretName: chart-example-tls
+        #    hosts:
+        #      - chart-example.local
+
   exporter:
     # API_PORT for the cost-model to listen on
     apiPort: 9003
@@ -145,7 +176,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.117.6@sha256:6f1a0e6fe21559a77051e7b7f9e4ac6bc80277131492ae084e8365ada805af91"
+      tag: "1.118.0@sha256:c1a08767fe3c3b2964a75885c145bae0cba32225c0b4c1e0382a77566aef93e9"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -444,7 +475,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.117.6@sha256:fd26f004b2b2565e22240fc2a9f6adb078fdb4de3fc1a1b16c611a3c3b80683e"
+      tag: "1.118.0@sha256:571f87e528ea563a5071b380df624a383968b5e20360e45dc1a2939c0024d073"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
