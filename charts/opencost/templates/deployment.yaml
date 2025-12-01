@@ -325,6 +325,9 @@ spec:
               value: "true"
             - name: MCP_HTTP_PORT
               value: {{ .Values.opencost.mcp.port | quote }}
+            {{- else }}
+            - name: MCP_SERVER_ENABLED
+              value: "false"
             {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
