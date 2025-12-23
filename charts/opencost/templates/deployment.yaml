@@ -361,7 +361,7 @@ spec:
             {{- end }}
             {{- if .Values.opencost.cloudIntegrationSecret }}
             - name: cloud-integration
-              mountPath: /var/configs/cloud-integration
+              mountPath: /var/configs
             {{- end }}
             {{- if .Values.opencost.updateCaTrust.enabled }}
             - name: ca-certs-secret
