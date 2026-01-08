@@ -94,4 +94,22 @@ rules:
       - update
       - patch
 {{- end }}
+---
+{{- if and .Values.opencost.platforms.openshift.enabled .Values.opencost.platforms.openshift.enableSCC }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system:openshift:scc:{{ include "opencost.sccName" . }}
+  labels: {{- include "opencost.labels" . | nindent 4 }}
+rules:
+  - verbs:
+      - use
+    apiGroups:
+      - security.openshift.io
+    resources:
+      - securitycontextconstraints
+    resourceNames:
+      - {{ include "opencost.sccName" . }}
+---
+{{- end }}
 {{- end }}
