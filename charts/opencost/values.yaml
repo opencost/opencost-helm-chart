@@ -538,6 +538,15 @@ opencost:
     # set to true to set upstream to use <service>.<namespace>.svc.cluster.local instead of just <service>.<namespace>
     useDefaultFqdn: false
 
+    # -- Nginx proxy timeout settings (in seconds)
+    nginx:
+      # -- Timeout for establishing a connection with the proxied server
+      proxyConnectTimeout: 180
+      # -- Timeout for transmitting a request to the proxied server
+      proxySendTimeout: 180
+      # -- Timeout for reading a response from the proxied server
+      proxyReadTimeout: 180
+
     # Set the model fqdn to use for the upstream
     # modelFqdn: opencost.opencost.svc.cluster.local:9003
 
