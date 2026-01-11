@@ -176,7 +176,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.118.0@sha256:c1a08767fe3c3b2964a75885c145bae0cba32225c0b4c1e0382a77566aef93e9"
+      tag: "1.119.1@sha256:43fbd73e2d13f79c07801511877b6c9d70896bc10e2cadcf6a04f4c5d37f6ed3"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -475,7 +475,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.118.0@sha256:571f87e528ea563a5071b380df624a383968b5e20360e45dc1a2939c0024d073"
+      tag: "1.119.1@sha256:ae134411a088658d003a06bb3cdfe03336abfc861c2fbe2e7cb54dd54b26714b"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -537,6 +537,15 @@ opencost:
 
     # set to true to set upstream to use <service>.<namespace>.svc.cluster.local instead of just <service>.<namespace>
     useDefaultFqdn: false
+
+    # -- Nginx proxy timeout settings (in seconds)
+    nginx:
+      # -- Timeout for establishing a connection with the proxied server
+      proxyConnectTimeout: 180
+      # -- Timeout for transmitting a request to the proxied server
+      proxySendTimeout: 180
+      # -- Timeout for reading a response from the proxied server
+      proxyReadTimeout: 180
 
     # Set the model fqdn to use for the upstream
     # modelFqdn: opencost.opencost.svc.cluster.local:9003
