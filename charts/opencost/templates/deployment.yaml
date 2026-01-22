@@ -335,7 +335,12 @@ spec:
             - mountPath: /opt/opencost/plugin
               name: plugins-dir
               readOnly: false
-            {{- range $key, $config := .Values.plugins.configs }}
+            {{- /* Mount plugin config files - use install.plugins list if set, otherwise fall back to configs keys */}}
+            {{- $pluginList := .Values.plugins.install.plugins }}
+            {{- if not $pluginList }}
+            {{- $pluginList = keys .Values.plugins.configs }}
+            {{- end }}
+            {{- range $key := $pluginList }}
             - mountPath: /opt/opencost/plugin/config/{{$key}}_config.json
               subPath: {{$key}}_config.json
               name: plugins-config
@@ -481,7 +486,8 @@ spec:
           emptyDir: {}
         - name: plugins-config
           secret:
-            secretName:  {{ template "opencost.fullname" . }}-plugins-config
+            {{- /* Use existingSecret if specified, otherwise use the generated secret name */}}
+            secretName: {{ .Values.plugins.existingSecret | default (printf "%s-plugins-config" (include "opencost.fullname" .)) }}
         {{- end }}
         {{- if .Values.opencost.customPricing.enabled }}
         - name: custom-configs
