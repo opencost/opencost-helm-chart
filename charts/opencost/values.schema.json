@@ -309,6 +309,94 @@
                 }
               },
               "required": []
+            },
+            "httpRoute": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "parentRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      },
+                      "sectionName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": []
+                  }
+                },
+                "hostnames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "annotations": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "labels": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "matches": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": []
+                            }
+                          },
+                          "required": []
+                        }
+                      },
+                      "backendRefs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "port": {
+                              "type": "number"
+                            }
+                          },
+                          "required": []
+                        }
+                      }
+                    },
+                    "required": []
+                  }
+                }
+              },
+              "required": []
             }
           },
           "required": []
@@ -589,6 +677,94 @@
                 "tls": {
                   "type": "array",
                   "items": {}
+                }
+              },
+              "required": []
+            },
+            "apiHttpRoute": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "parentRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      },
+                      "sectionName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": []
+                  }
+                },
+                "hostnames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "annotations": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "labels": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "matches": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": []
+                            }
+                          },
+                          "required": []
+                        }
+                      },
+                      "backendRefs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "port": {
+                              "type": "number"
+                            }
+                          },
+                          "required": []
+                        }
+                      }
+                    },
+                    "required": []
+                  }
                 }
               },
               "required": []
@@ -1014,6 +1190,21 @@
             "useDefaultFqdn": {
               "type": "boolean"
             },
+            "nginx": {
+              "type": "object",
+              "properties": {
+                "proxyConnectTimeout": {
+                  "type": "number"
+                },
+                "proxySendTimeout": {
+                  "type": "number"
+                },
+                "proxyReadTimeout": {
+                  "type": "number"
+                }
+              },
+              "required": []
+            },
             "ingress": {
               "type": "object",
               "properties": {
@@ -1077,6 +1268,94 @@
                 "tls": {
                   "type": "array",
                   "items": {}
+                }
+              },
+              "required": []
+            },
+            "httpRoute": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "parentRefs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      },
+                      "sectionName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": []
+                  }
+                },
+                "hostnames": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "annotations": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "labels": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "rules": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "matches": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": []
+                            }
+                          },
+                          "required": []
+                        }
+                      },
+                      "backendRefs": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "port": {
+                              "type": "number"
+                            }
+                          },
+                          "required": []
+                        }
+                      }
+                    },
+                    "required": []
+                  }
                 }
               },
               "required": []
@@ -1229,5 +1508,6 @@
       "items": {}
     }
   },
-  "required": []
+  "required": [],
+  "additionalProperties": false
 }
