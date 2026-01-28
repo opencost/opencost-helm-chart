@@ -181,7 +181,9 @@
       "properties": {},
       "required": []
     },
-    "priorityClassName": {},
+    "priorityClassName": {
+      "type": ["string", "null"]
+    },
     "podAutomountServiceAccountToken": {
       "type": "boolean"
     },
@@ -251,6 +253,66 @@
         "cloudIntegrationSecret": {
           "type": "string"
         },
+        "mcp": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "port": {
+              "type": "number"
+            },
+            "ingress": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "ingressClassName": {
+                  "type": "string"
+                },
+                "annotations": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "hosts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "host": {
+                        "type": "string"
+                      },
+                      "paths": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string"
+                            },
+                            "pathType": {
+                              "type": "string"
+                            }
+                          },
+                          "required": []
+                        }
+                      }
+                    },
+                    "required": []
+                  }
+                },
+                "tls": {
+                  "type": "array",
+                  "items": {}
+                }
+              },
+              "required": []
+            }
+          },
+          "required": []
+        },
         "exporter": {
           "type": "object",
           "properties": {
@@ -261,6 +323,9 @@
               "type": "string"
             },
             "defaultClusterId": {
+              "type": "string"
+            },
+            "clusterIdConfigmap": {
               "type": "string"
             },
             "image": {
@@ -278,7 +343,9 @@
                 "pullPolicy": {
                   "type": "string"
                 },
-                "fullImageName": {}
+                "fullImageName": {
+                  "type": ["string", "null"]
+                }
               },
               "required": []
             },

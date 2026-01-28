@@ -1,0 +1,18 @@
+# CI test values - Cloud Costs Enabled
+# Tests cloud cost integration features
+
+opencost:
+  cloudCost:
+    enabled: true
+    refreshRateHours: 6
+    runWindowDays: 3
+    monthToDateInterval: 6
+    queryWindowDays: 7
+
+  cloudIntegrationSecret: "cloud-integration-secret"
+
+  exporter:
+    defaultClusterId: "cloud-costs-cluster"
+    aws:
+      access_key_id: "AKIAIOSFODNN7EXAMPLE"
+      secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"

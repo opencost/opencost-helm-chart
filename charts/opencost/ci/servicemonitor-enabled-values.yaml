@@ -1,0 +1,35 @@
+# CI test values - ServiceMonitor Enabled
+# Tests Prometheus Operator ServiceMonitor configuration
+
+opencost:
+  metrics:
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        prometheus: kube-prometheus
+        release: prometheus-operator
+      namespace: monitoring
+      scrapeInterval: 30s
+      scrapeTimeout: 10s
+      honorLabels: true
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_pod_node_name]
+        targetLabel: node
+      metricRelabelings:
+      - sourceLabels: [__name__]
+        regex: 'opencost_.*'
+        action: keep
+      scheme: http
+      tlsConfig: {}
+
+    kubeStateMetrics:
+      emitPodAnnotations: true
+      emitNamespaceAnnotations: true
+      emitKsmV1Metrics: false
+      emitKsmV1MetricsOnly: false
+
+    config:
+      enabled: true
+      configmapName: opencost-metrics-config
+      disabledMetrics:
+      - opencost_build_info
