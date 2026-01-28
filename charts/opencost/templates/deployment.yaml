@@ -279,6 +279,8 @@ spec:
             {{- if .Values.opencost.customPricing.enabled }}
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}
+            - name: PRICING_CONFIGMAP_NAME
+              value: {{ .Values.opencost.customPricing.configmapName | quote }}
             {{- end }}
             - name: RESOLUTION_1D_RETENTION
             {{- if (.Values.opencost.dataRetention).dailyResolutionDays}}
@@ -325,6 +327,9 @@ spec:
               value: "true"
             - name: MCP_HTTP_PORT
               value: {{ .Values.opencost.mcp.port | quote }}
+            {{- else }}
+            - name: MCP_SERVER_ENABLED
+              value: "false"
             {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
@@ -344,21 +349,15 @@ spec:
               name: opencost-export
               readOnly: false
             {{- end }}
-            {{- if .Values.opencost.customPricing.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}/{{ include "opencost.configFileName" . }}.json
+            {{- if or .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled }}
+            - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
-              subPath: {{ include "opencost.configFileName" . }}.json
-              readOnly: true
-            {{- end }}
-            {{- if .Values.opencost.metrics.config.enabled }}
-            - mountPath: {{ .Values.opencost.customPricing.configPath }}/metrics.json
-              name: custom-metrics
-              subPath: metrics.json
-              readOnly: true
             {{- end }}
             {{- if .Values.opencost.cloudIntegrationSecret }}
             - name: cloud-integration
-              mountPath: /var/configs/cloud-integration
+              mountPath: /var/configs/cloud-integration.json
+              subPath: cloud-integration.json
+              readOnly: true
             {{- end }}
             {{- if .Values.opencost.updateCaTrust.enabled }}
             - name: ca-certs-secret
@@ -478,15 +477,9 @@ spec:
           secret:
             secretName:  {{ template "opencost.fullname" . }}-plugins-config
         {{- end }}
-        {{- if .Values.opencost.customPricing.enabled }}
+        {{- if or .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled }}
         - name: custom-configs
-          configMap:
-            name: {{ .Values.opencost.customPricing.configmapName }}
-        {{- end }}
-        {{- if .Values.opencost.metrics.config.enabled }}
-        - name: custom-metrics
-          configMap:
-            name: {{ .Values.opencost.metrics.config.configmapName }}
+          emptyDir: {}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export

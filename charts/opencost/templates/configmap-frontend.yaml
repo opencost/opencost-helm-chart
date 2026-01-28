@@ -80,9 +80,9 @@ data:
             return 200 'OK';
         }
         location {{ .Values.opencost.ui.uiPath | trimSuffix "/" }}/model/ {
-            proxy_connect_timeout       180;
-            proxy_send_timeout          180;
-            proxy_read_timeout          180;
+            proxy_connect_timeout       {{ .Values.opencost.ui.nginx.proxyConnectTimeout }};
+            proxy_send_timeout          {{ .Values.opencost.ui.nginx.proxySendTimeout }};
+            proxy_read_timeout          {{ .Values.opencost.ui.nginx.proxyReadTimeout }};
             proxy_pass http://model/;
             proxy_redirect off;
             proxy_http_version 1.1;
