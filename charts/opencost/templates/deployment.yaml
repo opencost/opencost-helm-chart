@@ -254,10 +254,10 @@ spec:
             {{- if  .Values.opencost.exporter.persistence.enabled }}
             - name: PV_MOUNT_PATH
               value: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") | quote }}
+            {{- end }}
             {{- if .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
               value: {{ .Values.opencost.exporter.csv_path | quote }}
-            {{- end }}
             {{- end }}
             {{- if .Values.opencost.prometheus.thanos.enabled }}
             - name: THANOS_ENABLED
