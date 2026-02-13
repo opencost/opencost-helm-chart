@@ -1,0 +1,30 @@
+# CI test values - Plugins Enabled
+# Tests plugin installation and configuration
+
+plugins:
+  enabled: true
+  install:
+    enabled: true
+    fullImageName: curlimages/curl:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 1000
+  folder: /opt/opencost/plugin
+  configs:
+    datadog: |
+      {
+        "datadog_site": "datadoghq.com",
+        "datadog_api_key": "test-api-key",
+        "datadog_app_key": "test-app-key"
+      }
+
+opencost:
+  exporter:
+    defaultClusterId: "plugins-cluster"

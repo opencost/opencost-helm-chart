@@ -1,0 +1,16 @@
+# CI test values - External Prometheus
+# Tests configuration with external Prometheus (e.g., Grafana Cloud)
+
+opencost:
+  prometheus:
+    external:
+      enabled: true
+      url: "https://prometheus.example.com/prometheus"
+    internal:
+      enabled: false
+    username: "test-user"
+    password: "test-password"
+    insecureSkipVerify: false
+
+  exporter:
+    defaultClusterId: "external-prom-cluster"
