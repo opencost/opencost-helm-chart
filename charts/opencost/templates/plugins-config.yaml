@@ -1,4 +1,5 @@
-{{- if .Values.plugins.enabled }}
+{{- /* Only create the plugins-config secret if plugins are enabled and existingSecret is not specified */}}
+{{- if and .Values.plugins.enabled (not .Values.plugins.existingSecret) .Values.plugins.configs }}
 apiVersion: v1
 kind: Secret
 metadata:

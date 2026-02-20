@@ -24,9 +24,19 @@ plugins:
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       runAsUser: 1000
+    # -- List of plugins to download (decoupled from config).
+    # When specified, these plugins are downloaded regardless of what's in configs.
+    # This allows using existingSecret for credentials while still downloading plugin binaries.
+    # Example: ["datadog", "mongodb"]
+    # If empty, falls back to downloading plugins based on keys in configs (legacy behavior).
+    plugins: []
   folder: /opt/opencost/plugin
   # leave this commented to always download most recent version of plugins
   # version: <INSERT_SPECIFIC_PLUGINS_VERSION>
+  # -- Use an existing secret for plugin configuration instead of creating one from configs.
+  # The secret should contain files named <plugin>_config.json (e.g., datadog_config.json).
+  # This is useful when using ExternalSecrets or other secret management tools.
+  existingSecret: ""
   configs:
     # datadog: |
     #   {
