@@ -40,8 +40,8 @@ spec:
           port: {{ default $.Values.opencost.ui.uiPort .port }}
         {{- end }}
     {{- end }}
-{{- end }}
 ---
+{{- end }}
 {{- if .Values.opencost.exporter.apiHttpRoute.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -84,8 +84,8 @@ spec:
           port: {{ default $.Values.opencost.exporter.apiPort .port }}
         {{- end }}
     {{- end }}
-{{- end }}
 ---
+{{- end }}
 {{- if and .Values.opencost.mcp.enabled .Values.opencost.mcp.httpRoute.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
