@@ -490,6 +490,7 @@ spec:
         - name: cloud-integration
           secret:
             secretName: {{ .Values.opencost.cloudIntegrationSecret }}
+            optional: true
             items:
               - key: cloud-integration.json
                 path: cloud-integration.json
