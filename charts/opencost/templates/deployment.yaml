@@ -165,15 +165,15 @@ spec:
             - name: NETWORK_PORT
               value: {{ .networkPort | quote }}
             {{- end }}
-            {{- if .retentionResolution10m }}
+            {{- if .retention10m }}
             - name: COLLECTOR_RESOLUTION_10M_RETENTION
               value: {{ .retention10m | quote }}
             {{- end }}
-            {{- if .retentionResolution1h }}
+            {{- if .retention1h }}
             - name: COLLECTOR_RESOLUTION_1H_RETENTION
               value: {{ .retention1h | quote }}
             {{- end }}
-            {{- if .retentionResolution1d }}
+            {{- if .retention1d }}
             - name: COLLECTOR_RESOLUTION_1D_RETENTION
               value: {{ .retention1d | quote }}
             {{- end }}
