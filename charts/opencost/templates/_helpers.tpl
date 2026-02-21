@@ -54,6 +54,28 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Cloud integration source contents check. Either the Secret must be specified or the JSON, not both.
+*/}}
+{{- define "opencost.cloudIntegration.secretConfigCheck" -}}
+  {{- if and .Values.opencost.cloudIntegrationSecret .Values.opencost.cloudIntegrationJSON -}}
+    {{- fail "\nopencost.cloudIntegrationSecret and opencost.cloudIntegrationJSON are mutually exclusive. Please specify only one." -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Compute the cloud integration secret name when enabled.
+*/}}
+{{- define "opencost.cloudIntegration.secretName" -}}
+  {{- if or .Values.opencost.cloudIntegrationSecret .Values.opencost.cloudIntegrationJSON -}}
+    {{- if .Values.opencost.cloudIntegrationSecret -}}
+      {{- .Values.opencost.cloudIntegrationSecret -}}
+    {{- else -}}
+      {{- printf "%s-cloud-integration" (include "opencost.fullname" .) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "opencost.labels" -}}
@@ -212,6 +234,7 @@ apiVersion: networking.k8s.io/v1beta1
   "configmap-custom-pricing.yaml"
   "configmap-frontend.yaml"
   "configmap-metrics-config.yaml"
+  "secret-cloud-integration.yaml"
   "secret.yaml"
 -}}
 {{- $checksum := "" -}}
