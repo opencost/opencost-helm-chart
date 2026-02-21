@@ -1,6 +1,8 @@
 {{- include  "isPrometheusConfigValid" . }}
 {{- include  "kubeRBACProxyBearerTokenCheck" . }}
 {{ include "opencost.caCertsSecretConfig.check" . }}
+{{ include "opencost.cloudIntegration.secretConfigCheck" . }}
+{{- $cloudIntegrationSecretName := include "opencost.cloudIntegration.secretName" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -331,7 +333,7 @@ spec:
             - name: MCP_SERVER_ENABLED
               value: "false"
             {{- end }}
-          {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.updateCaTrust.enabled}}
+          {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled $cloudIntegrationSecretName .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
             {{- if .Values.plugins.enabled }}
             - mountPath: /opt/opencost/plugin
@@ -353,7 +355,7 @@ spec:
             - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
             {{- end }}
-            {{- if .Values.opencost.cloudIntegrationSecret }}
+            {{- if $cloudIntegrationSecretName }}
             - name: cloud-integration
               mountPath: /var/configs/cloud-integration.json
               subPath: cloud-integration.json
@@ -463,7 +465,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.ui.enabled .Values.opencost.updateCaTrust.enabled }}
+      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled $cloudIntegrationSecretName .Values.opencost.ui.enabled .Values.opencost.updateCaTrust.enabled }}
       volumes:
         {{- if .Values.plugins.enabled  }}
         {{- if .Values.plugins.install.enabled}}
@@ -486,10 +488,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "opencost.fullname" . }}-pvc
         {{- end }}
-        {{- if .Values.opencost.cloudIntegrationSecret }}
+        {{- if $cloudIntegrationSecretName }}
         - name: cloud-integration
           secret:
-            secretName: {{ .Values.opencost.cloudIntegrationSecret }}
+            secretName: {{ $cloudIntegrationSecretName }}
             items:
               - key: cloud-integration.json
                 path: cloud-integration.json
