@@ -1,0 +1,82 @@
+suite: cloud integration deployment
+templates:
+  - templates/deployment.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should mount existing cloud integration secret
+    set:
+      opencost.cloudIntegrationSecret: cloud-costs
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: cloud-integration
+            secret:
+              secretName: cloud-costs
+              items:
+                - key: cloud-integration.json
+                  path: cloud-integration.json
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: cloud-integration
+            mountPath: /var/configs/cloud-integration.json
+            subPath: cloud-integration.json
+            readOnly: true
+  - it: should mount generated cloud integration secret
+    set:
+      opencost.cloudIntegrationJSON: '{"aws":[]}'
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: cloud-integration
+            secret:
+              secretName: opencost-cloud-integration
+              items:
+                - key: cloud-integration.json
+                  path: cloud-integration.json
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: cloud-integration
+            mountPath: /var/configs/cloud-integration.json
+            subPath: cloud-integration.json
+            readOnly: true
+---
+suite: cloud integration secret
+templates:
+  - templates/secret-cloud-integration.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should render secret when cloudIntegrationJSON is set
+    set:
+      opencost.cloudIntegrationJSON: '{"aws":[]}'
+    asserts:
+      - isKind:
+          of: Secret
+      - equal:
+          path: metadata.name
+          value: opencost-cloud-integration
+      - equal:
+          path: data.cloud-integration.json
+          value: eyJhd3MiOltdfQ==
+---
+suite: cloud integration validation
+templates:
+  - templates/deployment.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should fail when cloudIntegrationSecret and cloudIntegrationJSON are set
+    set:
+      opencost.cloudIntegrationSecret: cloud-costs
+      opencost.cloudIntegrationJSON: '{"aws":[]}'
+    asserts:
+      - failedTemplate:
+          errorMessage: opencost.cloudIntegrationSecret and opencost.cloudIntegrationJSON are mutually exclusive. Please specify only one.

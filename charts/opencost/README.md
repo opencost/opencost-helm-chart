@@ -50,7 +50,8 @@ $ helm install opencost opencost/opencost
 | opencost.cloudCost.queryWindowDays | int | `7` | The max number of days that any single query will be made to construct Cloud Costs |
 | opencost.cloudCost.refreshRateHours | int | `6` | Number of hours between each run of the Cloud Cost pipeline |
 | opencost.cloudCost.runWindowDays | int | `3` | Number of days into the past that a Cloud Cost standard run will query for |
-| opencost.cloudIntegrationSecret | string | `""` |  |
+| opencost.cloudIntegrationSecret | string | `""` | Existing secret name containing `cloud-integration.json` for Cloud Costs. Mutually exclusive with `opencost.cloudIntegrationJSON`. |
+| opencost.cloudIntegrationJSON | string | `""` | Raw JSON string for `cloud-integration.json`. Creates `<fullname>-cloud-integration` in the release namespace. Mutually exclusive with `opencost.cloudIntegrationSecret`. |
 | opencost.customPricing.configPath | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
 | opencost.customPricing.configmapName | string | `"custom-pricing-model"` | Customize the configmap name used for custom pricing |
 | opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified pricing configuration.","internetNetworkEgress":0.12,"regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
