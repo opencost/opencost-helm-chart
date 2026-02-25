@@ -58,7 +58,7 @@ Cloud integration source contents check. Either the Secret must be specified or 
 */}}
 {{- define "opencost.cloudIntegration.secretConfigCheck" -}}
   {{- if and .Values.opencost.cloudIntegrationSecret .Values.opencost.cloudIntegrationJSON -}}
-    {{- fail "\nopencost.cloudIntegrationSecret and opencost.cloudIntegrationJSON are mutually exclusive. Please specify only one." -}}
+    {{- fail "opencost.cloudIntegrationSecret and opencost.cloudIntegrationJSON are mutually exclusive. Please specify only one." -}}
   {{- end -}}
 {{- end -}}
 
