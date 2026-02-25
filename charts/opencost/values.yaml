@@ -140,7 +140,7 @@ opencost:
   #         "athenaBucketName": "s3://AWS_cloud_integration_athenaBucketName",
   #         "athenaRegion": "AWS_cloud_integration_athenaRegion",
   #         "athenaDatabase": "AWS_cloud_integration_athenaDatabase",
-  #         "athenaTable": "AWS_cloud_integration_athenaBucketName",
+  #         "athenaTable": "AWS_cloud_integration_athenaTable",
   #         "projectID": "AWS_cloud_integration_athena_projectID",
   #         "serviceKeyName": "AWS_cloud_integration_athena_serviceKeyName",
   #         "serviceKeySecret": "AWS_cloud_integration_athena_serviceKeySecret"
