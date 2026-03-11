@@ -87,6 +87,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.env | list | `[]` | List of additional environment variables to set in the container |
 | opencost.exporter.extraArgs | list | `[]` | List of extra arguments for the command, e.g.: log-format=json |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
+| opencost.exporter.adminToken.enabled | bool | `false` | When true, set ADMIN_TOKEN from value or existingSecret; when false, ADMIN_TOKEN is not set and no admin-token Secret is deployed. |
 | opencost.exporter.adminToken.value | string | `""` | If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (use existingSecret in production). |
 | opencost.exporter.adminToken.existingSecret | string | `""` | Use an existing Secret for the admin token; must contain the key in adminToken.secretKey. |
 | opencost.exporter.adminToken.secretKey | string | `"ADMIN_TOKEN"` | Key in the Secret that holds the admin token (for write operations: POST /serviceKey, cloud config endpoints). |

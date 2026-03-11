@@ -366,6 +366,8 @@ opencost:
     # Admin token for write operations (e.g. POST /serviceKey, cloud config endpoints).
     # Set ADMIN_TOKEN env from a chart-created secret or an existing secret.
     adminToken:
+      # -- When true, the chart creates the admin-token Secret (if value is set) or mounts existingSecret as ADMIN_TOKEN. When false, ADMIN_TOKEN is not set and no secret is deployed.
+      enabled: false
       # -- If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (not recommended for production; use existingSecret instead).
       value: ""
       # -- Use an existing Secret for the admin token (recommended). Secret must contain the key below.
