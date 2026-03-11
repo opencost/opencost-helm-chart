@@ -323,6 +323,13 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+            {{- if or .Values.opencost.exporter.adminToken.value .Values.opencost.exporter.adminToken.existingSecret }}
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.opencost.exporter.adminToken.existingSecret | default (printf "%s-admin-token" (include "opencost.fullname" .)) }}
+                  key: {{ .Values.opencost.exporter.adminToken.secretKey | default "ADMIN_TOKEN" }}
+            {{- end }}
             {{- if .Values.opencost.mcp.enabled }}
             # MCP Server Configuration
             - name: MCP_SERVER_ENABLED

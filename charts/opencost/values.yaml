@@ -363,6 +363,15 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+    # Admin token for write operations (e.g. POST /serviceKey, cloud config endpoints).
+    # Set ADMIN_TOKEN env from a chart-created secret or an existing secret.
+    adminToken:
+      # -- If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (not recommended for production; use existingSecret instead).
+      value: ""
+      # -- Use an existing Secret for the admin token (recommended). Secret must contain the key below.
+      existingSecret: ""
+      # -- Key in the Secret that holds the admin token (used for both value-created and existing secrets).
+      secretKey: "ADMIN_TOKEN"
     apiIngress:
       # -- Ingress for OpenCost API
       enabled: false
