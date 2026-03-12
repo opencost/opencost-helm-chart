@@ -236,6 +236,7 @@ apiVersion: networking.k8s.io/v1beta1
   "configmap-metrics-config.yaml"
   "secret-cloud-integration.yaml"
   "secret.yaml"
+  "secret-admin-token.yaml"
 -}}
 {{- $checksum := "" -}}
 {{- range $files -}}

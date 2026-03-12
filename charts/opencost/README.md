@@ -87,6 +87,10 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.env | list | `[]` | List of additional environment variables to set in the container |
 | opencost.exporter.extraArgs | list | `[]` | List of extra arguments for the command, e.g.: log-format=json |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
+| opencost.exporter.adminToken.enabled | bool | `false` | When true, set ADMIN_TOKEN from value or existingSecret; when false, ADMIN_TOKEN is not set and no admin-token Secret is deployed. |
+| opencost.exporter.adminToken.value | string | `""` | If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (use existingSecret in production). |
+| opencost.exporter.adminToken.existingSecret | string | `""` | Use an existing Secret for the admin token; must contain the key in adminToken.secretKey. |
+| opencost.exporter.adminToken.secretKey | string | `"ADMIN_TOKEN"` | Key in the Secret that holds the admin token (for write operations: POST /serviceKey, cloud config endpoints). |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
 | opencost.exporter.image | object | `{"fullImageName":null,"pullPolicy":"IfNotPresent","registry":"ghcr.io","repository":"opencost/opencost","tag":"1.118.0@sha256:c1a08767fe3c3b2964a75885c145bae0cba32225c0b4c1e0382a77566aef93e9"}` | This overrides the above defaultClusterId. Ensure the ConfigMap exists and contains the required CLUSTER_ID key. clusterIdConfigmap: cluster-id-configmap |
 | opencost.exporter.image.fullImageName | string | `nil` | Override the full image name for development purposes |
