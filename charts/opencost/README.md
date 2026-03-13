@@ -50,7 +50,8 @@ $ helm install opencost opencost/opencost
 | opencost.cloudCost.queryWindowDays | int | `7` | The max number of days that any single query will be made to construct Cloud Costs |
 | opencost.cloudCost.refreshRateHours | int | `6` | Number of hours between each run of the Cloud Cost pipeline |
 | opencost.cloudCost.runWindowDays | int | `3` | Number of days into the past that a Cloud Cost standard run will query for |
-| opencost.cloudIntegrationSecret | string | `""` |  |
+| opencost.cloudIntegrationSecret | string | `""` | Existing secret name containing `cloud-integration.json` for Cloud Costs. Mutually exclusive with `opencost.cloudIntegrationJSON`. |
+| opencost.cloudIntegrationJSON | string | `""` | Raw JSON string for `cloud-integration.json`. Creates `<fullname>-cloud-integration` in the release namespace. Mutually exclusive with `opencost.cloudIntegrationSecret`. |
 | opencost.customPricing.configPath | string | `"/tmp/custom-config"` | Path for the pricing configuration. |
 | opencost.customPricing.configmapName | string | `"custom-pricing-model"` | Customize the configmap name used for custom pricing |
 | opencost.customPricing.costModel | object | `{"CPU":1.25,"GPU":0.95,"RAM":0.5,"description":"Modified pricing configuration.","internetNetworkEgress":0.12,"regionNetworkEgress":0.01,"spotCPU":0.006655,"spotRAM":0.000892,"storage":0.25,"zoneNetworkEgress":0.01}` | More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart |
@@ -86,6 +87,10 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.env | list | `[]` | List of additional environment variables to set in the container |
 | opencost.exporter.extraArgs | list | `[]` | List of extra arguments for the command, e.g.: log-format=json |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
+| opencost.exporter.adminToken.enabled | bool | `false` | When true, set ADMIN_TOKEN from value or existingSecret; when false, ADMIN_TOKEN is not set and no admin-token Secret is deployed. |
+| opencost.exporter.adminToken.value | string | `""` | If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (use existingSecret in production). |
+| opencost.exporter.adminToken.existingSecret | string | `""` | Use an existing Secret for the admin token; must contain the key in adminToken.secretKey. |
+| opencost.exporter.adminToken.secretKey | string | `"ADMIN_TOKEN"` | Key in the Secret that holds the admin token (for write operations: POST /serviceKey, cloud config endpoints). |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
 | opencost.exporter.image | object | `{"fullImageName":null,"pullPolicy":"IfNotPresent","registry":"ghcr.io","repository":"opencost/opencost","tag":"1.118.0@sha256:c1a08767fe3c3b2964a75885c145bae0cba32225c0b4c1e0382a77566aef93e9"}` | This overrides the above defaultClusterId. Ensure the ConfigMap exists and contains the required CLUSTER_ID key. clusterIdConfigmap: cluster-id-configmap |
 | opencost.exporter.image.fullImageName | string | `nil` | Override the full image name for development purposes |

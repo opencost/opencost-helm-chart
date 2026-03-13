@@ -12,7 +12,9 @@ rules:
       - configmaps
       - deployments
       - nodes
+      {{- if .Values.opencost.exporter.collectorDataSource.enabled }}
       - nodes/proxy
+      {{- end }}
       - pods
       - services
       - resourcequotas

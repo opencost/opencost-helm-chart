@@ -127,7 +127,52 @@ pdb:
 opencost:
   # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
   # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
+  # -- Mutually exclusive with opencost.cloudIntegrationJSON.
   cloudIntegrationSecret: ""
+  # -- Specify the cloud integration information in JSON form. This will create a Secret named
+  # -- "<fullname>-cloud-integration" in the release namespace. Mutually exclusive with
+  # -- opencost.cloudIntegrationSecret.
+  cloudIntegrationJSON: ""
+  # cloudIntegrationJSON: |-
+  #   {
+  #     "aws": [
+  #       {
+  #         "athenaBucketName": "s3://AWS_cloud_integration_athenaBucketName",
+  #         "athenaRegion": "AWS_cloud_integration_athenaRegion",
+  #         "athenaDatabase": "AWS_cloud_integration_athenaDatabase",
+  #         "athenaTable": "AWS_cloud_integration_athenaTable",
+  #         "projectID": "AWS_cloud_integration_athena_projectID",
+  #         "serviceKeyName": "AWS_cloud_integration_athena_serviceKeyName",
+  #         "serviceKeySecret": "AWS_cloud_integration_athena_serviceKeySecret"
+  #       }
+  #     ],
+  #     "azure": [
+  #       {
+  #         "azureSubscriptionID": "my-subscription-id",
+  #         "azureStorageAccount": "my-storage-account",
+  #         "azureStorageAccessKey": "my-storage-access-key",
+  #         "azureStorageContainer": "my-storage-container"
+  #       }
+  #     ],
+  #     "gcp": [
+  #       {
+  #         "projectID": "my-project-id",
+  #         "billingDataDataset": "detailedbilling.my-billing-dataset",
+  #         "key": {
+  #           "type": "service_account",
+  #           "project_id": "my-project-id",
+  #           "private_key_id": "my-private-key-id",
+  #           "private_key": "my-pem-encoded-private-key",
+  #           "client_email": "my-service-account-name@my-project-id.iam.gserviceaccount.com",
+  #           "client_id": "my-client-id",
+  #           "auth_uri": "auth-uri",
+  #           "token_uri": "token-uri",
+  #           "auth_provider_x509_cert_url": "my-x509-provider-cert",
+  #           "client_x509_cert_url": "my-x509-cert-url"
+  #         }
+  #       }
+  #     ]
+  #   }
 
   # -- MCP (Model Context Protocol) Server Configuration
   # The MCP server provides AI agents with access to cost allocation and asset data
@@ -203,7 +248,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.119.1@sha256:43fbd73e2d13f79c07801511877b6c9d70896bc10e2cadcf6a04f4c5d37f6ed3"
+      tag: "1.119.2@sha256:4b8de6e029b9dc1f7e68bdf1cf02fca7649614c23812e51a63820f113ca97b89"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -318,6 +363,17 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+    # Admin token for write operations (e.g. POST /serviceKey, cloud config endpoints).
+    # Set ADMIN_TOKEN env from a chart-created secret or an existing secret.
+    adminToken:
+      # -- When true, the chart creates the admin-token Secret (if value is set) or mounts existingSecret as ADMIN_TOKEN. When false, ADMIN_TOKEN is not set and no secret is deployed.
+      enabled: false
+      # -- If set, the chart creates a Secret with this value and sets ADMIN_TOKEN from it (not recommended for production; use existingSecret instead).
+      value: ""
+      # -- Use an existing Secret for the admin token (recommended). Secret must contain the key below.
+      existingSecret: ""
+      # -- Key in the Secret that holds the admin token (used for both value-created and existing secrets).
+      secretKey: "ADMIN_TOKEN"
     apiIngress:
       # -- Ingress for OpenCost API
       enabled: false
@@ -529,7 +585,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.119.1@sha256:ae134411a088658d003a06bb3cdfe03336abfc861c2fbe2e7cb54dd54b26714b"
+      tag: "1.119.2@sha256:0dba1a93db7ae88e956556caf9a9240879d7fcb1d5a7cb9fec0b83970c0ce50c"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes

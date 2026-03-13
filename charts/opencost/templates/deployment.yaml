@@ -1,6 +1,8 @@
 {{- include  "isPrometheusConfigValid" . }}
 {{- include  "kubeRBACProxyBearerTokenCheck" . }}
 {{ include "opencost.caCertsSecretConfig.check" . }}
+{{ include "opencost.cloudIntegration.secretConfigCheck" . }}
+{{- $cloudIntegrationSecretName := include "opencost.cloudIntegration.secretName" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -165,15 +167,15 @@ spec:
             - name: NETWORK_PORT
               value: {{ .networkPort | quote }}
             {{- end }}
-            {{- if .retentionResolution10m }}
+            {{- if .retention10m }}
             - name: COLLECTOR_RESOLUTION_10M_RETENTION
               value: {{ .retention10m | quote }}
             {{- end }}
-            {{- if .retentionResolution1h }}
+            {{- if .retention1h }}
             - name: COLLECTOR_RESOLUTION_1H_RETENTION
               value: {{ .retention1h | quote }}
             {{- end }}
-            {{- if .retentionResolution1d }}
+            {{- if .retention1d }}
             - name: COLLECTOR_RESOLUTION_1D_RETENTION
               value: {{ .retention1d | quote }}
             {{- end }}
@@ -254,10 +256,10 @@ spec:
             {{- if  .Values.opencost.exporter.persistence.enabled }}
             - name: PV_MOUNT_PATH
               value: {{ (.Values.opencost.exporter.persistence.mountPath | default "mnt/export") | quote }}
+            {{- end }}
             {{- if .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
               value: {{ .Values.opencost.exporter.csv_path | quote }}
-            {{- end }}
             {{- end }}
             {{- if .Values.opencost.prometheus.thanos.enabled }}
             - name: THANOS_ENABLED
@@ -321,6 +323,13 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+            {{- if and .Values.opencost.exporter.adminToken.enabled (or .Values.opencost.exporter.adminToken.value .Values.opencost.exporter.adminToken.existingSecret) }}
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.opencost.exporter.adminToken.existingSecret | default (printf "%s-admin-token" (include "opencost.fullname" .)) }}
+                  key: {{ .Values.opencost.exporter.adminToken.secretKey | default "ADMIN_TOKEN" }}
+            {{- end }}
             {{- if .Values.opencost.mcp.enabled }}
             # MCP Server Configuration
             - name: MCP_SERVER_ENABLED
@@ -331,7 +340,7 @@ spec:
             - name: MCP_SERVER_ENABLED
               value: "false"
             {{- end }}
-          {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.updateCaTrust.enabled}}
+          {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled $cloudIntegrationSecretName .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
             {{- if .Values.plugins.enabled }}
             - mountPath: /opt/opencost/plugin
@@ -353,7 +362,7 @@ spec:
             - mountPath: {{ .Values.opencost.customPricing.configPath }}
               name: custom-configs
             {{- end }}
-            {{- if .Values.opencost.cloudIntegrationSecret }}
+            {{- if $cloudIntegrationSecretName }}
             - name: var-configs
               mountPath: /var/configs
             - name: cloud-integration
@@ -465,7 +474,7 @@ spec:
           {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.cloudIntegrationSecret .Values.opencost.ui.enabled .Values.opencost.updateCaTrust.enabled }}
+      {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.extraVolumes .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled $cloudIntegrationSecretName .Values.opencost.ui.enabled .Values.opencost.updateCaTrust.enabled }}
       volumes:
         {{- if .Values.plugins.enabled  }}
         {{- if .Values.plugins.install.enabled}}
@@ -488,12 +497,12 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "opencost.fullname" . }}-pvc
         {{- end }}
-        {{- if .Values.opencost.cloudIntegrationSecret }}
+        {{- if $cloudIntegrationSecretName }}
         - name: var-configs
           emptyDir: {}
         - name: cloud-integration
           secret:
-            secretName: {{ .Values.opencost.cloudIntegrationSecret }}
+            secretName: {{ $cloudIntegrationSecretName }}
             items:
               - key: cloud-integration.json
                 path: cloud-integration.json
