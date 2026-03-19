@@ -363,6 +363,8 @@ spec:
               name: custom-configs
             {{- end }}
             {{- if $cloudIntegrationSecretName }}
+            - name: var-configs
+              mountPath: /var/configs
             - name: cloud-integration
               mountPath: /var/configs/cloud-integration.json
               subPath: cloud-integration.json
@@ -496,13 +498,15 @@ spec:
             claimName: {{ include "opencost.fullname" . }}-pvc
         {{- end }}
         {{- if $cloudIntegrationSecretName }}
+        - name: var-configs
+          emptyDir: {}
         - name: cloud-integration
           secret:
             secretName: {{ $cloudIntegrationSecretName }}
             items:
               - key: cloud-integration.json
                 path: cloud-integration.json
-          {{- end }}
+        {{- end }}
         {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui-nginx-config-volume
           configMap:
