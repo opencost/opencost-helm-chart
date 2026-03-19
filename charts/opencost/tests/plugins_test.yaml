@@ -1,0 +1,89 @@
+suite: test plugins
+templates:
+  - templates/plugins-config.yaml
+  - templates/install-plugins.yaml
+tests:
+  # Test 1: Plugins disabled by default - no secret created
+  - it: should not create plugins-config secret when plugins disabled
+    template: templates/plugins-config.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # Test 2: Old style - configs creates secret and downloads plugins
+  - it: should create plugins-config secret when using configs (legacy behavior)
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - isKind:
+          of: Secret
+      - matchRegex:
+          path: metadata.name
+          pattern: -plugins-config$
+      - exists:
+          path: data["datadog_config.json"]
+
+  # Test 3: New style - existingSecret should NOT create secret
+  - it: should not create plugins-config secret when existingSecret is set
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          plugins:
+            - datadog
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # Test 4: Install script uses plugins.install.plugins list when set
+  - it: should download plugins from install.plugins list
+    template: templates/install-plugins.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: datadog\.ocplugin
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: mongodb\.ocplugin
+
+  # Test 5: Install script falls back to configs keys when install.plugins is empty
+  - it: should fall back to configs keys when install.plugins is empty
+    template: templates/install-plugins.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: datadog\.ocplugin
+
+  # Test 6: No install script created when plugins disabled
+  - it: should not create install-plugins configmap when plugins disabled
+    template: templates/install-plugins.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
