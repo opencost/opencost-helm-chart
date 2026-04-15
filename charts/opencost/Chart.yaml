@@ -9,7 +9,7 @@ keywords:
   - finops
   - monitoring
   - opencost
-version: 2.5.13
+version: 2.5.14
 maintainers:
   - name: jessegoodier
   - name: toscott
