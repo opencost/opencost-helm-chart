@@ -1,18 +1,11 @@
 suite: cloud integration deployment
 templates:
   - templates/deployment.yaml
-  - templates/configmap-custom-pricing.yaml
-  - templates/configmap-frontend.yaml
-  - templates/configmap-metrics-config.yaml
-  - templates/secret-cloud-integration.yaml
-  - templates/secret.yaml
-  - templates/secret-admin-token.yaml
 release:
   name: opencost
   namespace: default
 tests:
   - it: should mount existing cloud integration secret
-    template: templates/deployment.yaml
     set:
       opencost.cloudIntegrationSecret: cloud-costs
     asserts:
@@ -33,7 +26,6 @@ tests:
             subPath: cloud-integration.json
             readOnly: true
   - it: should mount generated cloud integration secret
-    template: templates/deployment.yaml
     set:
       opencost.cloudIntegrationJSON: '{"aws":[]}'
     asserts:
@@ -71,24 +63,17 @@ tests:
           path: metadata.name
           value: opencost-cloud-integration
       - equal:
-          path: data["cloud-integration.json"]
+          path: data.cloud-integration.json
           value: eyJhd3MiOltdfQ==
 ---
 suite: cloud integration validation
 templates:
   - templates/deployment.yaml
-  - templates/configmap-custom-pricing.yaml
-  - templates/configmap-frontend.yaml
-  - templates/configmap-metrics-config.yaml
-  - templates/secret-cloud-integration.yaml
-  - templates/secret.yaml
-  - templates/secret-admin-token.yaml
 release:
   name: opencost
   namespace: default
 tests:
   - it: should fail when cloudIntegrationSecret and cloudIntegrationJSON are set
-    template: templates/deployment.yaml
     set:
       opencost.cloudIntegrationSecret: cloud-costs
       opencost.cloudIntegrationJSON: '{"aws":[]}'

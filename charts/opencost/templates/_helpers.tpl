@@ -78,21 +78,6 @@ Resolve plugin names to install/mount. Prefer explicit install list, then config
 {{- end -}}
 
 {{/*
-Resolve plugin names that require config file mounts.
-When using an existing secret, allow explicit install list fallback.
-Without an existing secret, only mount keys present in plugins.configs.
-*/}}
-{{- define "opencost.plugins.configMountList" -}}
-  {{- if .Values.plugins.existingSecret -}}
-    {{- include "opencost.plugins.installList" . -}}
-  {{- else if .Values.plugins.configs -}}
-    {{- toYaml (keys .Values.plugins.configs | sortAlpha) -}}
-  {{- else -}}
-[]
-  {{- end -}}
-{{- end -}}
-
-{{/*
 Cloud integration source contents check. Either the Secret must be specified or the JSON, not both.
 */}}
 {{- define "opencost.cloudIntegration.secretConfigCheck" -}}
