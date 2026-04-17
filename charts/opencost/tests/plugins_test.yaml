@@ -52,6 +52,20 @@ tests:
       - hasDocuments:
           count: 0
 
+  # Test 3b: Plugins enabled with no configs should still create an (empty)
+  # secret so the deployment volume mount resolves (matches legacy behavior).
+  - it: should create plugins-config secret when enabled even without configs
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+    asserts:
+      - isKind:
+          of: Secret
+      - equal:
+          path: metadata.name
+          value: opencost-plugins-config
+
   # Test 4: Install script uses plugins.install.plugins list when set
   - it: should download plugins from install.plugins list
     template: templates/install-plugins.yaml

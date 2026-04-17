@@ -267,9 +267,11 @@ $ helm install opencost opencost/opencost
 | pdb.minAvailable | string | `nil` | Minimum number of pods that must be available after the eviction |
 | plugins.configs | string | `nil` |  |
 | plugins.enabled | bool | `false` |  |
+| plugins.existingSecret | string | `""` | Use an existing secret for plugin configuration instead of creating one from configs. The secret should contain files named <plugin>_config.json (e.g., datadog_config.json). This is useful when using ExternalSecrets or other secret management tools. |
 | plugins.folder | string | `"/opt/opencost/plugin"` |  |
 | plugins.install.enabled | bool | `true` |  |
 | plugins.install.fullImageName | string | `"curlimages/curl:latest"` |  |
+| plugins.install.plugins | list | `[]` | List of plugins to download (decoupled from config). When specified, these plugins are downloaded regardless of what's in configs. This allows using existingSecret for credentials while still downloading plugin binaries. Example: ["datadog", "mongodb"]. If empty, falls back to downloading plugins based on keys in configs (legacy behavior). |
 | plugins.install.securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | plugins.install.securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | plugins.install.securityContext.readOnlyRootFilesystem | bool | `true` |  |
