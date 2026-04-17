@@ -38,11 +38,7 @@ data:
       VER=$(curl --silent https://api.github.com/repos/opencost/opencost-plugins/releases/latest | grep ".tag_name" | awk -F\" '{print $4}')
       {{- end }}
 
-      {{- /* Use plugins.install.plugins if specified, otherwise fall back to keys from plugins.configs */}}
-      {{- $pluginList := .Values.plugins.install.plugins }}
-      {{- if not $pluginList }}
-      {{- $pluginList = keys .Values.plugins.configs }}
-      {{- end }}
+      {{- $pluginList := include "opencost.plugins.installList" . | fromYamlArray }}
       {{- range $pluginName := $pluginList }}
       curl -fsSLO "https://github.com/opencost/opencost-plugins/releases/download/$VER/{{ $pluginName }}.ocplugin.$OS.$ARCH"
       chmod a+rx "{{ $pluginName }}.ocplugin.$OS.$ARCH"

@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "opencost.fullname" . }}-plugins-config
+  name: {{ include "opencost.pluginsConfigSecretName" . }}
   labels:
     app: {{ template "opencost.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}

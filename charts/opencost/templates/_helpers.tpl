@@ -54,6 +54,30 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Resolve the secret name that stores plugin config files.
+*/}}
+{{- define "opencost.pluginsConfigSecretName" -}}
+  {{- if .Values.plugins.existingSecret -}}
+    {{- .Values.plugins.existingSecret -}}
+  {{- else -}}
+    {{- printf "%s-plugins-config" (include "opencost.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Resolve plugin names to install/mount. Prefer explicit install list, then configs keys.
+*/}}
+{{- define "opencost.plugins.installList" -}}
+  {{- if .Values.plugins.install.plugins -}}
+    {{- toYaml .Values.plugins.install.plugins -}}
+  {{- else if .Values.plugins.configs -}}
+    {{- toYaml (keys .Values.plugins.configs | sortAlpha) -}}
+  {{- else -}}
+[]
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Cloud integration source contents check. Either the Secret must be specified or the JSON, not both.
 */}}
 {{- define "opencost.cloudIntegration.secretConfigCheck" -}}

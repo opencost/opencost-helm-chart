@@ -2,6 +2,10 @@ suite: test plugins
 templates:
   - templates/plugins-config.yaml
   - templates/install-plugins.yaml
+  - templates/deployment.yaml
+release:
+  name: opencost
+  namespace: default
 tests:
   # Test 1: Plugins disabled by default - no secret created
   - it: should not create plugins-config secret when plugins disabled
@@ -87,3 +91,66 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
+
+  # Test 7: Deployment should use generated plugins-config secret name by default
+  - it: should mount generated plugins-config secret when existingSecret is not set
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: plugins-config
+            secret:
+              secretName: opencost-opencost-plugins-config
+
+  # Test 8: Deployment should use existingSecret and mount install.plugins configs
+  - it: should mount existingSecret and plugin config paths from install.plugins list
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          enabled: true
+          plugins:
+            - datadog
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: plugins-config
+            secret:
+              secretName: my-external-secret
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            mountPath: /opt/opencost/plugin/config/datadog_config.json
+            subPath: datadog_config.json
+            name: plugins-config
+            readOnly: true
+
+  # Test 9: Deployment should fall back to configs keys for plugin mounts
+  - it: should mount plugin configs from configs keys when install.plugins is empty
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            mountPath: /opt/opencost/plugin/config/datadog_config.json
+            subPath: datadog_config.json
+            name: plugins-config
+            readOnly: true
