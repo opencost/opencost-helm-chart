@@ -1,8 +1,15 @@
 suite: test deployment
 templates:
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
   - templates/deployment.yaml
 tests:
   - it: should work
+    template: templates/deployment.yaml
     set:
       image.tag: latest
     asserts:
