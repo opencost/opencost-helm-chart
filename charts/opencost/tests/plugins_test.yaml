@@ -72,6 +72,7 @@ tests:
     set:
       plugins:
         enabled: true
+        existingSecret: my-external-secret
         install:
           enabled: true
           plugins:
@@ -174,3 +175,51 @@ tests:
             subPath: datadog_config.json
             name: plugins-config
             readOnly: true
+
+  # Test 10: configCheck should fail when existingSecret and configs are both set
+  - it: should fail when plugins.existingSecret and plugins.configs are both set
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - failedTemplate:
+          errorMessage: "plugins.existingSecret and plugins.configs are mutually exclusive. When plugins.existingSecret is set the chart does not render a generated Secret from plugins.configs, so any configs entries would be silently ignored. Please specify only one."
+
+  # Test 11: configCheck should fail when install.plugins lists a plugin without a matching configs entry
+  - it: should fail when install.plugins entry is missing from plugins.configs
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - failedTemplate:
+          errorMessage: "plugins.install.plugins contains \"mongodb\" but plugins.configs has no matching \"mongodb\" entry. The Deployment mounts mongodb_config.json from the generated plugin secret, so the Pod will fail to start with a missing subPath. Either add a plugins.configs.mongodb entry or set plugins.existingSecret to a Secret that contains mongodb_config.json."
+
+  # Test 12: configCheck subset check is skipped when existingSecret is set
+  - it: should not fail when install.plugins has no configs but existingSecret is set
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+    asserts:
+      - isKind:
+          of: Deployment

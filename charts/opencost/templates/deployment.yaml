@@ -2,6 +2,7 @@
 {{- include  "kubeRBACProxyBearerTokenCheck" . }}
 {{ include "opencost.caCertsSecretConfig.check" . }}
 {{ include "opencost.cloudIntegration.secretConfigCheck" . }}
+{{ include "opencost.plugins.configCheck" . }}
 {{- $cloudIntegrationSecretName := include "opencost.cloudIntegration.secretName" . -}}
 apiVersion: apps/v1
 kind: Deployment
