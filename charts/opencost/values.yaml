@@ -200,7 +200,23 @@ opencost:
   #           "client_x509_cert_url": "my-x509-cert-url"
   #         }
   #       }
-  #     ]
+  #     ],
+  #     "oci": {
+  #       "usageApi": [
+  #         {
+  #           "tenancyID": "ocid1.tenancy.oc1..my-tenancy-ocid",
+  #           "region": "us-ashburn-1",
+  #           "authorizer": {
+  #             "authorizerType": "OCIRawConfigProvider",
+  #             "tenancyId": "ocid1.tenancy.oc1..my-tenancy-ocid",
+  #             "userId": "ocid1.user.oc1..my-user-ocid",
+  #             "region": "us-ashburn-1",
+  #             "fingerprint": "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx",
+  #             "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nmy-pem-encoded-private-key\n-----END RSA PRIVATE KEY-----"
+  #           }
+  #         }
+  #       ]
+  #     }
   #   }
 
   # -- MCP (Model Context Protocol) Server Configuration
@@ -476,6 +492,7 @@ opencost:
       zoneNetworkEgress: 0.01
       regionNetworkEgress: 0.01
       internetNetworkEgress: 0.12
+      # spotDataFeedEnabled: "false"  # Set to "false" to disable AWS spot data feed when not using spot instances
 
   retention1d: 15
   retention1h: 49
