@@ -162,6 +162,9 @@ opencost:
   # -- "<fullname>-cloud-integration" in the release namespace. Mutually exclusive with
   # -- opencost.cloudIntegrationSecret.
   cloudIntegrationJSON: ""
+  # For OCI, cloud-integration.json uses "oci" as an object with a "usageApi" array (not a
+  # top-level provider array like aws/azure/gcp). The authorizer uses "tenancyId" while the outer
+  # Usage API entry uses "tenancyID"; both spellings are required by OpenCost's schema.
   # cloudIntegrationJSON: |-
   #   {
   #     "aws": [
@@ -492,7 +495,6 @@ opencost:
       zoneNetworkEgress: 0.01
       regionNetworkEgress: 0.01
       internetNetworkEgress: 0.12
-      # spotDataFeedEnabled: "false"  # Set to "false" to disable AWS spot data feed when not using spot instances
 
   retention1d: 15
   retention1h: 49
