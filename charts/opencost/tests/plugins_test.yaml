@@ -1,0 +1,225 @@
+suite: test plugins
+templates:
+  - templates/plugins-config.yaml
+  - templates/install-plugins.yaml
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  # Test 1: Plugins disabled by default - no secret created
+  - it: should not create plugins-config secret when plugins disabled
+    template: templates/plugins-config.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # Test 2: Old style - configs creates secret and downloads plugins
+  - it: should create plugins-config secret when using configs (legacy behavior)
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - isKind:
+          of: Secret
+      - matchRegex:
+          path: metadata.name
+          pattern: -plugins-config$
+      - exists:
+          path: data["datadog_config.json"]
+
+  # Test 3: New style - existingSecret should NOT create secret
+  - it: should not create plugins-config secret when existingSecret is set
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          plugins:
+            - datadog
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # Test 3b: Plugins enabled with no configs should still create an (empty)
+  # secret so the deployment volume mount resolves (matches legacy behavior).
+  - it: should create plugins-config secret when enabled even without configs
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+    asserts:
+      - isKind:
+          of: Secret
+      - equal:
+          path: metadata.name
+          value: opencost-plugins-config
+
+  # Test 4: Install script uses plugins.install.plugins list when set
+  - it: should download plugins from install.plugins list
+    template: templates/install-plugins.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: datadog\.ocplugin
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: mongodb\.ocplugin
+
+  # Test 5: Install script falls back to configs keys when install.plugins is empty
+  - it: should fall back to configs keys when install.plugins is empty
+    template: templates/install-plugins.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data["install_plugins.sh"]
+          pattern: datadog\.ocplugin
+
+  # Test 6: No install script created when plugins disabled
+  - it: should not create install-plugins configmap when plugins disabled
+    template: templates/install-plugins.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  # Test 7: Deployment should use generated plugins-config secret name by default
+  - it: should mount generated plugins-config secret when existingSecret is not set
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: plugins-config
+            secret:
+              secretName: opencost-plugins-config
+
+  # Test 8: Deployment should use existingSecret and mount install.plugins configs
+  - it: should mount existingSecret and plugin config paths from install.plugins list
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          enabled: true
+          plugins:
+            - datadog
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: plugins-config
+            secret:
+              secretName: my-external-secret
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            mountPath: /opt/opencost/plugin/config/datadog_config.json
+            subPath: datadog_config.json
+            name: plugins-config
+            readOnly: true
+
+  # Test 9: Deployment should fall back to configs keys for plugin mounts
+  - it: should mount plugin configs from configs keys when install.plugins is empty
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            mountPath: /opt/opencost/plugin/config/datadog_config.json
+            subPath: datadog_config.json
+            name: plugins-config
+            readOnly: true
+
+  # Test 10: configCheck should fail when existingSecret and configs are both set
+  - it: should fail when plugins.existingSecret and plugins.configs are both set
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - failedTemplate:
+          errorMessage: "plugins.existingSecret and plugins.configs are mutually exclusive. When plugins.existingSecret is set the chart does not render a generated Secret from plugins.configs, so any configs entries would be silently ignored. Please specify only one."
+
+  # Test 11: configCheck should fail when install.plugins lists a plugin without a matching configs entry
+  - it: should fail when install.plugins entry is missing from plugins.configs
+    template: templates/plugins-config.yaml
+    set:
+      plugins:
+        enabled: true
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+        configs:
+          datadog: |
+            {"datadog_api_key": "test-key"}
+    asserts:
+      - failedTemplate:
+          errorMessage: "plugins.install.plugins contains \"mongodb\" but plugins.configs has no matching \"mongodb\" entry. The Deployment mounts mongodb_config.json from the generated plugin secret, so the Pod will fail to start with a missing subPath. Either add a plugins.configs.mongodb entry or set plugins.existingSecret to a Secret that contains mongodb_config.json."
+
+  # Test 12: configCheck subset check is skipped when existingSecret is set
+  - it: should not fail when install.plugins has no configs but existingSecret is set
+    template: templates/deployment.yaml
+    set:
+      plugins:
+        enabled: true
+        existingSecret: my-external-secret
+        install:
+          enabled: true
+          plugins:
+            - datadog
+            - mongodb
+    asserts:
+      - isKind:
+          of: Deployment

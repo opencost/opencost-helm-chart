@@ -2,6 +2,7 @@
 {{- include  "kubeRBACProxyBearerTokenCheck" . }}
 {{ include "opencost.caCertsSecretConfig.check" . }}
 {{ include "opencost.cloudIntegration.secretConfigCheck" . }}
+{{ include "opencost.plugins.configCheck" . }}
 {{- $cloudIntegrationSecretName := include "opencost.cloudIntegration.secretName" . -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -346,7 +347,8 @@ spec:
             - mountPath: /opt/opencost/plugin
               name: plugins-dir
               readOnly: false
-            {{- range $key, $config := .Values.plugins.configs }}
+            {{- $pluginList := include "opencost.plugins.installList" . | fromYamlArray }}
+            {{- range $key := $pluginList }}
             - mountPath: /opt/opencost/plugin/config/{{$key}}_config.json
               subPath: {{$key}}_config.json
               name: plugins-config
@@ -486,7 +488,7 @@ spec:
           emptyDir: {}
         - name: plugins-config
           secret:
-            secretName:  {{ template "opencost.fullname" . }}-plugins-config
+            secretName: {{ include "opencost.pluginsConfigSecretName" . }}
         {{- end }}
         {{- if or .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled }}
         - name: custom-configs

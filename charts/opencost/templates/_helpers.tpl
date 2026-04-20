@@ -54,6 +54,63 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Resolve the secret name that stores plugin config files.
+*/}}
+{{- define "opencost.pluginsConfigSecretName" -}}
+  {{- if .Values.plugins.existingSecret -}}
+    {{- .Values.plugins.existingSecret -}}
+  {{- else -}}
+    {{- printf "%s-plugins-config" (include "opencost.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Resolve plugin names to install/mount. Prefer explicit install list, then configs keys.
+*/}}
+{{- define "opencost.plugins.installList" -}}
+  {{- if .Values.plugins.install.plugins -}}
+    {{- toYaml .Values.plugins.install.plugins -}}
+  {{- else if .Values.plugins.configs -}}
+    {{- toYaml (keys .Values.plugins.configs | sortAlpha) -}}
+  {{- else -}}
+[]
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Plugin configuration check. Fails fast on misconfigurations that would otherwise
+produce silent data loss or runtime Pod start failures:
+
+  1. plugins.existingSecret and plugins.configs are mutually exclusive. When
+     existingSecret is set, the chart no longer renders the generated Secret
+     from .Values.plugins.configs, so any configs entries would be silently
+     ignored.
+  2. When plugins.existingSecret is empty, every plugin listed in
+     plugins.install.plugins must have a matching key in plugins.configs --
+     otherwise the Deployment will mount a subPath that doesn't exist in the
+     generated Secret and the Pod will fail to start. (We intentionally skip
+     this check when existingSecret is set: the chart cannot introspect an
+     externally-managed secret at template-render time.)
+*/}}
+{{- define "opencost.plugins.configCheck" -}}
+  {{- if not .Values.plugins.enabled -}}
+    {{- /* nothing to validate when plugins are off */ -}}
+  {{- else -}}
+    {{- if and .Values.plugins.existingSecret .Values.plugins.configs -}}
+      {{- fail "plugins.existingSecret and plugins.configs are mutually exclusive. When plugins.existingSecret is set the chart does not render a generated Secret from plugins.configs, so any configs entries would be silently ignored. Please specify only one." -}}
+    {{- end -}}
+    {{- if and (not .Values.plugins.existingSecret) .Values.plugins.install.plugins -}}
+      {{- $configs := default (dict) .Values.plugins.configs -}}
+      {{- range $p := .Values.plugins.install.plugins -}}
+        {{- if not (hasKey $configs $p) -}}
+          {{- fail (printf "plugins.install.plugins contains %q but plugins.configs has no matching %q entry. The Deployment mounts %s_config.json from the generated plugin secret, so the Pod will fail to start with a missing subPath. Either add a plugins.configs.%s entry or set plugins.existingSecret to a Secret that contains %s_config.json." $p $p $p $p $p) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Cloud integration source contents check. Either the Secret must be specified or the JSON, not both.
 */}}
 {{- define "opencost.cloudIntegration.secretConfigCheck" -}}

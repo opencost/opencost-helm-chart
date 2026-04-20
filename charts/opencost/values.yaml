@@ -24,9 +24,38 @@ plugins:
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       runAsUser: 1000
+    # -- List of plugins to download, independent of `plugins.configs`.
+    # When specified, these plugins are downloaded regardless of what's in configs,
+    # which enables using `plugins.existingSecret` for credentials while still
+    # downloading plugin binaries. This list also drives which `<plugin>_config.json`
+    # subPaths the Deployment mounts, so each listed plugin MUST have a matching
+    # config source -- either a `plugins.configs.<plugin>` entry (when
+    # `plugins.existingSecret` is empty) or a `<plugin>_config.json` key in the
+    # Secret referenced by `plugins.existingSecret`. Missing entries cause Pod
+    # startup failures because the mounted subPath will not exist. When
+    # `plugins.existingSecret` is empty, the chart validates this at
+    # template-render time and fails with an actionable error; the check is
+    # skipped when `plugins.existingSecret` is set because the contents of an
+    # externally-managed Secret cannot be introspected from Helm.
+    # Example: ["datadog", "mongodb"]
+    # If empty, falls back to downloading plugins based on keys in configs (legacy behavior).
+    plugins: []
   folder: /opt/opencost/plugin
   # leave this commented to always download most recent version of plugins
   # version: <INSERT_SPECIFIC_PLUGINS_VERSION>
+  # -- Use an existing Secret for plugin configuration instead of generating
+  # one from `plugins.configs`. The referenced Secret MUST contain a
+  # `<plugin>_config.json` key for every entry in `plugins.install.plugins`
+  # (and for every plugin whose configs key would otherwise drive the
+  # install/mount list) -- the Deployment mounts those files via subPath and
+  # missing keys cause Pod startup failures. This is useful when using
+  # ExternalSecrets, Vault, or other secret-management tools so that plugin
+  # credentials do not have to be committed via `plugins.configs`. Mutually
+  # exclusive with `plugins.configs`: when `existingSecret` is set, the chart
+  # does not render a generated Secret and any `plugins.configs` entries would
+  # be silently ignored, so the chart will `fail` template rendering in that
+  # case.
+  existingSecret: ""
   configs:
     # datadog: |
     #   {
