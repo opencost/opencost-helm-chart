@@ -215,7 +215,7 @@ opencost:
   #             "userId": "ocid1.user.oc1..my-user-ocid",
   #             "region": "us-ashburn-1",
   #             "fingerprint": "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx",
-  #             "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nmy-pem-encoded-private-key\n-----END RSA PRIVATE KEY-----"
+  #             "privateKey": "REPLACE_WITH_YOUR_OCI_KEY_FILE_CONTENTS"
   #           }
   #         }
   #       ]
