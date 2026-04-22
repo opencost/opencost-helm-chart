@@ -724,7 +724,7 @@ opencost:
       targetPort: http-ui
       # targetPort: oauth-proxy
       # -- Ingress TLS configuration
-      tls: []
+      tls: {}
         # insecureEdgeTerminationPolicy: Redirect
         # termination: edge
     # -- HTTPRoute for OpenCost UI (Gateway API)
