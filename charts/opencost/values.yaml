@@ -200,7 +200,23 @@ opencost:
   #           "client_x509_cert_url": "my-x509-cert-url"
   #         }
   #       }
-  #     ]
+  #     ],
+  #     "oci": {
+  #       "usageApi": [
+  #         {
+  #           "tenancyID": "ocid1.tenancy.oc1..my-tenancy-ocid",
+  #           "region": "us-ashburn-1",
+  #           "authorizer": {
+  #             "authorizerType": "OCIRawConfigProvider",
+  #             "tenancyID": "ocid1.tenancy.oc1..my-tenancy-ocid",
+  #             "userID": "ocid1.user.oc1..my-user-ocid",
+  #             "region": "us-ashburn-1",
+  #             "fingerprint": "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx",
+  #             "privateKey": "REPLACE_WITH_YOUR_OCI_KEY_FILE_CONTENTS"
+  #           }
+  #         }
+  #       ]
+  #     }
   #   }
 
   # -- MCP (Model Context Protocol) Server Configuration
