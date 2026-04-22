@@ -208,8 +208,8 @@ opencost:
   #           "region": "us-ashburn-1",
   #           "authorizer": {
   #             "authorizerType": "OCIRawConfigProvider",
-  #             "tenancyId": "ocid1.tenancy.oc1..my-tenancy-ocid",
-  #             "userId": "ocid1.user.oc1..my-user-ocid",
+  #             "tenancyID": "ocid1.tenancy.oc1..my-tenancy-ocid",
+  #             "userID": "ocid1.user.oc1..my-user-ocid",
   #             "region": "us-ashburn-1",
   #             "fingerprint": "xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx",
   #             "privateKey": "REPLACE_WITH_YOUR_OCI_KEY_FILE_CONTENTS"
