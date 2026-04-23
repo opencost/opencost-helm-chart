@@ -1,0 +1,22 @@
+# CI test values - Persistence Enabled
+# Tests persistent volume configuration with collector data source
+
+opencost:
+  exporter:
+    defaultClusterId: "persistence-cluster"
+    persistence:
+      enabled: true
+      mountPath: /mnt/opencost-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "fast-ssd"
+      accessMode: ReadWriteOnce
+      storageClass: "fast-ssd"
+      size: 10Gi
+
+    collectorDataSource:
+      enabled: true
+      scrapeInterval: 30s
+      networkPort: 3001
+      retention10m: 36
+      retention1h: 49
+      retention1d: 15
