@@ -739,7 +739,7 @@ opencost:
       # -- Redirect ingress to an extraPort defined on the service such as oauth-proxy
       targetPort: http-ui
       # targetPort: oauth-proxy
-      # -- Ingress TLS configuration
+      # -- Route TLS configuration as a map (e.g. with `termination` and `insecureEdgeTerminationPolicy` fields)
       tls: {}
         # insecureEdgeTerminationPolicy: Redirect
         # termination: edge
