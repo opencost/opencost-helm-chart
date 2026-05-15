@@ -15,12 +15,12 @@ spec:
   parentRefs:
     {{- range .Values.opencost.ui.httpRoute.parentRefs }}
     - name: {{ .name }}
-      {{- if .kind }}
-      kind: {{ .kind }}
-      {{- end }}
-      {{- if .group }}
-      group: {{ .group }}
-      {{- end }}
+      {{ if .kind }}
+      kind: {{ .kind | quote }}
+      {{ end }}
+      {{ if .group }}
+      group: {{ .group | quote }}
+      {{ end }}
       {{- if .namespace }}
       namespace: {{ .namespace }}
       {{- end }}
