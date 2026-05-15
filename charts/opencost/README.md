@@ -247,7 +247,7 @@ $ helm install opencost opencost/opencost
 | opencost.ui.route.host | string | `"example.local"` |  |
 | opencost.ui.route.path | string | `nil` |  |
 | opencost.ui.route.targetPort | string | `"http-ui"` | Redirect ingress to an extraPort defined on the service such as oauth-proxy |
-| opencost.ui.route.tls | list | `[]` | Ingress TLS configuration |
+| opencost.ui.route.tls | object | `{}` | Route TLS configuration as a map (e.g. with `termination` and `insecureEdgeTerminationPolicy` fields) |
 | opencost.ui.securityContext | object | `{}` | The security options the container should be run with |
 | opencost.ui.uiPath | string | `"/"` |  |
 | opencost.ui.uiPort | int | `9090` |  |
