@@ -256,6 +256,8 @@ opencost:
       # @default -- See [values.yaml](values.yaml)
       parentRefs:
         - name: ""
+          # kind: ""
+          # group: ""
           namespace: ""
           sectionName: ""
       # -- Hostnames for the HTTPRoute
@@ -450,6 +452,8 @@ opencost:
       # @default -- See [values.yaml](values.yaml)
       parentRefs:
         - name: ""
+          # kind: ""
+          # group: ""
           namespace: ""
           sectionName: ""
       # -- Hostnames for the HTTPRoute
@@ -751,6 +755,8 @@ opencost:
       # @default -- See [values.yaml](values.yaml)
       parentRefs:
         - name: ""
+          # kind: ""
+          # group: ""
           namespace: ""
           sectionName: ""
       # -- Hostnames for the HTTPRoute
