@@ -859,3 +859,10 @@ opencost:
       enablePromAccess: false
 # -- A list of volumes to be added to the pod
 extraVolumes: []
+
+# -- Array of extra K8s manifests rendered through `tpl` and owned by the release.
+extraObjects: []
+  # - apiVersion: external-secrets.io/v1beta1
+  #   kind: ExternalSecret
+  #   metadata:
+  #     name: {{ include "opencost.fullname" . }}-cloud-integration
