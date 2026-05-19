@@ -5,6 +5,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ include "opencost.pluginsConfigSecretName" . }}
+  namespace: {{ include "opencost.namespace" . }}
   labels:
     app: {{ template "opencost.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}

@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: opencost-ui-nginx-config
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "opencost.namespace" . }}
 data:
   nginx.conf: |
     gzip_static  on;
@@ -43,11 +43,11 @@ data:
 
     upstream model {
     {{- if .Values.opencost.ui.useDefaultFqdn }}
-            server {{ $serviceName }}.{{ .Release.Namespace }}.svc.cluster.local:9003;
+            server {{ $serviceName }}.{{ include "opencost.namespace" . }}.svc.cluster.local:9003;
     {{- else if .Values.opencost.ui.modelFqdn }}
             server {{ .Values.opencost.ui.modelFqdn }};
     {{- else }}
-            server {{ $serviceName }}.{{ .Release.Namespace }}:9003;
+            server {{ $serviceName }}.{{ include "opencost.namespace" . }}:9003;
     {{- end }}
     }
 

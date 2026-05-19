@@ -3,6 +3,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "opencost.fullname" . }}
+  namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
 spec:
   {{- if .Values.pdb.minAvailable }}
