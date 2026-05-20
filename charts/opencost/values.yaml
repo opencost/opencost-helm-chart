@@ -37,7 +37,7 @@ plugins:
     # template-render time and fails with an actionable error; the check is
     # skipped when `plugins.existingSecret` is set because the contents of an
     # externally-managed Secret cannot be introspected from Helm.
-    # Example: ["datadog", "mongodb"]
+    # Example: ["datadog", "mongodb"].
     # If empty, falls back to downloading plugins based on keys in configs (legacy behavior).
     plugins: []
   folder: /opt/opencost/plugin
@@ -154,13 +154,14 @@ pdb:
   maxUnavailable: ~
 
 opencost:
-  # -- <SECRET_NAME> for the secret containing the Cloud Costs cloud-integration.json https://www.opencost.io/docs/configuration/#cloud-costs
-  # -- kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost
-  # -- Mutually exclusive with opencost.cloudIntegrationJSON.
+  # -- Existing Secret containing `cloud-integration.json` for Cloud Costs. See
+  # https://www.opencost.io/docs/configuration/#cloud-costs.
+  # Create with: `kubectl create secret generic <SECRET_NAME> --from-file=cloud-integration.json -n opencost`.
+  # Mutually exclusive with `opencost.cloudIntegrationJSON`.
   cloudIntegrationSecret: ""
-  # -- Specify the cloud integration information in JSON form. This will create a Secret named
-  # -- "<fullname>-cloud-integration" in the release namespace. Mutually exclusive with
-  # -- opencost.cloudIntegrationSecret.
+  # -- Raw JSON for `cloud-integration.json`. Creates a Secret named
+  # `<fullname>-cloud-integration` in the release namespace.
+  # Mutually exclusive with `opencost.cloudIntegrationSecret`.
   cloudIntegrationJSON: ""
   # cloudIntegrationJSON: |-
   #   {
@@ -865,4 +866,4 @@ extraObjects: []
   # - apiVersion: external-secrets.io/v1beta1
   #   kind: ExternalSecret
   #   metadata:
-  #     name: {{ include "opencost.fullname" . }}-cloud-integration
+  #     name: '{{ include "opencost.fullname" . }}-cloud-integration'
