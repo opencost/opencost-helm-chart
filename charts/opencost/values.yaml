@@ -266,16 +266,30 @@ opencost:
       annotations: {}
       # -- Labels for HTTPRoute resource
       labels: {}
-      # -- HTTPRoute rules
+      # -- HTTPRoute rules. Each rule supports an optional `filters` list at the rule level
+      # and per-backendRef `filters` for Gateway API filter configuration (e.g. basic auth
+      # via `ExtensionRef`, header modification via `RequestHeaderModifier`, etc.).
       # @default -- See [values.yaml](values.yaml)
       rules:
         - matches:
             - path:
                 type: PathPrefix
                 value: /
+          # filters:
+          #   - type: ExtensionRef
+          #     extensionRef:
+          #       group: gateway.envoyproxy.io
+          #       kind: SecurityPolicy
+          #       name: basic-auth-policy
           backendRefs:
             - name: ""  # Will default to service name
               port: 8081
+              # filters:
+              #   - type: RequestHeaderModifier
+              #     requestHeaderModifier:
+              #       add:
+              #         - name: X-Custom-Header
+              #           value: my-value
 
   exporter:
     # API_PORT for the cost-model to listen on
@@ -460,16 +474,30 @@ opencost:
       annotations: {}
       # -- Labels for HTTPRoute resource
       labels: {}
-      # -- HTTPRoute rules
+      # -- HTTPRoute rules. Each rule supports an optional `filters` list at the rule level
+      # and per-backendRef `filters` for Gateway API filter configuration (e.g. basic auth
+      # via `ExtensionRef`, header modification via `RequestHeaderModifier`, etc.).
       # @default -- See [values.yaml](values.yaml)
       rules:
         - matches:
             - path:
                 type: PathPrefix
                 value: /
+          # filters:
+          #   - type: ExtensionRef
+          #     extensionRef:
+          #       group: gateway.envoyproxy.io
+          #       kind: SecurityPolicy
+          #       name: basic-auth-policy
           backendRefs:
             - name: ""  # Will default to service name
               port: 9003
+              # filters:
+              #   - type: RequestHeaderModifier
+              #     requestHeaderModifier:
+              #       add:
+              #         - name: X-Custom-Header
+              #           value: my-value
   customPricing:
     # -- Enables custom pricing configuration
     enabled: false
@@ -761,16 +789,30 @@ opencost:
       annotations: {}
       # -- Labels for HTTPRoute resource
       labels: {}
-      # -- HTTPRoute rules
+      # -- HTTPRoute rules. Each rule supports an optional `filters` list at the rule level
+      # and per-backendRef `filters` for Gateway API filter configuration (e.g. basic auth
+      # via `ExtensionRef`, header modification via `RequestHeaderModifier`, etc.).
       # @default -- See [values.yaml](values.yaml)
       rules:
         - matches:
             - path:
                 type: PathPrefix
                 value: /
+          # filters:
+          #   - type: ExtensionRef
+          #     extensionRef:
+          #       group: gateway.envoyproxy.io
+          #       kind: SecurityPolicy
+          #       name: basic-auth-policy
           backendRefs:
             - name: ""  # Will default to service name
               port: 9090
+              # filters:
+              #   - type: RequestHeaderModifier
+              #     requestHeaderModifier:
+              #       add:
+              #         - name: X-Custom-Header
+              #           value: my-value
 
   sigV4Proxy:
     image: public.ecr.aws/aws-observability/aws-sigv4-proxy:latest
