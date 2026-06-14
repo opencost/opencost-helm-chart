@@ -1,0 +1,36 @@
+# CI test values - Ingress Enabled
+# Tests ingress configuration for both UI and API
+
+opencost:
+  ui:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      hosts:
+      - host: opencost.example.com
+        paths:
+        - /
+      tls:
+      - secretName: opencost-tls
+        hosts:
+        - opencost.example.com
+
+  exporter:
+    apiIngress:
+      enabled: true
+      ingressClassName: "nginx"
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      hosts:
+      - host: opencost-api.example.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - secretName: opencost-api-tls
+        hosts:
+        - opencost-api.example.com

@@ -1,0 +1,22 @@
+# CI test values - Custom Pricing
+# Tests custom pricing configuration for on-prem deployments
+
+opencost:
+  customPricing:
+    enabled: true
+    createConfigmap: true
+    provider: custom
+    costModel:
+      description: "Custom on-prem pricing"
+      CPU: 1.50
+      spotCPU: 0.008
+      RAM: 0.60
+      spotRAM: 0.001
+      GPU: 1.20
+      storage: 0.30
+      zoneNetworkEgress: 0.02
+      regionNetworkEgress: 0.02
+      internetNetworkEgress: 0.15
+
+  exporter:
+    defaultClusterId: "custom-pricing-cluster"
