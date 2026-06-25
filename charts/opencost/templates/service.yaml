@@ -45,7 +45,7 @@ spec:
     {{- if .Values.opencost.exporter.debugPort }}
     - name: debug-port
       port: {{ .Values.opencost.exporter.debugPort }}
-      targetPort: {{ .Values.opencost.debugPort }}
+      targetPort: {{ .Values.opencost.exporter.debugPort }}
     {{- end }}
     {{- with .Values.service.extraPorts }}
       {{- toYaml . | nindent 4 }}
