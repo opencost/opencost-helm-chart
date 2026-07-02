@@ -34,10 +34,18 @@ spec:
             type: {{ .path.type }}
             value: {{ .path.value }}
         {{- end }}
+      {{- with .filters }}
+      filters:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       backendRefs:
         {{- range .backendRefs }}
         - name: {{ default (include "opencost.fullname" $) .name }}
           port: {{ default $.Values.opencost.ui.uiPort .port }}
+          {{- with .filters }}
+          filters:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
     {{- end }}
 ---
@@ -78,10 +86,18 @@ spec:
             type: {{ .path.type }}
             value: {{ .path.value }}
         {{- end }}
+      {{- with .filters }}
+      filters:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       backendRefs:
         {{- range .backendRefs }}
         - name: {{ default (include "opencost.fullname" $) .name }}
           port: {{ default $.Values.opencost.exporter.apiPort .port }}
+          {{- with .filters }}
+          filters:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
     {{- end }}
 ---
@@ -122,10 +138,18 @@ spec:
             type: {{ .path.type }}
             value: {{ .path.value }}
         {{- end }}
+      {{- with .filters }}
+      filters:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       backendRefs:
         {{- range .backendRefs }}
         - name: {{ default (include "opencost.fullname" $) .name }}
           port: {{ default $.Values.opencost.mcp.port .port }}
+          {{- with .filters }}
+          filters:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}
