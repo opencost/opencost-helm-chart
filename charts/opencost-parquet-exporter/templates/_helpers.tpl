@@ -43,6 +43,14 @@ Create default image tag taken from the AppVersion.
 
 {{/*
 Common labels
+
+User-supplied `.Values.commonLabels` are appended at the end of the label set,
+but any keys that collide with the chart-managed identity labels
+(`helm.sh/chart`, `app.kubernetes.io/{name,instance,version,managed-by}`) are
+silently dropped. This avoids duplicate YAML keys, keeps the chart's identity
+labels stable, and preserves the chart's original label order so Helm diffs stay
+minimal. The outer `with` guards against `commonLabels` being null/unset (which
+would otherwise make `omit` fail with a type error).
 */}}
 {{- define "opencost-parquet-exporter.labels" -}}
 helm.sh/chart: {{ include "opencost-parquet-exporter.chart" . }}
@@ -51,6 +59,12 @@ helm.sh/chart: {{ include "opencost-parquet-exporter.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{- $extra := omit . "helm.sh/chart" "app.kubernetes.io/name" "app.kubernetes.io/instance" "app.kubernetes.io/version" "app.kubernetes.io/managed-by" }}
+{{- with $extra }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{/*

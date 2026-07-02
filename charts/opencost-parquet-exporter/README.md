@@ -10,6 +10,7 @@ OpenCost Parquet Exporter
 |-----|------|---------|-------------|
 | activeDeadlineSeconds | int | `3600` | Keep job running (from start time) for [activeDeadlineSeconds]   |
 | awsRolename | string | `"testrole"` | AWS IAM role to use when writing to the S3 Bucket.  |
+| commonLabels | object | `{}` | Additional labels applied to the CronJob, the Job template, and the Pod template. Consistent with the parent `opencost` chart's `commonLabels`. Chart-managed keys (`helm.sh/chart`, `app.kubernetes.io/name`, `app.kubernetes.io/instance`, `app.kubernetes.io/version`, `app.kubernetes.io/managed-by`) are reserved and silently dropped to keep the chart's identity labels stable. |
 | concurrencyPolicy | string | `"Forbid"` | Do not allow multiple runs |
 | dnsConfig | object | `{"options":[{"name":"single-request-reopen"},{"name":"ndots","value":"2"}]}` | Specific DNS parameters of the pod |
 | dnsConfig.options[0] | object | `{"name":"single-request-reopen"}` | Turning this option on [...] so that if two requests from the same port are not handled correctly it will close the socket and open a new one before sending the second request. See also "[single-request-reopen](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)" |
