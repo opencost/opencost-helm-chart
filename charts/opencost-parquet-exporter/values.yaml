@@ -64,3 +64,9 @@ dnsConfig:
 dnsPolicy: ClusterFirst
 restartPolicy: Never
 terminationGracePeriodSeconds: 30
+
+# -- Additional labels applied to the CronJob, the Job template, and the Pod template. Chart-managed keys
+# (`helm.sh/chart`, `app.kubernetes.io/name`, `app.kubernetes.io/instance`,
+# `app.kubernetes.io/version`, `app.kubernetes.io/managed-by`) are reserved and
+# silently dropped to keep the chart's identity labels stable.
+commonLabels: {}

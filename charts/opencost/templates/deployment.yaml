@@ -121,6 +121,7 @@ spec:
             initialDelaySeconds: {{ .Values.opencost.exporter.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.startupProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.exporter.startupProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.opencost.exporter.startupProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.opencost.exporter.livenessProbe.enabled }}
           livenessProbe:
@@ -130,6 +131,7 @@ spec:
             initialDelaySeconds: {{ .Values.opencost.exporter.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.exporter.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.opencost.exporter.livenessProbe.timeoutSeconds }}
           {{- end }}
           {{- if .Values.opencost.exporter.readinessProbe.enabled }}
           readinessProbe:
@@ -139,6 +141,8 @@ spec:
             initialDelaySeconds: {{ .Values.opencost.exporter.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.opencost.exporter.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.opencost.exporter.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.opencost.exporter.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.opencost.exporter.readinessProbe.successThreshold }}
           {{- end }}
           {{- with .Values.opencost.exporter.securityContext }}
           securityContext: {{- toYaml . | nindent 12 }}

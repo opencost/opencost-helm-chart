@@ -14,3 +14,28 @@ tests:
       - matchRegex:
           path: spec.template.spec.containers[0].image
           pattern: ghcr\.io\/opencost\/opencost:[0-9]*\.[0-9]*\.[0-9]*
+  - it: should render custom probe timeout values and readiness successThreshold
+    set:
+      image.tag: latest
+      opencost:
+        exporter:
+          startupProbe:
+            timeoutSeconds: 7
+          livenessProbe:
+            timeoutSeconds: 8
+          readinessProbe:
+            timeoutSeconds: 9
+            successThreshold: 4
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.timeoutSeconds
+          value: 7
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
+          value: 8
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.timeoutSeconds
+          value: 9
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.successThreshold
+          value: 4
