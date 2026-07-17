@@ -283,6 +283,24 @@ spec:
             {{- with .Values.opencost.exporter.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
+            {{- $external := .Values.external | default dict }}
+            {{- $nodeLabels := $external.nodeLabels | default dict }}
+            {{- if $nodeLabels.configMapName }}
+            - name: EXTERNAL_NODELABELS_CONFIG_MAP_NAME
+              value: {{ $nodeLabels.configMapName | quote }}
+            {{- if $nodeLabels.namespace }}
+            - name: EXTERNAL_NODELABELS_NAMESPACE
+              value: {{ $nodeLabels.namespace | quote }}
+            {{- end }}
+            {{- if $nodeLabels.key }}
+            - name: EXTERNAL_NODELABELS_KEY
+              value: {{ $nodeLabels.key | quote }}
+            {{- end }}
+            {{- if $nodeLabels.route }}
+            - name: EXTERNAL_NODELABELS_ROUTE
+              value: {{ $nodeLabels.route | quote }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.opencost.customPricing.enabled }}
             - name: CONFIG_PATH
               value: {{ .Values.opencost.customPricing.configPath | quote }}

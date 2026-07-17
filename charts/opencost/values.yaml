@@ -917,3 +917,66 @@ extraObjects: []
   #   kind: ExternalSecret
   #   metadata:
   #     name: '{{ include "opencost.fullname" . }}-cloud-integration'
+
+# External labels allow users to apply custom labels to node assets and
+# allocations.
+#
+# The OpenCost deployment can read external labels from an existing ConfigMap.
+#
+# Supported ConfigMap formats:
+#
+# 1. Traditional ConfigMap
+#
+#    data:
+#      cluster: prod
+#      env: dev
+#      region: nam
+#
+#    In this case, labels are read directly from ConfigMap.data. The
+#    key and route fields are optional and may be omitted.
+#
+# 2. Block-scalar ConfigMap
+#
+#    data:
+#      config.yaml: |
+#        metadata:
+#          externalLabels:
+#            cluster: prod
+#            env: dev
+#            region: nam
+#
+#    In this case, specify the key that contains the YAML document and
+#    a dot-separated route to the labels map within it.
+#
+# Fields:
+#   configMapName - name of the ConfigMap to read.
+#   namespace     - namespace of the ConfigMap. Defaults to the agent's
+#                   own namespace if left empty.
+#   key           - Optional. The ConfigMap data key containing the YAML
+#                   document. Required only for block-scalar ConfigMaps.
+#   route         - Optional. Dot-separated path to the labels map within
+#                   the key's YAML content, e.g. "metadata.externalLabels".
+#                   When omitted or empty, labels are read directly from
+#                   ConfigMap.data (traditional ConfigMap).
+#
+# Traditional ConfigMap example:
+#
+# external:
+#   nodeLabels:
+#     configMapName: external-label-configmap
+#     namespace: ""
+#
+# Block-scalar ConfigMap example:
+#
+# external:
+#   nodeLabels:
+#     configMapName: external-label-configmap
+#     namespace: ""
+#     key: config.yaml
+#     route: metadata.externalLabels
+external:
+  nodeLabels:
+    configMapName: ""
+    namespace: ""
+    key: ""
+    route: ""
