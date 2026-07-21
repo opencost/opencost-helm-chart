@@ -2,6 +2,29 @@ apiVersion: v1
 entries:
   opencost:
   - apiVersion: v2
+    appVersion: 1.121.0
+    created: "2026-07-21T20:21:47.720061895Z"
+    description: OpenCost and OpenCost UI
+    digest: 6579a8e7b2eb18a886bd8ac1a7bd91668f7866a474b0efa4d31d0cbc51101dcb
+    home: https://github.com/opencost/opencost-helm-chart
+    keywords:
+    - cloud-costs
+    - cost-optimization
+    - finops
+    - monitoring
+    - opencost
+    maintainers:
+    - name: jessegoodier
+    - name: toscott
+    - name: mittal-ishaan
+    - email: rafa@stormforge.io
+      name: brito-rafa
+    name: opencost
+    type: application
+    urls:
+    - https://github.com/opencost/opencost-helm-chart/releases/download/opencost-2.5.28/opencost-2.5.28.tgz
+    version: 2.5.28
+  - apiVersion: v2
     appVersion: 1.120.4
     created: "2026-07-17T21:46:12.432613219Z"
     description: OpenCost and OpenCost UI
@@ -3035,6 +3058,18 @@ entries:
   opencost-parquet-exporter:
   - apiVersion: v2
     appVersion: 0.2.1
+    created: "2026-07-21T20:21:47.875177216Z"
+    description: OpenCost Parquet Exporter
+    digest: 8682fc75a235df80cd411c9e328a2feefce437dd2ee27d4408c22ccc4339bf8e
+    maintainers:
+    - name: cklingspor
+    name: opencost-parquet-exporter
+    type: application
+    urls:
+    - https://github.com/opencost/opencost-helm-chart/releases/download/opencost-parquet-exporter-0.3.1/opencost-parquet-exporter-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
+    appVersion: 0.2.1
     created: "2026-07-02T22:24:31.213905842Z"
     description: OpenCost Parquet Exporter
     digest: 137b7998a382814e7351051bb022b24182a4130745c30099e85582757ae25c7c
@@ -3069,4 +3104,4 @@ entries:
     urls:
     - https://github.com/opencost/opencost-helm-chart/releases/download/0.1.0-helm/opencost-parquet-exporter-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-17T21:46:12.670703482Z"
+generated: "2026-07-21T20:21:47.875559952Z"
