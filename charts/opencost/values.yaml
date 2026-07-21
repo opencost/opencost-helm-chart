@@ -308,7 +308,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "develop-latest@sha256:e0c09b268d8243c45323fffec8ceea1434e9f7e982905af651b1adebfc7e3135"
+      tag: "1.121.0@sha256:2b0def286f343891b2cb2f10309d92bd614aab2f886e363cdc817dfd8595e472"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -680,7 +680,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.120.4@sha256:a59d77750cda9eaf7a220855c0449a5bf929cbefdb17defa109d576acb545494"
+      tag: "1.121.0@sha256:cdaa04a66a17963393627040ddaec4faa6caf5174fa7b4be590c852f2fd839c7"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes

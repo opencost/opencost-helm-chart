@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: "1.120.4"
+appVersion: "1.121.0"
 name: opencost
 description: OpenCost and OpenCost UI
 type: application
@@ -9,7 +9,7 @@ keywords:
   - finops
   - monitoring
   - opencost
-version: 2.5.27
+version: 2.5.28
 maintainers:
   - name: jessegoodier
   - name: toscott
