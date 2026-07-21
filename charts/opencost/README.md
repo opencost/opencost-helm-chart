@@ -4,7 +4,7 @@ OpenCost and OpenCost UI
 
 ![Version: 2.5.28](https://img.shields.io/badge/Version-2.5.26-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.120.4](https://img.shields.io/badge/AppVersion-1.120.4-informational?style=flat-square)
+![AppVersion: 1.121.0](https://img.shields.io/badge/AppVersion-1.121.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost-oci)](https://artifacthub.io/packages/search?repo=opencost-oci)
 
