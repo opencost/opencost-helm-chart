@@ -98,7 +98,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.image.pullPolicy | string | `"IfNotPresent"` | Exporter container image pull policy |
 | opencost.exporter.image.registry | string | `"ghcr.io"` | Exporter container image registry |
 | opencost.exporter.image.repository | string | `"opencost/opencost"` | Exporter container image name |
-| opencost.exporter.image.tag | string | `"1.121.0@sha256:cdaa04a66a17963393627040ddaec4faa6caf5174fa7b4be590c852f2fd839c7"` | Exporter container image tag |
+| opencost.exporter.image.tag | string | `"1.121.0@sha256:2b0def286f343891b2cb2f10309d92bd614aab2f886e363cdc817dfd8595e472"` | Exporter container image tag |
 | opencost.exporter.inferenceCostTracking.collectionInterval | string | `"2m"` | Background collection interval |
 | opencost.exporter.inferenceCostTracking.enabled | bool | `false` | Enable inference cost tracking |
 | opencost.exporter.inferenceCostTracking.modelLabel | string | `"llm-d.ai/model"` | Pod label whose value is the vLLM model name. Must match the model_name label on vLLM Prometheus metrics |
