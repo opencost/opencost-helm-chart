@@ -2,9 +2,9 @@
 
 OpenCost and OpenCost UI
 
-![Version: 2.5.22](https://img.shields.io/badge/Version-2.5.21-informational?style=flat-square)
+![Version: 2.5.26](https://img.shields.io/badge/Version-2.5.26-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
-![AppVersion: 1.120.3](https://img.shields.io/badge/AppVersion-1.120.2-informational?style=flat-square)
+![AppVersion: 1.120.4](https://img.shields.io/badge/AppVersion-1.120.4-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost-oci)](https://artifacthub.io/packages/search?repo=opencost-oci)
 
@@ -93,17 +93,23 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.extraArgs | list | `[]` | List of extra arguments for the command, e.g.: log-format=json |
 | opencost.exporter.extraEnv | object | `{}` | Any extra environment variables you would like to pass on to the pod |
 | opencost.exporter.extraVolumeMounts | list | `[]` | A list of volume mounts to be added to the pod |
-| opencost.exporter.image | object | `{"fullImageName":null,"pullPolicy":"IfNotPresent","registry":"ghcr.io","repository":"opencost/opencost","tag":"1.120.2@sha256:5f37f689557dbb6737a9182b70625bba55bbba843a2caaba5a79746945a56cc6"}` | This overrides the above defaultClusterId. Ensure the ConfigMap exists and contains the required CLUSTER_ID key. clusterIdConfigmap: cluster-id-configmap |
+| opencost.exporter.image | object | `{"fullImageName":null,"pullPolicy":"IfNotPresent","registry":"ghcr.io","repository":"opencost/opencost","tag":"develop-latest@sha256:e0c09b268d8243c45323fffec8ceea1434e9f7e982905af651b1adebfc7e3135"}` | This overrides the above defaultClusterId. Ensure the ConfigMap exists and contains the required CLUSTER_ID key. clusterIdConfigmap: cluster-id-configmap |
 | opencost.exporter.image.fullImageName | string | `nil` | Override the full image name for development purposes |
 | opencost.exporter.image.pullPolicy | string | `"IfNotPresent"` | Exporter container image pull policy |
 | opencost.exporter.image.registry | string | `"ghcr.io"` | Exporter container image registry |
 | opencost.exporter.image.repository | string | `"opencost/opencost"` | Exporter container image name |
-| opencost.exporter.image.tag | string | `"1.120.2@sha256:5f37f689557dbb6737a9182b70625bba55bbba843a2caaba5a79746945a56cc6"` | Exporter container image tag |
+| opencost.exporter.image.tag | string | `"develop-latest@sha256:e0c09b268d8243c45323fffec8ceea1434e9f7e982905af651b1adebfc7e3135"` | Exporter container image tag |
+| opencost.exporter.inferenceCostTracking.collectionInterval | string | `"2m"` | Background collection interval |
+| opencost.exporter.inferenceCostTracking.enabled | bool | `false` | Enable inference cost tracking |
+| opencost.exporter.inferenceCostTracking.modelLabel | string | `"llm-d.ai/model"` | Pod label whose value is the vLLM model name. Must match the model_name label on vLLM Prometheus metrics |
+| opencost.exporter.inferenceCostTracking.sharedInfraLabel | string | `"llm-d.ai/inference-shared"` | Pod label key identifying shared infra pods (EPP, gateway) |
+| opencost.exporter.inferenceCostTracking.sharedInfraLabelValue | string | `"true"` | Label value that marks a pod as shared infra |
 | opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
 | opencost.exporter.livenessProbe.failureThreshold | int | `3` | Number of failures for probe to be considered failed |
 | opencost.exporter.livenessProbe.initialDelaySeconds | int | `10` | Number of seconds before probe is initiated |
 | opencost.exporter.livenessProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.livenessProbe.periodSeconds | int | `20` | Probe frequency in seconds |
+| opencost.exporter.livenessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out |
 | opencost.exporter.persistence.accessMode | string | `""` | Access mode for persistent volume |
 | opencost.exporter.persistence.annotations | object | `{}` | Annotations for persistent volume |
 | opencost.exporter.persistence.enabled | bool | `false` |  |
@@ -116,6 +122,8 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.readinessProbe.initialDelaySeconds | int | `10` | Number of seconds before probe is initiated |
 | opencost.exporter.readinessProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.readinessProbe.periodSeconds | int | `10` | Probe frequency in seconds |
+| opencost.exporter.readinessProbe.successThreshold | int | `1` | Minimum consecutive successes for the probe to be considered successful after having failed |
+| opencost.exporter.readinessProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out |
 | opencost.exporter.replicas | int | `1` | Number of OpenCost replicas to run |
 | opencost.exporter.resources.limits | object | `{"memory":"1Gi"}` | CPU/Memory resource limits |
 | opencost.exporter.resources.requests | object | `{"cpu":"10m","memory":"55Mi"}` | CPU/Memory resource requests |
@@ -125,6 +133,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.startupProbe.initialDelaySeconds | int | `10` | Number of seconds before probe is initiated |
 | opencost.exporter.startupProbe.path | string | `"/healthz"` | Probe path |
 | opencost.exporter.startupProbe.periodSeconds | int | `5` | Probe frequency in seconds |
+| opencost.exporter.startupProbe.timeoutSeconds | int | `1` | Number of seconds after which the probe times out |
 | opencost.extraContainers | list | `[]` | extra sidecars to add to the pod.  Useful for things like oauth-proxy for the UI |
 | opencost.mcp | object | `{"enabled":true,"httpRoute":{"annotations":{},"enabled":false,"hostnames":[],"labels":{},"parentRefs":[{"name":"","namespace":"","sectionName":""}],"rules":[{"backendRefs":[{"name":"","port":8081}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]},"ingress":{"annotations":{},"enabled":false,"hosts":[{"host":"example.local","paths":[{"path":"/","pathType":"Prefix"}]}],"ingressClassName":"","tls":[]},"port":8081}` | MCP (Model Context Protocol) Server Configuration The MCP server provides AI agents with access to cost allocation and asset data |
 | opencost.mcp.enabled | bool | `true` | Enable MCP server for AI agent integration (default: true) Set to false to disable MCP server completely |

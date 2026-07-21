@@ -417,6 +417,19 @@ opencost:
       # -- Size for persistent volume
       size: ""
 
+    # Inference cost tracking configuration for LLM workloads (e.g., vLLM via llm-d)
+    inferenceCostTracking:
+      # -- Enable inference cost tracking
+      enabled: false
+      # -- Pod label whose value is the vLLM model name. Must match the model_name label on vLLM Prometheus metrics
+      modelLabel: "llm-d.ai/model"
+      # -- Pod label key identifying shared infra pods (EPP, gateway)
+      sharedInfraLabel: "llm-d.ai/inference-shared"
+      # -- Label value that marks a pod as shared infra
+      sharedInfraLabelValue: "true"
+      # -- Background collection interval
+      collectionInterval: "2m"
+
     aws:
       # -- AWS secret access key
       secret_access_key: ""
