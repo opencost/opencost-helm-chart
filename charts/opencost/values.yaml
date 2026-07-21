@@ -308,7 +308,7 @@ opencost:
       # -- Exporter container image name
       repository: opencost/opencost
       # -- Exporter container image tag
-      tag: "1.120.4@sha256:5467eaac8d301be69cc4a3f69f063ad5da7d57130d1126a4eb75b0d8f79839e1"
+      tag: "1.121.0@sha256:2b0def286f343891b2cb2f10309d92bd614aab2f886e363cdc817dfd8595e472"
       # -- Exporter container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes
@@ -416,6 +416,19 @@ opencost:
       storageClass: ""
       # -- Size for persistent volume
       size: ""
+
+    # Inference cost tracking configuration for LLM workloads (e.g., vLLM via llm-d)
+    inferenceCostTracking:
+      # -- Enable inference cost tracking
+      enabled: false
+      # -- Pod label whose value is the vLLM model name. Must match the model_name label on vLLM Prometheus metrics
+      modelLabel: "llm-d.ai/model"
+      # -- Pod label key identifying shared infra pods (EPP, gateway)
+      sharedInfraLabel: "llm-d.ai/inference-shared"
+      # -- Label value that marks a pod as shared infra
+      sharedInfraLabelValue: "true"
+      # -- Background collection interval
+      collectionInterval: "2m"
 
     aws:
       # -- AWS secret access key
@@ -667,7 +680,7 @@ opencost:
       repository: opencost/opencost-ui
       # -- UI container image tag
       # @default -- `""` (use appVersion in Chart.yaml)
-      tag: "1.120.4@sha256:a59d77750cda9eaf7a220855c0449a5bf929cbefdb17defa109d576acb545494"
+      tag: "1.121.0@sha256:cdaa04a66a17963393627040ddaec4faa6caf5174fa7b4be590c852f2fd839c7"
       # -- UI container image pull policy
       pullPolicy: IfNotPresent
       # -- Override the full image name for development purposes

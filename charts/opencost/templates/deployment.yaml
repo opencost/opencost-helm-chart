@@ -341,6 +341,19 @@ spec:
             - name: EMIT_KSM_V1_METRICS_ONLY
               value: {{ .Values.opencost.metrics.kubeStateMetrics.emitKsmV1MetricsOnly | quote }}
             {{- end }}
+            {{- if .Values.opencost.exporter.inferenceCostTracking.enabled }}
+            # Inference Cost Tracking Configuration
+            - name: INFERENCE_COST_ENABLED
+              value: "true"
+            - name: INFERENCE_MODEL_LABEL
+              value: {{ .Values.opencost.exporter.inferenceCostTracking.modelLabel | quote }}
+            - name: INFERENCE_SHARED_INFRA_LABEL
+              value: {{ .Values.opencost.exporter.inferenceCostTracking.sharedInfraLabel | quote }}
+            - name: INFERENCE_SHARED_INFRA_LABEL_VALUE
+              value: {{ .Values.opencost.exporter.inferenceCostTracking.sharedInfraLabelValue | quote }}
+            - name: INFERENCE_COLLECTION_INTERVAL
+              value: {{ .Values.opencost.exporter.inferenceCostTracking.collectionInterval | quote }}
+            {{- end }}
             # Add any additional provided variables
             {{- range $key, $value := .Values.opencost.exporter.extraEnv }}
             - name: {{ $key }}
