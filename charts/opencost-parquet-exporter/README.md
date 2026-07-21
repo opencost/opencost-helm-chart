@@ -4,12 +4,6 @@
 
 OpenCost Parquet Exporter
 
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| cklingspor |  |  |
-
 ## Values
 
 | Key | Type | Default | Description |
