@@ -15,7 +15,7 @@ OpenCost Parquet Exporter
 | dnsConfig | object | `{"options":[{"name":"single-request-reopen"},{"name":"ndots","value":"2"}]}` | Specific DNS parameters of the pod |
 | dnsConfig.options[0] | object | `{"name":"single-request-reopen"}` | Turning this option on [...] so that if two requests from the same port are not handled correctly it will close the socket and open a new one before sending the second request. See also "[single-request-reopen](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)" |
 | dnsConfig.options[1] | object | `{"name":"ndots","value":"2"}` | Sets a threshold for the number of dots which must appear in a name [...] before an initial absolute query will be made. . See also "[ndots](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)" |
-| dnsPolicy | string | `"ClusterFirst"` | A pod's [DNS polics](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) |
+| dnsPolicy | string | `"ClusterFirst"` | A pod's [DNS policies](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy) |
 | env | list | `[{"name":"AWS_REGION","value":"us-west-2"},{"name":"KUBE_CLUSTER","value":"YOUR_CLUSTER_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_FILE_KEY_PREFIX","value":"cluster=$(KUBE_CLUSTER)"},{"name":"OPENCOST_PARQUET_S3_BUCKET","value":"YOUR_S3_BUCKET_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_S3_REGION","value":"YOUR_S3_BUCKET_REGION_NAME_CHANGE_ME"},{"name":"OPENCOST_PARQUET_SVC_HOSTNAME","value":"opencost.opencost.svc.cluster.local"},{"name":"OPENCOST_PARQUET_SVC_PORT","value":"9003"}]` | List of env vars |
 | envFrom | string | `nil` |  |
 | existingServiceAccount | string | `nil` | Optional ServiceAccount use to run this pod |
