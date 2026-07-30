@@ -78,6 +78,7 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.apiIngress.tls | list | `[]` | Ingress TLS configuration |
 | opencost.exporter.apiPort | int | `9003` |  |
 | opencost.exporter.aws.access_key_id | string | `""` | AWS secret key id |
+| opencost.exporter.aws.riSpRefreshRateHours | int | `1` | Number of hours between refreshes of Reserved Instance and Savings Plan data from Athena. Defaults to 1 (hourly). For multi-cluster deployments sharing a single CUR export, raise this (e.g. 24) to reduce Athena scan cost. |
 | opencost.exporter.aws.secret_access_key | string | `""` | AWS secret access key |
 | opencost.exporter.cloudProviderApiKey | string | `""` | The GCP Pricing API requires a key. This is supplied just for evaluation. |
 | opencost.exporter.collectorDataSource.enabled | bool | `false` |  |

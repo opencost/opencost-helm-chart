@@ -325,6 +325,8 @@ spec:
               value: {{ .Values.opencost.cloudCost.queryWindowDays | quote }}
             - name: CLOUD_COST_RUN_WINDOW_DAYS
               value: {{ .Values.opencost.cloudCost.runWindowDays | quote }}
+            - name: AWS_RI_SP_REFRESH_RATE_HOURS
+              value: {{ .Values.opencost.exporter.aws.riSpRefreshRateHours | quote }}
             {{- if not (quote .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations | empty ) }}
             - name: EMIT_POD_ANNOTATIONS_METRIC
               value: {{ .Values.opencost.metrics.kubeStateMetrics.emitPodAnnotations | quote }}
