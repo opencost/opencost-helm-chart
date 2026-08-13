@@ -173,7 +173,8 @@ opencost:
   #         "athenaTable": "AWS_cloud_integration_athenaTable",
   #         "projectID": "AWS_cloud_integration_athena_projectID",
   #         "serviceKeyName": "AWS_cloud_integration_athena_serviceKeyName",
-  #         "serviceKeySecret": "AWS_cloud_integration_athena_serviceKeySecret"
+  #         "serviceKeySecret": "AWS_cloud_integration_athena_serviceKeySecret",
+  #         "resultReuseMaxAgeMinutes": 60
   #       }
   #     ],
   #     "azure": [
@@ -435,6 +436,8 @@ opencost:
       secret_access_key: ""
       # -- AWS secret key id
       access_key_id: ""
+      # -- Number of hours between refreshes of Reserved Instance and Savings Plan data from Athena. Defaults to 1 (hourly). For multi-cluster deployments sharing a single CUR export, raise this (e.g. 24) to reduce Athena scan cost.
+      riSpRefreshRateHours: 1
     # -- A list of volume mounts to be added to the pod
     extraVolumeMounts: []
     # -- List of additional environment variables to set in the container
