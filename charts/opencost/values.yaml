@@ -444,6 +444,12 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+    # -- Extra environment variables from secrets or configmaps
+    extraEnvFrom: []
+      # - configMapRef:
+      #     name: opencost-env
+      # - secretRef:
+      #     name: opencost-env-secret
     # Admin token for write operations (e.g. POST /serviceKey, cloud config endpoints).
     # Set ADMIN_TOKEN env from a chart-created secret or an existing secret.
     adminToken:
