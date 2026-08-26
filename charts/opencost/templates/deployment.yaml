@@ -313,6 +313,8 @@ spec:
             {{- else }}
               value: {{ .Values.opencost.retention1d | quote }}
             {{- end }}
+            - name: EXPORT_KUBEMODEL
+              value: {{ .Values.opencost.exporter.exportKubeModel | quote }}
             - name: RESOLUTION_1H_RETENTION
               value: {{ .Values.opencost.retention1h | quote }}
             - name: CLOUD_COST_ENABLED
