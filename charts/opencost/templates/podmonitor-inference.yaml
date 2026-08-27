@@ -1,0 +1,56 @@
+{{- if .Values.opencost.exporter.inferenceCostTracking.podMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "opencost.fullname" . }}-inference
+  {{- if .Values.opencost.exporter.inferenceCostTracking.podMonitor.namespace }}
+  namespace: {{ .Values.opencost.exporter.inferenceCostTracking.podMonitor.namespace | quote }}
+  {{- end }}
+  labels:
+    {{- include "opencost.labels" . | nindent 4 }}
+    {{- if .Values.opencost.exporter.inferenceCostTracking.podMonitor.additionalLabels }}
+      {{- toYaml .Values.opencost.exporter.inferenceCostTracking.podMonitor.additionalLabels | nindent 4 }}
+    {{- end }}
+spec:
+  podMetricsEndpoints:
+    - port: {{ .Values.opencost.exporter.inferenceCostTracking.podMonitor.portName | quote }}
+      path: {{ .Values.opencost.exporter.inferenceCostTracking.podMonitor.path | quote }}
+      interval: {{ .Values.opencost.exporter.inferenceCostTracking.podMonitor.scrapeInterval }}
+      scrapeTimeout: {{ .Values.opencost.exporter.inferenceCostTracking.podMonitor.scrapeTimeout }}
+      relabelings:
+        # Serving engines report model_name but nothing about where they run, so
+        # the Kubernetes identity has to be attached at scrape time.
+        #
+        # pod_uid is what OpenCost joins these metrics to the rest of its
+        # Kubernetes model on. A pod name is reused across a pod's lifetime, so
+        # name-based joins silently merge a recreated pod with its predecessor.
+        # Without pod_uid the saturation signals are dropped rather than
+        # mis-attributed.
+        - sourceLabels: [__meta_kubernetes_namespace]
+          targetLabel: namespace
+        - sourceLabels: [__meta_kubernetes_pod_name]
+          targetLabel: pod
+        - sourceLabels: [__meta_kubernetes_pod_uid]
+          targetLabel: pod_uid
+        {{- with .Values.opencost.exporter.inferenceCostTracking.podMonitor.extraRelabelings }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.opencost.exporter.inferenceCostTracking.podMonitor.metricRelabelings }}
+      metricRelabelings: {{- toYaml . | nindent 8 }}
+      {{- end }}
+  selector:
+    matchExpressions:
+      # Select model-server pods by the presence of the model label, the same
+      # label OpenCost reads the model name from.
+      - key: {{ .Values.opencost.exporter.inferenceCostTracking.modelLabel | quote }}
+        operator: Exists
+    {{- with .Values.opencost.exporter.inferenceCostTracking.podMonitor.additionalSelectorLabels }}
+    matchLabels: {{- toYaml . | nindent 6 }}
+    {{- end }}
+  namespaceSelector:
+    {{- if .Values.opencost.exporter.inferenceCostTracking.podMonitor.namespaces }}
+    matchNames: {{- toYaml .Values.opencost.exporter.inferenceCostTracking.podMonitor.namespaces | nindent 6 }}
+    {{- else }}
+    any: true
+    {{- end }}
+{{- end }}
