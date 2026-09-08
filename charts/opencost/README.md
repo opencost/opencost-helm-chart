@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 2.5.30](https://img.shields.io/badge/Version-2.5.30-informational?style=flat-square)
+![Version: 2.5.31](https://img.shields.io/badge/Version-2.5.31-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.121.0](https://img.shields.io/badge/AppVersion-1.121.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
@@ -30,7 +30,8 @@ $ helm install opencost opencost/opencost
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | annotations | object | `{}` | Annotations to add to the all the resources |
-| clusterName | string | `"cluster.local"` | Override the default name of cluster - Can be found in /etc/kubernetes/admin.conf: clusters -> cluster -> name |
+| clusterDomain | string | `"cluster.local"` | Kubernetes cluster DNS domain. Used as the suffix of the in-cluster service URLs the chart generates for Prometheus and Thanos (`<service>.<namespace>.svc.<clusterDomain>`). This is not a cluster identifier; use `opencost.exporter.defaultClusterId` for that. |
+| clusterName | string | `""` | Deprecated, use `clusterDomain` instead. Kept for backwards compatibility and takes precedence over `clusterDomain` when set. |
 | extraObjects | list | `[]` | Array of extra K8s manifests rendered through `tpl` and owned by the release. |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | fullnameOverride | string | `""` | Overwrite all resources name created by the chart |

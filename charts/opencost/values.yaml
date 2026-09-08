@@ -4,8 +4,10 @@ nameOverride: ""
 fullnameOverride: ""
 # -- Override the deployment namespace
 namespaceOverride: ""
-# -- Override the default name of cluster - Can be found in /etc/kubernetes/admin.conf: clusters -> cluster -> name
-clusterName: "cluster.local"
+# -- Kubernetes cluster DNS domain. Used as the suffix of the in-cluster service URLs the chart generates for Prometheus and Thanos (`<service>.<namespace>.svc.<clusterDomain>`). This is not a cluster identifier; use `opencost.exporter.defaultClusterId` for that.
+clusterDomain: "cluster.local"
+# -- Deprecated, use `clusterDomain` instead. Kept for backwards compatibility and takes precedence over `clusterDomain` when set.
+clusterName: ""
 
 loglevel: info
 
