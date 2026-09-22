@@ -403,6 +403,9 @@ opencost:
       # -- The number of 1d intervals the Collector DataSource should maintain
       retention1d: 15
 
+    # -- Enable/disable KubeModel export by setting the EXPORT_KUBEMODEL env var
+    exportKubeModel: true
+
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
       enabled: false
