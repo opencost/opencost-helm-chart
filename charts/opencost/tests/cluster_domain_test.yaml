@@ -1,0 +1,49 @@
+suite: test cluster domain
+templates:
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should use cluster.local as the service URL suffix by default
+    template: templates/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROMETHEUS_SERVER_ENDPOINT
+            value: http://prometheus-server.prometheus-system.svc.cluster.local:80
+
+  - it: should use clusterDomain as the service URL suffix
+    template: templates/deployment.yaml
+    set:
+      clusterDomain: example.internal
+      opencost.prometheus.thanos.enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROMETHEUS_SERVER_ENDPOINT
+            value: http://prometheus-server.prometheus-system.svc.example.internal:80
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: THANOS_QUERY_URL
+            value: http://my-thanos-query.opencost.svc.example.internal:10901
+
+  - it: should still honor the deprecated clusterName value
+    template: templates/deployment.yaml
+    set:
+      clusterName: legacy.internal
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROMETHEUS_SERVER_ENDPOINT
+            value: http://prometheus-server.prometheus-system.svc.legacy.internal:80
