@@ -38,5 +38,5 @@ spec:
     matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "opencost.namespace" . }}
 {{- end }}
