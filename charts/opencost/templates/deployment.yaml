@@ -376,6 +376,10 @@ spec:
             - name: MCP_SERVER_ENABLED
               value: "false"
             {{- end }}
+          {{- with .Values.opencost.exporter.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if or .Values.plugins.enabled .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.extraVolumeMounts .Values.opencost.customPricing.enabled .Values.opencost.metrics.config.enabled $cloudIntegrationSecretName .Values.opencost.updateCaTrust.enabled}}
           volumeMounts:
             {{- if .Values.plugins.enabled }}
