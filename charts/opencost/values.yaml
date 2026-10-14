@@ -429,6 +429,36 @@ opencost:
       sharedInfraLabelValue: "true"
       # -- Background collection interval
       collectionInterval: "2m"
+      # PodMonitor for model-server pods. OpenCost reads vLLM's metrics from
+      # your Prometheus; it does not scrape them itself. Those metrics must
+      # carry the pod's Kubernetes identity, and pod_uid in particular, or the
+      # engine saturation signals cannot be joined to the Kubernetes model and
+      # are dropped. Enable this to have the chart create a PodMonitor that
+      # attaches namespace, pod and pod_uid, or add the equivalent relabel
+      # rules to your own scrape job.
+      podMonitor:
+        # -- Create a PodMonitor that scrapes model-server pods with the relabel rules OpenCost requires (needs Prometheus Operator)
+        enabled: false
+        # -- Additional labels to add to the PodMonitor
+        additionalLabels: {}
+        # -- Deploy the PodMonitor into a different namespace (blank deploys into the same namespace as the chart)
+        namespace: ""
+        # -- Namespaces to search for model-server pods (empty selects all namespaces)
+        namespaces: []
+        # -- Name of the pod port exposing the engine's metrics endpoint
+        portName: "metrics"
+        # -- Path of the engine's metrics endpoint
+        path: "/metrics"
+        # -- Interval at which model-server metrics should be scraped
+        scrapeInterval: 30s
+        # -- Timeout after which the scrape is ended
+        scrapeTimeout: 10s
+        # -- Additional label selectors ANDed with the model-label existence check
+        additionalSelectorLabels: {}
+        # -- RelabelConfigs appended after the identity rules OpenCost requires
+        extraRelabelings: []
+        # -- MetricRelabelConfigs to apply to samples before ingestion
+        metricRelabelings: []
 
     aws:
       # -- AWS secret access key
