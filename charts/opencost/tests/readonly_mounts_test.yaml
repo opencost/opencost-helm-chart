@@ -1,0 +1,40 @@
+suite: test read-only mounts
+templates:
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should mount ConfigMap and Secret volumes read-only
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        updateCaTrust:
+          enabled: true
+          caCertsSecret: ca-certs
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].volumeMounts
+          content:
+            name: ca-certs-secret
+            mountPath: /usr/local/share/ca-certificates
+            readOnly: true
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: ca-certs-secret
+            mountPath: /usr/local/share/ca-certificates
+            readOnly: true
+      - contains:
+          path: spec.template.spec.containers[1].volumeMounts
+          content:
+            name: opencost-ui-nginx-config-volume
+            mountPath: /etc/nginx/conf.d/default.nginx.conf
+            subPath: default.nginx.conf
+            readOnly: true

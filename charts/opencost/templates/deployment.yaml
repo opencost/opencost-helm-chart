@@ -88,6 +88,7 @@ spec:
           volumeMounts:
             - name: ca-certs-secret
               mountPath: "/usr/local/share/ca-certificates"
+              readOnly: true
             - name: ssl-path
               mountPath: "/etc/ssl/certs"
               readOnly: false
@@ -414,6 +415,7 @@ spec:
             {{- if .Values.opencost.updateCaTrust.enabled }}
             - name: ca-certs-secret
               mountPath: "/usr/local/share/ca-certificates"
+              readOnly: true
             - name: ssl-path
               mountPath: "/etc/ssl/certs"
               readOnly: false
@@ -474,6 +476,7 @@ spec:
             - name: opencost-ui-nginx-config-volume
               mountPath: /etc/nginx/conf.d/default.nginx.conf
               subPath: default.nginx.conf
+              readOnly: true
             {{- if .Values.opencost.platforms.openshift.enabled }}
             - name: empty-var-www
               mountPath: /var/www
