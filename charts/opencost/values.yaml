@@ -539,6 +539,7 @@ opencost:
     # -- More information about these values here: https://www.opencost.io/docs/configuration/on-prem#custom-pricing-using-the-opencost-helm-chart
     costModel:
       description: Modified pricing configuration.
+      discount: ""
       CPU: 1.25
       spotCPU: 0.006655
       RAM: 0.50
