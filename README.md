@@ -25,6 +25,26 @@ helm repo add opencost https://opencost.github.io/opencost-helm-chart
 
 See the [Chart Documentation](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md) for chart install instructions.
 
+### Use an existing in-cluster Prometheus
+
+If Prometheus is already installed in the cluster, OpenCost can query that Service instead of deploying or pointing at a separate external endpoint. Configure the internal Prometheus connection with the Service name and namespace used by your monitoring stack:
+
+```yaml
+opencost:
+  prometheus:
+    external:
+      enabled: false
+    internal:
+      enabled: true
+      serviceName: monitoring-kube-prometheus-prometheus
+      namespaceName: monitoring
+      port: 9090
+      scheme: http
+```
+
+The Service name is release-dependent; confirm it with `kubectl get svc -n <prometheus-namespace>` before installing OpenCost. Keep only the Prometheus mode you intend to use enabled. For authenticated OpenShift/Thanos-style endpoints, use the chart's external Prometheus and RBAC proxy options documented in `values.yaml`.
+
+
 ## Testing
 
 [Testing](https://github.com/helm-unittest/helm-unittest) your chart (optional)
