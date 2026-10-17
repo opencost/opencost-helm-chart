@@ -1,11 +1,18 @@
 suite: cloud integration deployment
 templates:
   - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
 release:
   name: opencost
   namespace: default
 tests:
   - it: should mount existing cloud integration secret
+    template: templates/deployment.yaml
     set:
       opencost.cloudIntegrationSecret: cloud-costs
     asserts:
@@ -26,6 +33,7 @@ tests:
             subPath: cloud-integration.json
             readOnly: true
   - it: should mount generated cloud integration secret
+    template: templates/deployment.yaml
     set:
       opencost.cloudIntegrationJSON: '{"aws":[]}'
     asserts:
@@ -43,6 +51,20 @@ tests:
           content:
             name: cloud-integration
             mountPath: /var/configs/cloud-integration.json
+            subPath: cloud-integration.json
+            readOnly: true
+  - it: should mount existing cloud integration secret at custom pricing config path
+    template: templates/deployment.yaml
+    set:
+      opencost.cloudIntegrationSecret: cloud-costs
+      opencost.customPricing.enabled: true
+      opencost.customPricing.configPath: /tmp/custom-config
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: cloud-integration
+            mountPath: /tmp/custom-config/cloud-integration.json
             subPath: cloud-integration.json
             readOnly: true
 ---
@@ -63,7 +85,7 @@ tests:
           path: metadata.name
           value: opencost-cloud-integration
       - equal:
-          path: data.cloud-integration.json
+          path: 'data["cloud-integration.json"]'
           value: eyJhd3MiOltdfQ==
 ---
 suite: cloud integration validation

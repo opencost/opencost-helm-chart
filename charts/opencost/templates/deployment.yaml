@@ -408,7 +408,11 @@ spec:
             - name: var-configs
               mountPath: /var/configs
             - name: cloud-integration
+              {{- if .Values.opencost.customPricing.enabled }}
+              mountPath: {{ printf "%s/cloud-integration.json" .Values.opencost.customPricing.configPath | clean | quote }}
+              {{- else }}
               mountPath: /var/configs/cloud-integration.json
+              {{- end }}
               subPath: cloud-integration.json
               readOnly: true
             {{- end }}
