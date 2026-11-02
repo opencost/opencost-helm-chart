@@ -93,6 +93,22 @@ spec:
               mountPath: "/etc/ssl/certs"
               readOnly: false
           {{- end}}
+        {{- if and .Values.opencost.ui.enabled .Values.opencost.platforms.openshift.enabled }}
+        # Mounting an emptyDir at /var/www hides the UI files baked into the image, so copy them in first.
+        - name: populate-var-www
+          image: {{ include "opencostUi.fullImageName" . }}
+          imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
+          command: ["cp", "-r", "/var/www/.", "/mnt/var-www/"]
+          {{- with .Values.opencost.ui.securityContext }}
+          securityContext: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.opencost.ui.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-var-www
+              mountPath: /mnt/var-www
+        {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
           image: {{ include "opencost.fullImageName" . }}
