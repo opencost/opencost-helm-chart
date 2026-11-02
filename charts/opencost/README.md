@@ -30,7 +30,8 @@ $ helm install opencost opencost/opencost
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | annotations | object | `{}` | Annotations to add to the all the resources |
-| clusterName | string | `"cluster.local"` | Override the default name of cluster - Can be found in /etc/kubernetes/admin.conf: clusters -> cluster -> name |
+| clusterDomain | string | `"cluster.local"` | Kubernetes cluster DNS domain. Used as the suffix of the in-cluster service URLs the chart generates for Prometheus and Thanos (`<service>.<namespace>.svc.<clusterDomain>`). Set it to `""` to use `<service>.<namespace>.svc`, e.g. on RKE2 clusters without `cluster.local`. This is not a cluster identifier; use `opencost.exporter.defaultClusterId` for that. |
+| clusterName | string | `""` | Deprecated, use `clusterDomain` instead. Kept for backwards compatibility and takes precedence over `clusterDomain` when non-empty. |
 | extraObjects | list | `[]` | Array of extra K8s manifests rendered through `tpl` and owned by the release. |
 | extraVolumes | list | `[]` | A list of volumes to be added to the pod |
 | fullnameOverride | string | `""` | Overwrite all resources name created by the chart |
