@@ -1,0 +1,33 @@
+suite: cloud integration mount path
+templates:
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should mount cloud-integration.json outside CONFIG_PATH when custom pricing is enabled
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        cloudIntegrationSecret: cloud-costs
+        customPricing:
+          enabled: true
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CONFIG_PATH
+            value: /tmp/custom-config
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: cloud-integration
+            mountPath: /var/configs/cloud-integration/cloud-integration.json
+            subPath: cloud-integration.json
+            readOnly: true
