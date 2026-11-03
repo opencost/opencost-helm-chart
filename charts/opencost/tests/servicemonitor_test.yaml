@@ -1,0 +1,77 @@
+suite: test servicemonitor
+templates:
+  - templates/servicemonitor.yaml
+release:
+  namespace: default
+tests:
+  - it: should select the release namespace by default
+    set:
+      opencost:
+        metrics:
+          serviceMonitor:
+            enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - notExists:
+          path: metadata.namespace
+      - equal:
+          path: spec.namespaceSelector.matchNames
+          value:
+            - default
+
+  - it: should select namespaceOverride when set
+    set:
+      namespaceOverride: cost-system
+      opencost:
+        metrics:
+          serviceMonitor:
+            enabled: true
+    asserts:
+      - equal:
+          path: spec.namespaceSelector.matchNames
+          value:
+            - cost-system
+
+  - it: should select namespaceOverride when the ServiceMonitor is in another namespace
+    set:
+      namespaceOverride: cost-system
+      opencost:
+        metrics:
+          serviceMonitor:
+            enabled: true
+            namespace: monitoring
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: monitoring
+      - equal:
+          path: spec.namespaceSelector.matchNames
+          value:
+            - cost-system
+
+  - it: should select the release namespace when the ServiceMonitor is in another namespace without override
+    set:
+      opencost:
+        metrics:
+          serviceMonitor:
+            enabled: true
+            namespace: monitoring
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: monitoring
+      - equal:
+          path: spec.namespaceSelector.matchNames
+          value:
+            - default
+
+  - it: should not render when disabled
+    set:
+      opencost:
+        metrics:
+          serviceMonitor:
+            enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
