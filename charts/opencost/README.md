@@ -103,6 +103,17 @@ $ helm install opencost opencost/opencost
 | opencost.exporter.inferenceCostTracking.collectionInterval | string | `"2m"` | Background collection interval |
 | opencost.exporter.inferenceCostTracking.enabled | bool | `false` | Enable inference cost tracking |
 | opencost.exporter.inferenceCostTracking.modelLabel | string | `"llm-d.ai/model"` | Pod label whose value is the vLLM model name. Must match the model_name label on vLLM Prometheus metrics |
+| opencost.exporter.inferenceCostTracking.podMonitor.additionalLabels | object | `{}` | Additional labels to add to the PodMonitor |
+| opencost.exporter.inferenceCostTracking.podMonitor.additionalSelectorLabels | object | `{}` | Additional label selectors ANDed with the model-label existence check |
+| opencost.exporter.inferenceCostTracking.podMonitor.enabled | bool | `false` | Create a PodMonitor that scrapes model-server pods with the relabel rules OpenCost requires (needs Prometheus Operator) |
+| opencost.exporter.inferenceCostTracking.podMonitor.extraRelabelings | list | `[]` | RelabelConfigs appended after the identity rules OpenCost requires |
+| opencost.exporter.inferenceCostTracking.podMonitor.metricRelabelings | list | `[]` | MetricRelabelConfigs to apply to samples before ingestion |
+| opencost.exporter.inferenceCostTracking.podMonitor.namespace | string | `""` | Deploy the PodMonitor into a different namespace (blank deploys into the same namespace as the chart) |
+| opencost.exporter.inferenceCostTracking.podMonitor.namespaces | list | `[]` | Namespaces to search for model-server pods (empty selects all namespaces) |
+| opencost.exporter.inferenceCostTracking.podMonitor.path | string | `"/metrics"` | Path of the engine's metrics endpoint |
+| opencost.exporter.inferenceCostTracking.podMonitor.portName | string | `"metrics"` | Name of the pod port exposing the engine's metrics endpoint |
+| opencost.exporter.inferenceCostTracking.podMonitor.scrapeInterval | string | `30s` | Interval at which model-server metrics should be scraped |
+| opencost.exporter.inferenceCostTracking.podMonitor.scrapeTimeout | string | `10s` | Timeout after which the scrape is ended |
 | opencost.exporter.inferenceCostTracking.sharedInfraLabel | string | `"llm-d.ai/inference-shared"` | Pod label key identifying shared infra pods (EPP, gateway) |
 | opencost.exporter.inferenceCostTracking.sharedInfraLabelValue | string | `"true"` | Label value that marks a pod as shared infra |
 | opencost.exporter.livenessProbe.enabled | bool | `true` | Whether probe is enabled |
