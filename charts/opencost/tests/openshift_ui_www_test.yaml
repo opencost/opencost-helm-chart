@@ -1,0 +1,70 @@
+suite: test OpenShift UI static files
+templates:
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should copy the UI files into the emptyDir before the UI container starts on OpenShift
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        platforms:
+          openshift:
+            enabled: true
+        ui:
+          securityContext:
+            readOnlyRootFilesystem: true
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].name
+          value: populate-var-www
+      - equal:
+          path: spec.template.spec.initContainers[0].command
+          value: ["cp", "-r", "/var/www/.", "/mnt/var-www/"]
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: ghcr.io/opencost/opencost-ui:1.121.3@sha256:99ee2db766a074fcbc321bbddfae1851c159339f463a3c32a9ba87727576a3ed
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext.readOnlyRootFilesystem
+          value: true
+      - contains:
+          path: spec.template.spec.initContainers[0].volumeMounts
+          content:
+            name: empty-var-www
+            mountPath: /mnt/var-www
+      - contains:
+          path: spec.template.spec.containers[1].volumeMounts
+          content:
+            name: empty-var-www
+            mountPath: /var/www
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: empty-var-www
+            emptyDir: {}
+
+  - it: should not add the init container outside OpenShift
+    template: templates/deployment.yaml
+    asserts:
+      - isNullOrEmpty:
+          path: spec.template.spec.initContainers
+
+  - it: should not add the init container when the UI is disabled
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        platforms:
+          openshift:
+            enabled: true
+        ui:
+          enabled: false
+    asserts:
+      - isNullOrEmpty:
+          path: spec.template.spec.initContainers
