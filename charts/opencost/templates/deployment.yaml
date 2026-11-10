@@ -408,7 +408,7 @@ spec:
             - name: var-configs
               mountPath: /var/configs
             - name: cloud-integration
-              mountPath: /var/configs/cloud-integration.json
+              mountPath: /var/configs/cloud-integration/cloud-integration.json
               subPath: cloud-integration.json
               readOnly: true
             {{- end }}
