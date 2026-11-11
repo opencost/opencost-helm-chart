@@ -1,6 +1,6 @@
 # opencost-parquet-exporter
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.1](https://img.shields.io/badge/AppVersion-0.2.1-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.1](https://img.shields.io/badge/AppVersion-0.2.1-informational?style=flat-square)
 
 OpenCost Parquet Exporter
 
@@ -23,13 +23,11 @@ OpenCost Parquet Exporter
 | image.imagePullPolicy | string | `"Always"` |  |
 | image.repository | string | `"ghcr.io/opencost/opencost-parquet-exporter"` |  |
 | image.tag | string | `""` |  |
+| podSecurityContext | object | `{}` | Pod-level securityContext (PodSecurityContext), e.g. fsGroup or seccompProfile. |
 | resources | object | `{"limits":{"cpu":2,"memory":"5Gi"},"requests":{"cpu":1,"memory":"1Gi"}}` | Compute resources required |
 | restartPolicy | string | `"Never"` |  |
 | schedule | string | `"* * * * *"` | Schedule on which to run the cron job |
-| securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| securityContext.readOnlyRootFilesystem | bool | `true` |  |
-| securityContext.runAsNonRoot | bool | `true` |  |
-| securityContext.runAsUser | int | `1001` |  |
+| securityContext | object | `{"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"runAsUser":1001}` | Container-level securityContext for the exporter container. |
 | successfulJobsHistoryLimit | int | `3` | Keep up to three successful jobs |
 | suspend | bool | `false` |  |
 | terminationGracePeriodSeconds | int | `30` |  |
