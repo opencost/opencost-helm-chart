@@ -19,6 +19,28 @@ To install the chart with the release name `opencost`:
 $ helm install opencost opencost/{{ template "chart.name" . }}
 ```
 
+## Connecting to Prometheus with mutual TLS
+
+If your Prometheus-compatible endpoint (for example Mimir behind an ingress) requires a client certificate, store the CA certificate, client certificate and client key in a Secret in the release namespace:
+
+```console
+$ kubectl create secret generic prometheus-client-certs \
+    --from-file=ca.crt=ca.pem --from-file=tls.crt=client.pem --from-file=tls.key=client-key.pem
+```
+
+Then enable mTLS in the chart values. The chart mounts the Secret into the OpenCost container and sets `PROM_MTLS_AUTH_CA_FILE`, `PROM_MTLS_AUTH_CRT_FILE` and `PROM_MTLS_AUTH_KEY_FILE`; OpenCost only uses mTLS when all three are set.
+
+```yaml
+opencost:
+  prometheus:
+    mtls:
+      enabled: true
+      existingSecretName: prometheus-client-certs
+      # caKey: ca.crt
+      # certKey: tls.crt
+      # keyKey: tls.key
+```
+
 {{ template "chart.requirementsSection" . }}
 
 {{ template "chart.valuesSection" . }}
