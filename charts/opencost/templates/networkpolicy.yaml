@@ -9,8 +9,7 @@ metadata:
   namespace: {{ include "opencost.namespace" . }}
 spec:
   podSelector:
-    matchLabels:
-      app.kubernetes.io/name: opencost
+    matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
