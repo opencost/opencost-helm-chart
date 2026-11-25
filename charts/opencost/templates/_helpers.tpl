@@ -180,14 +180,15 @@ Create the name of the controller service account to use
 {{- else -}}
     {{- $host := tpl .Values.opencost.prometheus.internal.serviceName . }}
     {{- $ns := tpl .Values.opencost.prometheus.internal.namespaceName . }}
-    {{- $clusterName := .Values.clusterName }}
+    {{- $clusterDomain := .Values.clusterName | default .Values.clusterDomain }}
+    {{- $svc := ternary "svc" (printf "svc.%s" $clusterDomain) (empty $clusterDomain) }}
     {{- $scheme := .Values.opencost.prometheus.internal.scheme | default "http"}}
     {{- $port := .Values.opencost.prometheus.internal.port | int }}
     {{- $path := .Values.opencost.prometheus.internal.path | default "" }}
     {{- if $path }}
-      {{- printf "%s://%s.%s.svc.%s:%d%s" $scheme $host $ns $clusterName $port $path -}}
+      {{- printf "%s://%s.%s.%s:%d%s" $scheme $host $ns $svc $port $path -}}
     {{- else }}
-      {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
+      {{- printf "%s://%s.%s.%s:%d" $scheme $host $ns $svc $port -}}
     {{- end }}
 {{- end -}}
 {{- end -}}
@@ -201,10 +202,11 @@ Check that either thanos external or internal is defined
   {{- else -}}
     {{- $host := .Values.opencost.prometheus.thanos.internal.serviceName }}
     {{- $ns := .Values.opencost.prometheus.thanos.internal.namespaceName }}
-    {{- $clusterName := .Values.clusterName }}
+    {{- $clusterDomain := .Values.clusterName | default .Values.clusterDomain }}
+    {{- $svc := ternary "svc" (printf "svc.%s" $clusterDomain) (empty $clusterDomain) }}
     {{- $port := .Values.opencost.prometheus.thanos.internal.port | int }}
     {{- $scheme := .Values.opencost.prometheus.thanos.internal.scheme | default "http"}}
-    {{- printf "%s://%s.%s.svc.%s:%d" $scheme $host $ns $clusterName $port -}}
+    {{- printf "%s://%s.%s.%s:%d" $scheme $host $ns $svc $port -}}
   {{- end -}}
 {{- end -}}
 
