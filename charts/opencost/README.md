@@ -2,7 +2,7 @@
 
 OpenCost and OpenCost UI
 
-![Version: 2.5.33](https://img.shields.io/badge/Version-2.5.33-informational?style=flat-square)
+![Version: 2.5.35](https://img.shields.io/badge/Version-2.5.35-informational?style=flat-square)
 ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 ![AppVersion: 1.121.0](https://img.shields.io/badge/AppVersion-1.121.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opencost)](https://artifacthub.io/packages/search?repo=opencost)
@@ -23,6 +23,28 @@ To install the chart with the release name `opencost`:
 
 ```console
 $ helm install opencost opencost/opencost
+```
+
+## Connecting to Prometheus with mutual TLS
+
+If your Prometheus-compatible endpoint (for example Mimir behind an ingress) requires a client certificate, store the CA certificate, client certificate and client key in a Secret in the release namespace:
+
+```console
+$ kubectl create secret generic prometheus-client-certs \
+    --from-file=ca.crt=ca.pem --from-file=tls.crt=client.pem --from-file=tls.key=client-key.pem
+```
+
+Then enable mTLS in the chart values. The chart mounts the Secret into the OpenCost container and sets `PROM_MTLS_AUTH_CA_FILE`, `PROM_MTLS_AUTH_CRT_FILE` and `PROM_MTLS_AUTH_KEY_FILE`; OpenCost only uses mTLS when all three are set.
+
+```yaml
+opencost:
+  prometheus:
+    mtls:
+      enabled: true
+      existingSecretName: prometheus-client-certs
+      # caKey: ca.crt
+      # certKey: tls.crt
+      # keyKey: tls.key
 ```
 
 ## Values
@@ -192,6 +214,12 @@ $ helm install opencost opencost/opencost
 | opencost.prometheus.internal.scheme | string | `"http"` | Scheme to use for in-cluster Prometheus |
 | opencost.prometheus.internal.serviceName | string | `"prometheus-server"` | Service name of in-cluster Prometheus |
 | opencost.prometheus.kubeRBACProxy | bool | `false` | If true, opencost will use kube-rbac-proxy to authenticate with in cluster Prometheus for openshift |
+| opencost.prometheus.mtls.caKey | string | `"ca.crt"` | Key in the Secret that holds the CA certificate used to verify the Prometheus server |
+| opencost.prometheus.mtls.certKey | string | `"tls.crt"` | Key in the Secret that holds the client certificate |
+| opencost.prometheus.mtls.enabled | bool | `false` | Enable mutual TLS authentication towards Prometheus |
+| opencost.prometheus.mtls.existingSecretName | string | `""` | Name of an existing Secret holding the CA certificate, client certificate and client key (required when enabled) |
+| opencost.prometheus.mtls.keyKey | string | `"tls.key"` | Key in the Secret that holds the client private key |
+| opencost.prometheus.mtls.mountPath | string | `"/etc/opencost/prometheus-mtls"` | Directory the Secret is mounted at inside the OpenCost container |
 | opencost.prometheus.password | string | `""` | Prometheus Basic auth password |
 | opencost.prometheus.password_key | string | `"DB_BASIC_AUTH_PW"` | Key in the secret that references the password |
 | opencost.prometheus.secret_name | string | `nil` | Secret name that contains credentials for Prometheus |

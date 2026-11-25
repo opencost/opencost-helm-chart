@@ -1,0 +1,137 @@
+suite: test prometheus mtls
+templates:
+  - templates/deployment.yaml
+  - templates/configmap-custom-pricing.yaml
+  - templates/configmap-frontend.yaml
+  - templates/configmap-metrics-config.yaml
+  - templates/secret-cloud-integration.yaml
+  - templates/secret.yaml
+  - templates/secret-admin-token.yaml
+release:
+  name: opencost
+  namespace: default
+tests:
+  - it: should not configure mTLS by default
+    template: templates/deployment.yaml
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_CA_FILE
+            value: /etc/opencost/prometheus-mtls/ca.crt
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            name: prometheus-mtls
+            secret:
+              secretName: prometheus-client-certs
+              items:
+                - key: ca.crt
+                  path: ca.crt
+                - key: tls.crt
+                  path: tls.crt
+                - key: tls.key
+                  path: tls.key
+
+  - it: should mount the secret and set the mTLS environment variables
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        prometheus:
+          mtls:
+            enabled: true
+            existingSecretName: prometheus-client-certs
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_CA_FILE
+            value: /etc/opencost/prometheus-mtls/ca.crt
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_CRT_FILE
+            value: /etc/opencost/prometheus-mtls/tls.crt
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_KEY_FILE
+            value: /etc/opencost/prometheus-mtls/tls.key
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: prometheus-mtls
+            mountPath: /etc/opencost/prometheus-mtls
+            readOnly: true
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: prometheus-mtls
+            secret:
+              secretName: prometheus-client-certs
+              items:
+                - key: ca.crt
+                  path: ca.crt
+                - key: tls.crt
+                  path: tls.crt
+                - key: tls.key
+                  path: tls.key
+
+  - it: should honour custom secret keys and mount path
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        prometheus:
+          mtls:
+            enabled: true
+            existingSecretName: prometheus-client-certs
+            caKey: ca.pem
+            certKey: client.pem
+            keyKey: client-key.pem
+            mountPath: /certs
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_CA_FILE
+            value: /certs/ca.pem
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_CRT_FILE
+            value: /certs/client.pem
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: PROM_MTLS_AUTH_KEY_FILE
+            value: /certs/client-key.pem
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: prometheus-mtls
+            mountPath: /certs
+            readOnly: true
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: prometheus-mtls
+            secret:
+              secretName: prometheus-client-certs
+              items:
+                - key: ca.pem
+                  path: ca.pem
+                - key: client.pem
+                  path: client.pem
+                - key: client-key.pem
+                  path: client-key.pem
+
+  - it: should fail when mTLS is enabled without a secret name
+    template: templates/deployment.yaml
+    set:
+      opencost:
+        prometheus:
+          mtls:
+            enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: opencost.prometheus.mtls.existingSecretName is required when opencost.prometheus.mtls.enabled is true

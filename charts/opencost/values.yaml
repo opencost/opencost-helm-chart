@@ -444,6 +444,9 @@ opencost:
       # FOO: BAR
       # For example, if accessing mimir directly and getting 401 Unauthorized
       # PROMETHEUS_HEADER_X_SCOPE_ORGID: anonymous
+      # For mutual TLS (mTLS) towards Prometheus/Mimir, use opencost.prometheus.mtls
+      # instead of setting PROM_MTLS_AUTH_CA_FILE, PROM_MTLS_AUTH_CRT_FILE and
+      # PROM_MTLS_AUTH_KEY_FILE by hand (all three must be set for mTLS to be used)
     # -- Extra environment variables from secrets or configmaps
     extraEnvFrom: []
       # - configMapRef:
@@ -640,6 +643,23 @@ opencost:
     kubeRBACProxy: false
     # -- Whether to disable SSL certificate verification
     insecureSkipVerify: false
+    # Mutual TLS (client certificate) authentication towards Prometheus-compatible
+    # endpoints such as Mimir behind an mTLS-enforcing ingress. When enabled, the chart
+    # mounts the Secret and sets PROM_MTLS_AUTH_CA_FILE, PROM_MTLS_AUTH_CRT_FILE and
+    # PROM_MTLS_AUTH_KEY_FILE. OpenCost only uses mTLS when all three files are configured.
+    mtls:
+      # -- Enable mutual TLS authentication towards Prometheus
+      enabled: false
+      # -- Name of an existing Secret holding the CA certificate, client certificate and client key (required when enabled)
+      existingSecretName: ""
+      # -- Key in the Secret that holds the CA certificate used to verify the Prometheus server
+      caKey: ca.crt
+      # -- Key in the Secret that holds the client certificate
+      certKey: tls.crt
+      # -- Key in the Secret that holds the client private key
+      keyKey: tls.key
+      # -- Directory the Secret is mounted at inside the OpenCost container
+      mountPath: /etc/opencost/prometheus-mtls
     external:
       # -- Use external Prometheus (eg. Grafana Cloud)
       enabled: false
