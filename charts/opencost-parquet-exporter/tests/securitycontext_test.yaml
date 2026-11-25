@@ -1,0 +1,26 @@
+suite: securityContext placement
+templates:
+  - templates/cronjob.yaml
+tests:
+  - it: renders container-only fields on the container, not the pod
+    asserts:
+      - isNull:
+          path: spec.jobTemplate.spec.template.spec.securityContext
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].securityContext
+          value:
+            runAsUser: 1001
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+  - it: renders podSecurityContext on the pod
+    set:
+      podSecurityContext:
+        fsGroup: 2000
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.securityContext
+          value:
+            fsGroup: 2000

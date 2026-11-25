@@ -15,6 +15,9 @@ activeDeadlineSeconds: 3600
 ttlSecondsAfterFinished: 14400
 # --  Optional ServiceAccount use to run this pod
 existingServiceAccount:
+# -- Pod-level securityContext (PodSecurityContext), e.g. fsGroup or seccompProfile.
+podSecurityContext: {}
+# -- Container-level securityContext for the exporter container.
 securityContext:
   runAsUser: 1001
   readOnlyRootFilesystem: true
